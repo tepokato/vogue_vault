@@ -29,6 +29,17 @@ IconData serviceTypeIcon(ServiceType type) {
   }
 }
 
+Color serviceTypeColor(ServiceType type) {
+  switch (type) {
+    case ServiceType.barber:
+      return Colors.blue;
+    case ServiceType.hairdresser:
+      return Colors.purple;
+    case ServiceType.nails:
+      return Colors.pink;
+  }
+}
+
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
 
@@ -61,7 +72,13 @@ class AppointmentsPage extends StatelessWidget {
           final Appointment appt = appointments[index];
           final client = service.getClient(appt.clientId);
           return ListTile(
-            leading: Icon(serviceTypeIcon(appt.service)),
+            leading: CircleAvatar(
+              backgroundColor: serviceTypeColor(appt.service),
+              child: Icon(
+                serviceTypeIcon(appt.service),
+                color: Colors.white,
+              ),
+            ),
             title: Text(
               '${client?.name ?? 'Unknown'} - ${serviceTypeLabel(appt.service)}',
             ),
