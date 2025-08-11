@@ -2,9 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/appointment.dart';
+import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import 'edit_appointment_page.dart';
 import 'edit_client_page.dart';
+
+String serviceTypeLabel(ServiceType type) {
+  switch (type) {
+    case ServiceType.barber:
+      return 'Barber';
+    case ServiceType.hairdresser:
+      return 'Hairdresser';
+    case ServiceType.nails:
+      return 'Nails';
+  }
+}
+
+IconData serviceTypeIcon(ServiceType type) {
+  switch (type) {
+    case ServiceType.barber:
+      return Icons.content_cut;
+    case ServiceType.hairdresser:
+      return Icons.brush;
+    case ServiceType.nails:
+      return Icons.spa;
+  }
+}
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
@@ -38,7 +61,10 @@ class AppointmentsPage extends StatelessWidget {
           final Appointment appt = appointments[index];
           final client = service.getClient(appt.clientId);
           return ListTile(
-            title: Text('${client?.name ?? 'Unknown'} - ${appt.service.name}'),
+            leading: Icon(serviceTypeIcon(appt.service)),
+            title: Text(
+              '${client?.name ?? 'Unknown'} - ${serviceTypeLabel(appt.service)}',
+            ),
             subtitle: Text(appt.dateTime.toLocal().toString()),
             onTap: () {
               Navigator.push(
