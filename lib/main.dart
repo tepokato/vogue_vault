@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/appointments_page.dart';
+import 'screens/welcome_page.dart';
 import 'services/appointment_service.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const AppointmentsPage(),
+      home: const WelcomePage(),
     );
   }
 }
