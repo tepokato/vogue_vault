@@ -5,16 +5,24 @@ import 'package:provider/provider.dart';
 
 import 'screens/welcome_page.dart';
 import 'services/appointment_service.dart';
+import 'services/role_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    ChangeNotifierProvider<AppointmentService>(
-      create: (_) {
-        final service = AppointmentService();
-        unawaited(service.init());
-        return service;
-      },
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppointmentService>(
+          create: (_) {
+            final service = AppointmentService();
+            unawaited(service.init());
+            return service;
+          },
+        ),
+        ChangeNotifierProvider<RoleProvider>(
+          create: (_) => RoleProvider(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
