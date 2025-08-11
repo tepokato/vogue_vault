@@ -2,15 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/client.dart';
+import '../models/user_role.dart';
 import '../services/appointment_service.dart';
+import '../services/role_provider.dart';
 
 class EditClientPage extends StatelessWidget {
   const EditClientPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final role = context.watch<RoleProvider>().selectedRole;
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
+
+    if (role != UserRole.professional) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Available only for professionals'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clients'),
