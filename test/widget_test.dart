@@ -5,6 +5,6 @@ void main() {
   testWidgets('Appointments page shows sample data', (tester) async {
     await tester.pumpWidget(const MyApp());
 
-    expect(find.text('Consultation with Alice - Sep 10 10:00 AM'), findsOneWidget);
+    expect(find.text('barber with Alice - Sep 10 10:00 AM'), findsOneWidget);
   });
 }

@@ -38,7 +38,7 @@ class AppointmentsPage extends StatelessWidget {
           final Appointment appt = appointments[index];
           final client = service.getClient(appt.clientId);
           return ListTile(
-            title: Text('${client?.name ?? 'Unknown'} - ${appt.service}'),
+            title: Text('${client?.name ?? 'Unknown'} - ${appt.service.name}'),
             subtitle: Text(appt.dateTime.toLocal().toString()),
             onTap: () {
               Navigator.push(

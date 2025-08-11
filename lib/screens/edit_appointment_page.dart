@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/appointment.dart';
+import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 
 class EditAppointmentPage extends StatefulWidget {
@@ -14,23 +15,16 @@ class EditAppointmentPage extends StatefulWidget {
 }
 
 class _EditAppointmentPageState extends State<EditAppointmentPage> {
-  late TextEditingController _serviceController;
+  late ServiceType _service;
   DateTime _dateTime = DateTime.now();
   String? _selectedClientId;
 
   @override
   void initState() {
     super.initState();
-    _serviceController =
-        TextEditingController(text: widget.appointment?.service ?? '');
+    _service = widget.appointment?.service ?? ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
     _selectedClientId = widget.appointment?.clientId;
-  }
-
-  @override
-  void dispose() {
-    _serviceController.dispose();
-    super.dispose();
   }
 
   @override
@@ -60,9 +54,18 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   .toList(),
               onChanged: (value) => setState(() => _selectedClientId = value),
             ),
-            TextField(
-              controller: _serviceController,
+            DropdownButtonFormField<ServiceType>(
+              value: _service,
               decoration: const InputDecoration(labelText: 'Service'),
+              items: ServiceType.values
+                  .map(
+                    (s) => DropdownMenuItem<ServiceType>(
+                      value: s,
+                      child: Text(s.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => setState(() => _service = value!),
             ),
             const SizedBox(height: 12),
             Row(
@@ -102,7 +105,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       final newAppt = Appointment(
                         id: id,
                         clientId: _selectedClientId!,
-                        service: _serviceController.text,
+                        service: _service,
                         dateTime: _dateTime,
                       );
                       if (isEditing) {
