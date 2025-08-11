@@ -1,6 +1,6 @@
 # Vogue Vault
 
-Vogue Vault is a scheduling platform for beauty professionals and their clients. Salon owners, stylists and makeup artists can showcase services, manage calendars and coordinate appointments in one place.
+Vogue Vault is a scheduling platform for barbershops, hairdressers, nail technicians, and other beauty professionals and their clients. Salon owners, barbers, stylists, nail techs, and makeup artists can showcase services, manage calendars, and coordinate appointments in one place.
 
 ## Setup
 
@@ -36,11 +36,18 @@ flutter pub get
 
 ## Core Features
 
-- Browse stylist profiles and available services
-- Book, reschedule and cancel appointments
-- Manage stylist calendars and time slots
+- Browse profiles and services for barbers, hairdressers, nail technicians, and other beauty professionals
+- Book, reschedule, and cancel appointments across all service types
+- Manage professional calendars and time slots
 - Local data persistence with Hive
 - State management using Provider
+
+### Example Services
+
+- Barbershop cuts
+- Hair styling and coloring
+- Manicures and pedicures
+- Makeup application
 
 ## Roadmap
 
