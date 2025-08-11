@@ -9,8 +9,8 @@ void main() async {
   final service = AppointmentService();
   await service.init();
   runApp(
-    ChangeNotifierProvider<AppointmentService>.value(
-      value: service,
+    ChangeNotifierProvider<AppointmentService>(
+      create: (_) => service,
       child: const MyApp(),
     ),
   );

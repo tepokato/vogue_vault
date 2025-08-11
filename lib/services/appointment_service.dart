@@ -66,4 +66,11 @@ class AppointmentService extends ChangeNotifier {
     await _appointmentsBox.delete(id);
     notifyListeners();
   }
+
+  @override
+  void dispose() {
+    _appointmentsBox.close();
+    _clientsBox.close();
+    super.dispose();
+  }
 }
