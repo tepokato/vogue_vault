@@ -81,9 +81,16 @@ void main() {
       expect(notified, isTrue);
     });
 
-    test('delete client removes client and notifies listeners', () async {
+    test('delete client removes client and related appointments', () async {
       final client = Client(id: 'c1', name: 'Alice');
+      final appointment = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
       await service.addClient(client);
+      await service.addAppointment(appointment);
 
       var notified = false;
       service.addListener(() => notified = true);
@@ -92,7 +99,30 @@ void main() {
 
       expect(service.getClient('c1'), isNull);
       expect(service.clients, isEmpty);
+      expect(service.getAppointment('a1'), isNull);
+      expect(service.appointments, isEmpty);
       expect(notified, isTrue);
+    });
+
+    test('delete client reassigns appointments when id provided', () async {
+      final c1 = Client(id: 'c1', name: 'Alice');
+      final c2 = Client(id: 'c2', name: 'Bob');
+      final appointment = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+      await service.addClient(c1);
+      await service.addClient(c2);
+      await service.addAppointment(appointment);
+
+      await service.deleteClient('c1', reassignedClientId: 'c2');
+
+      final updated = service.getAppointment('a1');
+      expect(updated?.clientId, 'c2');
+      expect(service.getClient('c1'), isNull);
+      expect(service.clients.length, 1);
     });
   });
 
