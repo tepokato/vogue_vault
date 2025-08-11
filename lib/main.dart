@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/welcome_page.dart';
+import 'screens/role_selection_page.dart';
 import 'services/appointment_service.dart';
 import 'services/role_provider.dart';
 
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const WelcomePage(),
+      home: const RoleSelectionPage(),
     );
   }
 }
