@@ -33,4 +33,41 @@ void main() {
       expect(() => Appointment.fromMap(invalidDate), throwsA(isA<FormatException>()));
     });
   });
+
+  group('Appointment equality', () {
+    test('appointments with the same values are equal', () {
+      final a1 = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+      final a2 = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+
+      expect(a1, equals(a2));
+      expect(a1.hashCode, equals(a2.hashCode));
+    });
+
+    test('appointments with different values are not equal', () {
+      final a1 = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+      final a2 = Appointment(
+        id: 'a2',
+        clientId: 'c1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+
+      expect(a1, isNot(equals(a2)));
+    });
+  });
 }
