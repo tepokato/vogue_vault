@@ -39,7 +39,13 @@ class FakeAppointmentService extends ChangeNotifier implements AppointmentServic
   }
 
   @override
-  Future<void> deleteClient(String id) async {
+  Future<void> deleteClient(String id, {String? reassignedClientId}) async {
+    if (reassignedClientId != null) {
+      _appointments.updateAll((key, appt) =>
+          appt.clientId == id ? appt.copyWith(clientId: reassignedClientId) : appt);
+    } else {
+      _appointments.removeWhere((key, appt) => appt.clientId == id);
+    }
     _clients.remove(id);
     notifyListeners();
   }

@@ -35,6 +35,19 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     final role = context.watch<RoleProvider>().selectedRole;
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
+    if (_selectedClientId != null &&
+        !clients.any((c) => c.id == _selectedClientId)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() => _selectedClientId = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Previously selected client was removed. Please choose another.'),
+          ),
+        );
+      });
+    }
     final isEditing = widget.appointment != null;
 
     if (role != UserRole.professional) {
