@@ -11,7 +11,7 @@ class Client {
     );
   }
 
-  factory Client.fromMap(Map<dynamic, dynamic> map) {
+  factory Client.fromMap(Map<String, dynamic> map) {
     return Client(
       id: map['id'] as String,
       name: map['name'] as String,
