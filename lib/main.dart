@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'screens/appointments_page.dart';
+import 'services/appointment_service.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final service = AppointmentService();
+  await service.init();
+  runApp(
+    ChangeNotifierProvider<AppointmentService>.value(
+      value: service,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
