@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../models/appointment.dart';
 import '../models/service_type.dart';
@@ -50,7 +51,11 @@ class AppointmentsPage extends StatelessWidget {
             title: Text(
               '${client?.name ?? 'Unknown'} - ${serviceTypeLabel(appt.service)}',
             ),
-            subtitle: Text(appt.dateTime.toLocal().toString()),
+            subtitle: Text(
+              DateFormat.yMMMd().add_jm().format(
+                    appt.dateTime.toLocal(),
+                  ),
+            ),
             onTap: () {
               Navigator.push(
                 context,
