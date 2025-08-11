@@ -1,11 +1,20 @@
 import 'service_type.dart';
 
+/// Represents a scheduled appointment for a client.
 class Appointment {
+  /// Unique identifier for the appointment.
   final String id;
+
+  /// Identifier of the client booking the appointment.
   final String clientId;
+
+  /// The type of service being scheduled.
   final ServiceType service;
+
+  /// The date and time when the appointment takes place.
   final DateTime dateTime;
 
+  /// Creates a new [Appointment].
   Appointment({
     required this.id,
     required this.clientId,
@@ -13,6 +22,7 @@ class Appointment {
     required this.dateTime,
   });
 
+  /// Returns a copy of this appointment with the given fields replaced.
   Appointment copyWith({
     String? id,
     String? clientId,
@@ -27,6 +37,7 @@ class Appointment {
     );
   }
 
+  /// Creates an [Appointment] from a JSON-compatible [map].
   factory Appointment.fromMap(Map<String, dynamic> map) {
     return Appointment(
       id: map['id'] as String,
@@ -36,6 +47,7 @@ class Appointment {
     );
   }
 
+  /// Converts this appointment into a JSON-compatible map.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -44,4 +56,18 @@ class Appointment {
       'dateTime': dateTime.toIso8601String(),
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Appointment &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          clientId == other.clientId &&
+          service == other.service &&
+          dateTime == other.dateTime;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ clientId.hashCode ^ service.hashCode ^ dateTime.hashCode;
 }
