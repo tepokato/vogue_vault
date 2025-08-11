@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
           children: [
             Text(
               'Explore our services',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             Expanded(
