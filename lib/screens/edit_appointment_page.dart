@@ -37,9 +37,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     final clients = service.clients;
     if (_selectedClientId != null &&
         !clients.any((c) => c.id == _selectedClientId)) {
+      _selectedClientId = null;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        setState(() => _selectedClientId = null);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
@@ -54,6 +54,17 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
       return const Scaffold(
         body: Center(
           child: Text('Available only for professionals'),
+        ),
+      );
+    }
+
+    if (clients.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(isEditing ? 'Edit Appointment' : 'New Appointment'),
+        ),
+        body: const Center(
+          child: Text('No clients available. Please add a client first.'),
         ),
       );
     }
