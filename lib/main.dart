@@ -7,17 +7,17 @@ import 'screens/role_selection_page.dart';
 import 'services/appointment_service.dart';
 import 'services/role_provider.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final appointmentService = AppointmentService();
+  await appointmentService.init();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppointmentService>(
-          create: (_) {
-            final service = AppointmentService();
-            unawaited(service.init());
-            return service;
-          },
+        ChangeNotifierProvider<AppointmentService>.value(
+          value: appointmentService,
         ),
         ChangeNotifierProvider<RoleProvider>(
           create: (_) => RoleProvider(),
