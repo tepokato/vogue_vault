@@ -8,33 +8,33 @@ class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
   static const _clientsBoxName = 'clients';
 
-  late Box _appointmentsBox;
-  late Box _clientsBox;
+  late Box<Map<String, dynamic>> _appointmentsBox;
+  late Box<Map<String, dynamic>> _clientsBox;
 
   Future<void> init() async {
     await Hive.initFlutter();
-    _appointmentsBox = await Hive.openBox(_appointmentsBoxName);
-    _clientsBox = await Hive.openBox(_clientsBoxName);
+    _appointmentsBox =
+        await Hive.openBox<Map<String, dynamic>>(_appointmentsBoxName);
+    _clientsBox =
+        await Hive.openBox<Map<String, dynamic>>(_clientsBoxName);
   }
 
-  List<Appointment> get appointments => _appointmentsBox.values
-      .map((e) => Appointment.fromMap(Map<String, dynamic>.from(e as Map)))
-      .toList();
+  List<Appointment> get appointments =>
+      _appointmentsBox.values.map(Appointment.fromMap).toList();
 
-  List<Client> get clients => _clientsBox.values
-      .map((e) => Client.fromMap(Map<String, dynamic>.from(e as Map)))
-      .toList();
+  List<Client> get clients =>
+      _clientsBox.values.map(Client.fromMap).toList();
 
   Client? getClient(String id) {
     final map = _clientsBox.get(id);
     if (map == null) return null;
-    return Client.fromMap(Map<String, dynamic>.from(map as Map));
+    return Client.fromMap(map);
   }
 
   Appointment? getAppointment(String id) {
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
-    return Appointment.fromMap(Map<String, dynamic>.from(map as Map));
+    return Appointment.fromMap(map);
   }
 
   Future<void> addClient(Client client) async {

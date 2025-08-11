@@ -27,7 +27,7 @@ class Appointment {
     );
   }
 
-  factory Appointment.fromMap(Map<dynamic, dynamic> map) {
+  factory Appointment.fromMap(Map<String, dynamic> map) {
     return Appointment(
       id: map['id'] as String,
       clientId: map['clientId'] as String,
