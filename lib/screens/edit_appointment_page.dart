@@ -15,6 +15,7 @@ class EditAppointmentPage extends StatefulWidget {
 }
 
 class _EditAppointmentPageState extends State<EditAppointmentPage> {
+  final _formKey = GlobalKey<FormState>();
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
   String? _selectedClientId;
@@ -39,85 +40,91 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            DropdownButtonFormField<String>(
-              value: _selectedClientId,
-              hint: const Text('Select Client'),
-              items: clients
-                  .map(
-                    (c) => DropdownMenuItem<String>(
-                      value: c.id,
-                      child: Text(c.name),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) => setState(() => _selectedClientId = value),
-            ),
-            DropdownButtonFormField<ServiceType>(
-              value: _service,
-              decoration: const InputDecoration(labelText: 'Service'),
-              items: ServiceType.values
-                  .map(
-                    (s) => DropdownMenuItem<ServiceType>(
-                      value: s,
-                      child: Text(s.name),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) => setState(() => _service = value!),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(_dateTime.toLocal().toString()),
-                const SizedBox(width: 8),
-                TextButton(
-                  onPressed: () async {
-                    final date = await showDatePicker(
-                      context: context,
-                      initialDate: _dateTime,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (date == null) return;
-                    final time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(_dateTime),
-                    );
-                    if (time == null) return;
-                    setState(() {
-                      _dateTime = DateTime(
-                          date.year, date.month, date.day, time.hour, time.minute);
-                    });
-                  },
-                  child: const Text('Select Date'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _selectedClientId == null
-                  ? null
-                  : () {
-                      final id = widget.appointment?.id ??
-                          DateTime.now().millisecondsSinceEpoch.toString();
-                      final newAppt = Appointment(
-                        id: id,
-                        clientId: _selectedClientId!,
-                        service: _service,
-                        dateTime: _dateTime,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              DropdownButtonFormField<String>(
+                value: _selectedClientId,
+                hint: const Text('Select Client'),
+                items: clients
+                    .map(
+                      (c) => DropdownMenuItem<String>(
+                        value: c.id,
+                        child: Text(c.name),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) => setState(() => _selectedClientId = value),
+                validator: (value) =>
+                    value == null ? 'Please select a client' : null,
+              ),
+              DropdownButtonFormField<ServiceType>(
+                value: _service,
+                decoration: const InputDecoration(labelText: 'Service'),
+                items: ServiceType.values
+                    .map(
+                      (s) => DropdownMenuItem<ServiceType>(
+                        value: s,
+                        child: Text(s.name),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) => setState(() => _service = value!),
+                validator: (value) =>
+                    value == null ? 'Please select a service' : null,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Text(_dateTime.toLocal().toString()),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: _dateTime,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
                       );
-                      if (isEditing) {
-                        service.updateAppointment(newAppt);
-                      } else {
-                        service.addAppointment(newAppt);
-                      }
-                      Navigator.pop(context);
+                      if (date == null) return;
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(_dateTime),
+                      );
+                      if (time == null) return;
+                      setState(() {
+                        _dateTime = DateTime(
+                            date.year, date.month, date.day, time.hour, time.minute);
+                      });
                     },
-              child: const Text('Save'),
-            ),
-          ],
+                    child: const Text('Select Date'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  if (!_formKey.currentState!.validate()) return;
+                  final id = widget.appointment?.id ??
+                      DateTime.now().millisecondsSinceEpoch.toString();
+                  final newAppt = Appointment(
+                    id: id,
+                    clientId: _selectedClientId!,
+                    service: _service,
+                    dateTime: _dateTime,
+                  );
+                  if (isEditing) {
+                    service.updateAppointment(newAppt);
+                  } else {
+                    service.addAppointment(newAppt);
+                  }
+                  Navigator.pop(context);
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         ),
       ),
     );
