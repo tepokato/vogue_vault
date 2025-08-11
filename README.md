@@ -56,3 +56,28 @@ flutter pub get
 - Push notifications and reminders
 - Ratings and reviews for stylists
 - Advanced analytics for salon performance
+
+## Project Architecture
+
+The app follows a feature-driven structure under `lib/`:
+
+- `models/` contains data classes such as `Appointment` and `Client`.
+- `services/` holds the service layer. For example, `AppointmentService` uses Hive for local persistence and exposes CRUD operations while notifying listeners via `ChangeNotifier`.
+- `screens/` provides the UI widgets for each page.
+- `utils/` includes shared helpers and constants.
+- `main.dart` wires everything together and registers providers.
+
+## Running Tests
+
+Run the full test suite, including unit and widget tests, with:
+
+```bash
+flutter test
+```
+
+## Contribution Guidelines
+
+1. Format code: `dart format .`
+2. Lint and analyze: `flutter analyze`
+3. Run tests: `flutter test`
+4. Commit changes and open a pull request.
