@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../models/appointment.dart';
 import '../models/service_type.dart';
+import '../models/user_role.dart';
 import '../services/appointment_service.dart';
+import '../services/role_provider.dart';
 
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
@@ -30,9 +32,18 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final role = context.watch<RoleProvider>().selectedRole;
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
     final isEditing = widget.appointment != null;
+
+    if (role != UserRole.professional) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Available only for professionals'),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

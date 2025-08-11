@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+      // Start the app by letting the user pick a role.
       home: const RoleSelectionPage(),
     );
   }
