@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/appointment.dart';
+import '../services/appointment_service.dart';
 import 'edit_appointment_page.dart';
 import 'edit_client_page.dart';
 
@@ -8,11 +11,8 @@ class AppointmentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appointments = <String>[
-      'Consultation with Alice - Sep 10 10:00 AM',
-      'Facial for Bob - Sep 12 2:00 PM',
-      'Hair styling for Carol - Sep 14 1:00 PM',
-    ];
+    final service = context.watch<AppointmentService>();
+    final appointments = service.appointments;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,17 +35,23 @@ class AppointmentsPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: appointments.length,
         itemBuilder: (context, index) {
-          final appointment = appointments[index];
+          final Appointment appt = appointments[index];
+          final client = service.getClient(appt.clientId);
           return ListTile(
-            title: Text(appointment),
+            title: Text('${client?.name ?? 'Unknown'} - ${appt.service}'),
+            subtitle: Text(appt.dateTime.toLocal().toString()),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => EditAppointmentPage(appointment: appointment),
+                  builder: (_) => EditAppointmentPage(appointment: appt),
                 ),
               );
             },
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => service.deleteAppointment(appt.id),
+            ),
           );
         },
       ),

@@ -1,20 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class EditAppointmentPage extends StatelessWidget {
-  final String? appointment;
+import '../models/appointment.dart';
+import '../services/appointment_service.dart';
+
+class EditAppointmentPage extends StatefulWidget {
+  final Appointment? appointment;
 
   const EditAppointmentPage({super.key, this.appointment});
 
   @override
+  State<EditAppointmentPage> createState() => _EditAppointmentPageState();
+}
+
+class _EditAppointmentPageState extends State<EditAppointmentPage> {
+  late TextEditingController _serviceController;
+  DateTime _dateTime = DateTime.now();
+  String? _selectedClientId;
+
+  @override
+  void initState() {
+    super.initState();
+    _serviceController =
+        TextEditingController(text: widget.appointment?.service ?? '');
+    _dateTime = widget.appointment?.dateTime ?? DateTime.now();
+    _selectedClientId = widget.appointment?.clientId;
+  }
+
+  @override
+  void dispose() {
+    _serviceController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isEditing = appointment != null;
+    final service = context.watch<AppointmentService>();
+    final clients = service.clients;
+    final isEditing = widget.appointment != null;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Appointment' : 'New Appointment'),
       ),
-      body: const Center(
-        child: Text('Appointment form goes here'),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            DropdownButtonFormField<String>(
+              value: _selectedClientId,
+              hint: const Text('Select Client'),
+              items: clients
+                  .map(
+                    (c) => DropdownMenuItem<String>(
+                      value: c.id,
+                      child: Text(c.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => setState(() => _selectedClientId = value),
+            ),
+            TextField(
+              controller: _serviceController,
+              decoration: const InputDecoration(labelText: 'Service'),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text(_dateTime.toLocal().toString()),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: _dateTime,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (date == null) return;
+                    final time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(_dateTime),
+                    );
+                    if (time == null) return;
+                    setState(() {
+                      _dateTime = DateTime(
+                          date.year, date.month, date.day, time.hour, time.minute);
+                    });
+                  },
+                  child: const Text('Select Date'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _selectedClientId == null
+                  ? null
+                  : () {
+                      final id = widget.appointment?.id ??
+                          DateTime.now().millisecondsSinceEpoch.toString();
+                      final newAppt = Appointment(
+                        id: id,
+                        clientId: _selectedClientId!,
+                        service: _serviceController.text,
+                        dateTime: _dateTime,
+                      );
+                      if (isEditing) {
+                        service.updateAppointment(newAppt);
+                      } else {
+                        service.addAppointment(newAppt);
+                      }
+                      Navigator.pop(context);
+                    },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
