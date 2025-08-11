@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vogue_vault/models/appointment.dart';
+import 'package:vogue_vault/models/service_type.dart';
 
 void main() {
   group('Appointment serialization', () {
@@ -7,7 +8,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
-        service: 'Consultation',
+        service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
       final map = appointment.toMap();
@@ -26,7 +27,7 @@ void main() {
       final invalidDate = {
         'id': 'a1',
         'clientId': 'c1',
-        'service': 'Consultation',
+        'service': 'barber',
         'dateTime': 'invalid',
       };
       expect(() => Appointment.fromMap(invalidDate), throwsA(isA<FormatException>()));

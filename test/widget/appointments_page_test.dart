@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/client.dart';
+import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/screens/appointments_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 
@@ -69,7 +70,7 @@ void main() {
     final appointment = Appointment(
       id: 'a1',
       clientId: 'c1',
-      service: 'Consultation',
+      service: ServiceType.barber,
       dateTime: DateTime(2023, 9, 10, 10),
     );
     await service.addClient(client);
@@ -83,9 +84,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Alice - Consultation'), findsOneWidget);
+    expect(find.text('Alice - barber'), findsOneWidget);
 
-    await tester.tap(find.text('Alice - Consultation'));
+    await tester.tap(find.text('Alice - barber'));
     await tester.pumpAndSettle();
     expect(find.text('Edit Appointment'), findsOneWidget);
 

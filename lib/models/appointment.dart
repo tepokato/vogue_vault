@@ -1,7 +1,9 @@
+import 'service_type.dart';
+
 class Appointment {
   final String id;
   final String clientId;
-  final String service;
+  final ServiceType service;
   final DateTime dateTime;
 
   Appointment({
@@ -14,7 +16,7 @@ class Appointment {
   Appointment copyWith({
     String? id,
     String? clientId,
-    String? service,
+    ServiceType? service,
     DateTime? dateTime,
   }) {
     return Appointment(
@@ -29,7 +31,7 @@ class Appointment {
     return Appointment(
       id: map['id'] as String,
       clientId: map['clientId'] as String,
-      service: map['service'] as String,
+      service: ServiceType.values.byName(map['service'] as String),
       dateTime: DateTime.parse(map['dateTime'] as String),
     );
   }
@@ -38,7 +40,7 @@ class Appointment {
     return {
       'id': id,
       'clientId': clientId,
-      'service': service,
+      'service': service.name,
       'dateTime': dateTime.toIso8601String(),
     };
   }
