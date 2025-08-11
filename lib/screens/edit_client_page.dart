@@ -36,9 +36,9 @@ class EditClientPage extends StatelessWidget {
     );
   }
 
-  void _showClientDialog(BuildContext context, {Client? client}) {
+  Future<void> _showClientDialog(BuildContext context, {Client? client}) async {
     final nameController = TextEditingController(text: client?.name ?? '');
-    showDialog(
+    await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: Text(client == null ? 'New Client' : 'Edit Client'),
@@ -52,15 +52,15 @@ class EditClientPage extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               final service = context.read<AppointmentService>();
               final id =
                   client?.id ?? DateTime.now().millisecondsSinceEpoch.toString();
               final newClient = Client(id: id, name: nameController.text);
               if (client == null) {
-                service.addClient(newClient);
+                await service.addClient(newClient);
               } else {
-                service.updateClient(newClient);
+                await service.updateClient(newClient);
               }
               Navigator.pop(context);
             },
@@ -69,5 +69,6 @@ class EditClientPage extends StatelessWidget {
         ],
       ),
     );
+    nameController.dispose();
   }
 }
