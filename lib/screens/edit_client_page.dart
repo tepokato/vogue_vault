@@ -38,13 +38,19 @@ class EditClientPage extends StatelessWidget {
 
   Future<void> _showClientDialog(BuildContext context, {Client? client}) async {
     final nameController = TextEditingController(text: client?.name ?? '');
+    final formKey = GlobalKey<FormState>();
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: Text(client == null ? 'New Client' : 'Edit Client'),
-        content: TextField(
-          controller: nameController,
-          decoration: const InputDecoration(labelText: 'Name'),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: nameController,
+            decoration: const InputDecoration(labelText: 'Name'),
+            validator: (value) =>
+                value == null || value.trim().isEmpty ? 'Please enter a name' : null,
+          ),
         ),
         actions: [
           TextButton(
@@ -53,6 +59,7 @@ class EditClientPage extends StatelessWidget {
           ),
           TextButton(
             onPressed: () async {
+              if (!formKey.currentState!.validate()) return;
               final service = context.read<AppointmentService>();
               final id =
                   client?.id ?? DateTime.now().millisecondsSinceEpoch.toString();
