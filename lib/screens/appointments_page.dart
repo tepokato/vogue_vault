@@ -3,42 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../models/appointment.dart';
 import '../models/service_type.dart';
+import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
 import 'edit_appointment_page.dart';
 import 'edit_client_page.dart';
-
-String serviceTypeLabel(ServiceType type) {
-  switch (type) {
-    case ServiceType.barber:
-      return 'Barber';
-    case ServiceType.hairdresser:
-      return 'Hairdresser';
-    case ServiceType.nails:
-      return 'Nails';
-  }
-}
-
-IconData serviceTypeIcon(ServiceType type) {
-  switch (type) {
-    case ServiceType.barber:
-      return Icons.content_cut;
-    case ServiceType.hairdresser:
-      return Icons.brush;
-    case ServiceType.nails:
-      return Icons.spa;
-  }
-}
-
-Color serviceTypeColor(ServiceType type) {
-  switch (type) {
-    case ServiceType.barber:
-      return Colors.blue;
-    case ServiceType.hairdresser:
-      return Colors.purple;
-    case ServiceType.nails:
-      return Colors.pink;
-  }
-}
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
