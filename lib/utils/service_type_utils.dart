@@ -10,6 +10,8 @@ String serviceTypeLabel(ServiceType type) {
       return 'Hairdresser';
     case ServiceType.nails:
       return 'Nails';
+    default:
+      return 'Unknown';
   }
 }
 
@@ -21,6 +23,8 @@ IconData serviceTypeIcon(ServiceType type) {
       return Icons.brush;
     case ServiceType.nails:
       return Icons.spa;
+    default:
+      return Icons.help_outline;
   }
 }
 
@@ -32,5 +36,7 @@ Color serviceTypeColor(ServiceType type) {
       return Colors.purple;
     case ServiceType.nails:
       return Colors.pink;
+    default:
+      return Colors.grey;
   }
 }
