@@ -84,9 +84,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Alice - Barber'), findsOneWidget);
+    expect(find.text('Alice - Barbershop'), findsOneWidget);
 
-    await tester.tap(find.text('Alice - Barber'));
+    await tester.tap(find.text('Alice - Barbershop'));
     await tester.pumpAndSettle();
     expect(find.text('Edit Appointment'), findsOneWidget);
 
