@@ -1,16 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'screens/appointments_page.dart';
-import 'screens/welcome_page.dart';
-import 'services/appointment_service.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+import 'screens/welcome_page.dart';
+import 'services/appointment_service.dart';
+
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final service = AppointmentService();
-  await service.init();
   runApp(
     ChangeNotifierProvider<AppointmentService>(
-      create: (_) => service,
+      create: (_) {
+        final service = AppointmentService();
+        unawaited(service.init());
+        return service;
+      },
       child: const MyApp(),
     ),
   );
