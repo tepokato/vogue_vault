@@ -146,6 +146,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   final newAppt = Appointment(
                     id: id,
                     clientId: _selectedClientId!,
+                    providerId: service.providers.isNotEmpty
+                        ? service.providers.first.id
+                        : '',
                     service: _service,
                     dateTime: _dateTime,
                   );

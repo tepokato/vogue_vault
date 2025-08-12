@@ -142,6 +142,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -166,6 +167,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -187,6 +189,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -204,6 +207,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -227,6 +231,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
