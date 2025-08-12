@@ -6,14 +6,18 @@ class Client {
   /// Display name of the client.
   final String name;
 
+  /// URL or file path to the client's profile photo.
+  final String? photoUrl;
+
   /// Creates a new [Client] instance.
-  Client({required this.id, required this.name});
+  Client({required this.id, required this.name, this.photoUrl});
 
   /// Returns a copy of this client with the provided values replaced.
-  Client copyWith({String? id, String? name}) {
+  Client copyWith({String? id, String? name, String? photoUrl}) {
     return Client(
       id: id ?? this.id,
       name: name ?? this.name,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 
@@ -22,6 +26,7 @@ class Client {
     return Client(
       id: map['id'] as String,
       name: map['name'] as String,
+      photoUrl: map['photoUrl'] as String?,
     );
   }
 
@@ -30,6 +35,7 @@ class Client {
     return {
       'id': id,
       'name': name,
+      'photoUrl': photoUrl,
     };
   }
 
@@ -39,8 +45,9 @@ class Client {
       other is Client &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          name == other.name;
+          name == other.name &&
+          photoUrl == other.photoUrl;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ photoUrl.hashCode;
 }

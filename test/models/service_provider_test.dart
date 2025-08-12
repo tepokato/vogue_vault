@@ -9,6 +9,7 @@ void main() {
         id: 's1',
         name: 'Bob',
         serviceType: ServiceType.barber,
+        photoUrl: 'p1',
       );
       final map = provider.toMap();
       final from = ServiceProvider.fromMap(map);
@@ -16,6 +17,7 @@ void main() {
       expect(from.id, provider.id);
       expect(from.name, provider.name);
       expect(from.serviceType, provider.serviceType);
+      expect(from.photoUrl, provider.photoUrl);
     });
 
     test('fromMap validates required data', () {
@@ -30,11 +32,13 @@ void main() {
         id: 's1',
         name: 'Bob',
         serviceType: ServiceType.barber,
+        photoUrl: 'p1',
       );
       final p2 = ServiceProvider(
         id: 's1',
         name: 'Bob',
         serviceType: ServiceType.barber,
+        photoUrl: 'p1',
       );
 
       expect(p1, equals(p2));
@@ -46,11 +50,13 @@ void main() {
         id: 's1',
         name: 'Bob',
         serviceType: ServiceType.barber,
+        photoUrl: 'p1',
       );
       final p2 = ServiceProvider(
         id: 's2',
         name: 'Bob',
         serviceType: ServiceType.barber,
+        photoUrl: 'p1',
       );
 
       expect(p1, isNot(equals(p2)));
