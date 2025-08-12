@@ -32,7 +32,7 @@ class RoleSelectionPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     context.read<RoleProvider>().selectedRole = UserRole.customer;
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const WelcomePage(),
@@ -48,7 +48,7 @@ class RoleSelectionPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     context.read<RoleProvider>().selectedRole = UserRole.professional;
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const AppointmentsPage(),

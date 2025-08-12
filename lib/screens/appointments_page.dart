@@ -11,6 +11,7 @@ import '../services/role_provider.dart';
 import 'edit_appointment_page.dart';
 import 'edit_client_page.dart';
 import 'edit_provider_page.dart';
+import 'role_selection_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
@@ -25,6 +26,20 @@ class AppointmentsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Appointments'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.switch_account),
+            tooltip: 'Switch Role',
+            onPressed: () {
+              context.read<RoleProvider>().clearRole();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const RoleSelectionPage(),
+                ),
+                (route) => false,
+              );
+            },
+          ),
           if (role == UserRole.professional)
             IconButton(
               icon: const Icon(Icons.person),

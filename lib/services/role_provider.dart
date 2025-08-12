@@ -11,4 +11,9 @@ class RoleProvider extends ChangeNotifier {
     _selectedRole = role;
     notifyListeners();
   }
+
+  void clearRole() {
+    _selectedRole = null;
+    notifyListeners();
+  }
 }
