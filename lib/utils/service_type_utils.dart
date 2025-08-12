@@ -10,9 +10,9 @@ String serviceTypeLabel(ServiceType type) {
       return 'Hairdresser';
     case ServiceType.nails:
       return 'Nails';
-    default:
-      return 'Unknown';
   }
+  assert(false, 'Unhandled ServiceType: $type');
+  throw ArgumentError('Unhandled ServiceType: $type');
 }
 
 IconData serviceTypeIcon(ServiceType type) {
@@ -23,9 +23,9 @@ IconData serviceTypeIcon(ServiceType type) {
       return Icons.brush;
     case ServiceType.nails:
       return Icons.spa;
-    default:
-      return Icons.help_outline;
   }
+  assert(false, 'Unhandled ServiceType: $type');
+  throw ArgumentError('Unhandled ServiceType: $type');
 }
 
 Color serviceTypeColor(ServiceType type) {
@@ -36,7 +36,7 @@ Color serviceTypeColor(ServiceType type) {
       return Colors.purple;
     case ServiceType.nails:
       return Colors.pink;
-    default:
-      return Colors.grey;
   }
+  assert(false, 'Unhandled ServiceType: $type');
+  throw ArgumentError('Unhandled ServiceType: $type');
 }
