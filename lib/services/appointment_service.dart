@@ -38,9 +38,13 @@ class AppointmentService extends ChangeNotifier {
 
   List<UserProfile> get users {
     if (!_initialized) return [];
-    return _usersBox.values
-        .map((m) => UserProfile.fromMap(Map<String, dynamic>.from(m)))
-        .toList();
+    return _usersBox.values.map((m) {
+      final userMap = Map<String, dynamic>.from(m);
+      return UserProfile.fromMap({
+        ...userMap,
+        'services': userMap['services'] ?? <String>[],
+      });
+    }).toList();
   }
 
   List<UserProfile> get clients =>
@@ -54,7 +58,10 @@ class AppointmentService extends ChangeNotifier {
     final map = _usersBox.get(id);
     if (map == null) return null;
     final userMap = Map<String, dynamic>.from(map);
-    return UserProfile.fromMap(userMap);
+    return UserProfile.fromMap({
+      ...userMap,
+      'services': userMap['services'] ?? <String>[],
+    });
   }
 
   Appointment? getAppointment(String id) {
