@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +7,7 @@ import '../models/user_role.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
+import '../utils/avatar_image.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -36,9 +35,7 @@ class EditUserPage extends StatelessWidget {
           final roleText = user.roles.map((r) => r.name).join(', ');
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: user.photoUrl != null && user.photoUrl!.isNotEmpty
-                  ? FileImage(File(user.photoUrl!))
-                  : null,
+              backgroundImage: avatarImage(user.photoUrl),
               child: user.photoUrl == null || user.photoUrl!.isEmpty
                   ? const Icon(Icons.person)
                   : null,
@@ -89,9 +86,7 @@ class EditUserPage extends StatelessWidget {
                     },
                     child: CircleAvatar(
                       radius: 30,
-                      backgroundImage: photoUrl != null && photoUrl!.isNotEmpty
-                          ? FileImage(File(photoUrl!))
-                          : null,
+                      backgroundImage: avatarImage(photoUrl),
                       child: photoUrl == null || photoUrl!.isEmpty
                           ? const Icon(Icons.person)
                           : null,
