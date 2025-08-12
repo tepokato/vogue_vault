@@ -4,15 +4,20 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/client.dart';
 import 'package:vogue_vault/models/service_type.dart';
+import 'package:vogue_vault/models/service_provider.dart';
 import 'package:vogue_vault/screens/appointments_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 
 class FakeAppointmentService extends ChangeNotifier implements AppointmentService {
   final Map<String, Appointment> _appointments = {};
   final Map<String, Client> _clients = {};
+  final Map<String, ServiceProvider> _providers = {};
 
   @override
   Future<void> init() async {}
+
+  @override
+  bool get isInitialized => true;
 
   @override
   List<Appointment> get appointments => _appointments.values.toList();
@@ -21,10 +26,16 @@ class FakeAppointmentService extends ChangeNotifier implements AppointmentServic
   List<Client> get clients => _clients.values.toList();
 
   @override
+  List<ServiceProvider> get providers => _providers.values.toList();
+
+  @override
   Client? getClient(String id) => _clients[id];
 
   @override
   Appointment? getAppointment(String id) => _appointments[id];
+
+  @override
+  ServiceProvider? getProvider(String id) => _providers[id];
 
   @override
   Future<void> addClient(Client client) async {
@@ -47,6 +58,24 @@ class FakeAppointmentService extends ChangeNotifier implements AppointmentServic
       _appointments.removeWhere((key, appt) => appt.clientId == id);
     }
     _clients.remove(id);
+    notifyListeners();
+  }
+
+  @override
+  Future<void> addProvider(ServiceProvider provider) async {
+    _providers[provider.id] = provider;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> updateProvider(ServiceProvider provider) async {
+    _providers[provider.id] = provider;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> deleteProvider(String id) async {
+    _providers.remove(id);
     notifyListeners();
   }
 
@@ -76,6 +105,7 @@ void main() {
     final appointment = Appointment(
       id: 'a1',
       clientId: 'c1',
+      providerId: 'p1',
       service: ServiceType.barber,
       dateTime: DateTime(2023, 9, 10, 10),
     );

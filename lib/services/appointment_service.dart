@@ -60,7 +60,11 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
-    return Appointment.fromMap(map);
+    // Ensure providerId is available for older stored appointments.
+    return Appointment.fromMap({
+      ...map,
+      'providerId': map['providerId'] ?? '',
+    });
   }
 
   ServiceProvider? getProvider(String id) {
@@ -125,12 +129,14 @@ class AppointmentService extends ChangeNotifier {
 
   Future<void> addAppointment(Appointment appointment) async {
     _ensureInitialized();
+    // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
     notifyListeners();
   }
 
   Future<void> updateAppointment(Appointment appointment) async {
     _ensureInitialized();
+    // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
     notifyListeners();
   }

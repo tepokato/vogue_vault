@@ -8,6 +8,7 @@ void main() {
       final appointment = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -16,6 +17,7 @@ void main() {
 
       expect(from.id, appointment.id);
       expect(from.clientId, appointment.clientId);
+      expect(from.providerId, appointment.providerId);
       expect(from.service, appointment.service);
       expect(from.dateTime, appointment.dateTime);
     });
@@ -27,6 +29,7 @@ void main() {
       final invalidDate = {
         'id': 'a1',
         'clientId': 'c1',
+        'providerId': 'p1',
         'service': 'barber',
         'dateTime': 'invalid',
       };
@@ -39,12 +42,14 @@ void main() {
       final a1 = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
       final a2 = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -57,12 +62,14 @@ void main() {
       final a1 = Appointment(
         id: 'a1',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
       final a2 = Appointment(
         id: 'a2',
         clientId: 'c1',
+        providerId: 'p1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
