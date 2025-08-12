@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,6 @@ import '../models/user_role.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
-import '../utils/avatar_image.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -35,8 +36,10 @@ class EditUserPage extends StatelessWidget {
           final roleText = user.roles.map((r) => r.name).join(', ');
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: avatarImage(user.photoUrl),
-              child: user.photoUrl == null || user.photoUrl!.isEmpty
+              backgroundImage: user.photoBytes != null
+                  ? MemoryImage(user.photoBytes!)
+                  : null,
+              child: user.photoBytes == null || user.photoBytes!.isEmpty
                   ? const Icon(Icons.person)
                   : null,
             ),
@@ -60,7 +63,7 @@ class EditUserPage extends StatelessWidget {
   Future<void> _showUserDialog(BuildContext context, {UserProfile? user}) async {
     final nameController = TextEditingController(text: user?.name ?? '');
     final formKey = GlobalKey<FormState>();
-    String? photoUrl = user?.photoUrl;
+    Uint8List? photoBytes = user?.photoBytes;
     final picker = ImagePicker();
     final roles = <UserRole>{...user?.roles ?? {}};
     final selectedServices = <ServiceType>{...user?.services ?? {}};
@@ -81,13 +84,16 @@ class EditUserPage extends StatelessWidget {
                       final picked =
                           await picker.pickImage(source: ImageSource.gallery);
                       if (picked != null) {
-                        setState(() => photoUrl = picked.path);
+                        final bytes = await picked.readAsBytes();
+                        setState(() => photoBytes = bytes);
                       }
                     },
                     child: CircleAvatar(
                       radius: 30,
-                      backgroundImage: avatarImage(photoUrl),
-                      child: photoUrl == null || photoUrl!.isEmpty
+                      backgroundImage: photoBytes != null
+                          ? MemoryImage(photoBytes!)
+                          : null,
+                      child: photoBytes == null || photoBytes!.isEmpty
                           ? const Icon(Icons.person)
                           : null,
                     ),
@@ -167,7 +173,7 @@ class EditUserPage extends StatelessWidget {
                   final newUser = UserProfile(
                     id: id,
                     name: nameController.text,
-                    photoUrl: photoUrl,
+                    photoBytes: photoBytes,
                     roles: roles,
                     services: roles.contains(UserRole.professional)
                         ? selectedServices

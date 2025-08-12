@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import 'edit_appointment_page.dart';
-import '../utils/avatar_image.dart';
 
 class ProviderSelectionPage extends StatelessWidget {
   final ServiceType serviceType;
@@ -30,9 +29,11 @@ class ProviderSelectionPage extends StatelessWidget {
                 final provider = providers[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: avatarImage(provider.photoUrl),
-                    child: provider.photoUrl == null ||
-                            provider.photoUrl!.isEmpty
+                    backgroundImage: provider.photoBytes != null
+                        ? MemoryImage(provider.photoBytes!)
+                        : null,
+                    child: provider.photoBytes == null ||
+                            provider.photoBytes!.isEmpty
                         ? const Icon(Icons.person)
                         : null,
                   ),

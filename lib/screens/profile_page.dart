@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +10,6 @@ import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../services/role_provider.dart';
-import '../utils/avatar_image.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -22,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _nameController = TextEditingController();
   final _picker = ImagePicker();
 
-  String? _photoUrl;
+  Uint8List? _photoBytes;
   late String _userId;
   late Set<UserRole> _roles;
   late Set<ServiceType> _services;
@@ -36,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
     final user = service.getUser(_userId);
     _nameController.text = user?.name ?? '';
-    _photoUrl = user?.photoUrl;
+    _photoBytes = user?.photoBytes;
     _roles = {...(user?.roles ?? roleProvider.roles)};
     _services = {...(user?.services ?? <ServiceType>{})};
   }
@@ -50,7 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
     if (picked != null) {
-      setState(() => _photoUrl = picked.path);
+      final bytes = await picked.readAsBytes();
+      setState(() => _photoBytes = bytes);
     }
   }
 
@@ -60,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final user = UserProfile(
       id: _userId,
       name: _nameController.text,
-      photoUrl: _photoUrl,
+      photoBytes: _photoBytes,
       roles: _roles,
       services: _services,
     );
@@ -91,8 +93,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         onTap: _pickImage,
                         child: CircleAvatar(
                           radius: 40,
-                          backgroundImage: avatarImage(_photoUrl),
-                          child: _photoUrl == null || _photoUrl!.isEmpty
+                          backgroundImage: _photoBytes != null
+                              ? MemoryImage(_photoBytes!)
+                              : null,
+                          child: _photoBytes == null || _photoBytes!.isEmpty
                               ? const Icon(Icons.person, size: 40)
                               : null,
                         ),
