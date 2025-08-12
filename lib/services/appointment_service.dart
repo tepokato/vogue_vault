@@ -3,13 +3,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/appointment.dart';
 import '../models/client.dart';
+import '../models/service_provider.dart';
 
 class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
   static const _clientsBoxName = 'clients';
+  static const _providersBoxName = 'providers';
 
   late Box<Map<String, dynamic>> _appointmentsBox;
   late Box<Map<String, dynamic>> _clientsBox;
+  late Box<Map<String, dynamic>> _providersBox;
 
   bool _initialized = false;
   bool get isInitialized => _initialized;
@@ -20,6 +23,8 @@ class AppointmentService extends ChangeNotifier {
         await Hive.openBox<Map<String, dynamic>>(_appointmentsBoxName);
     _clientsBox =
         await Hive.openBox<Map<String, dynamic>>(_clientsBoxName);
+    _providersBox =
+        await Hive.openBox<Map<String, dynamic>>(_providersBoxName);
     _initialized = true;
   }
 
@@ -39,6 +44,11 @@ class AppointmentService extends ChangeNotifier {
     return _clientsBox.values.map(Client.fromMap).toList();
   }
 
+  List<ServiceProvider> get providers {
+    if (!_initialized) return [];
+    return _providersBox.values.map(ServiceProvider.fromMap).toList();
+  }
+
   Client? getClient(String id) {
     _ensureInitialized();
     final map = _clientsBox.get(id);
@@ -51,6 +61,13 @@ class AppointmentService extends ChangeNotifier {
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
     return Appointment.fromMap(map);
+  }
+
+  ServiceProvider? getProvider(String id) {
+    _ensureInitialized();
+    final map = _providersBox.get(id);
+    if (map == null) return null;
+    return ServiceProvider.fromMap(map);
   }
 
   Future<void> addClient(Client client) async {
@@ -88,6 +105,24 @@ class AppointmentService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addProvider(ServiceProvider provider) async {
+    _ensureInitialized();
+    await _providersBox.put(provider.id, provider.toMap());
+    notifyListeners();
+  }
+
+  Future<void> updateProvider(ServiceProvider provider) async {
+    _ensureInitialized();
+    await _providersBox.put(provider.id, provider.toMap());
+    notifyListeners();
+  }
+
+  Future<void> deleteProvider(String id) async {
+    _ensureInitialized();
+    await _providersBox.delete(id);
+    notifyListeners();
+  }
+
   Future<void> addAppointment(Appointment appointment) async {
     _ensureInitialized();
     await _appointmentsBox.put(appointment.id, appointment.toMap());
@@ -111,6 +146,7 @@ class AppointmentService extends ChangeNotifier {
     if (_initialized) {
       _appointmentsBox.close();
       _clientsBox.close();
+      _providersBox.close();
     }
     super.dispose();
   }
