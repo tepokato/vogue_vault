@@ -12,6 +12,7 @@ class RoleSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final roles = context.watch<RoleProvider>().roles;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Role'),
@@ -27,37 +28,40 @@ class RoleSelectionPage extends StatelessWidget {
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.read<RoleProvider>().selectedRole = UserRole.customer;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const WelcomePage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Customer'),
+              if (roles.contains(UserRole.customer))
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<RoleProvider>().selectedRole = UserRole.customer;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const WelcomePage(),
+                        ),
+                      );
+                    },
+                    child: const Text('Customer'),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.read<RoleProvider>().selectedRole = UserRole.professional;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AppointmentsPage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Professional'),
+              if (roles.contains(UserRole.customer))
+                const SizedBox(height: 16),
+              if (roles.contains(UserRole.professional))
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<RoleProvider>().selectedRole = UserRole.professional;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AppointmentsPage(),
+                        ),
+                      );
+                    },
+                    child: const Text('Professional'),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

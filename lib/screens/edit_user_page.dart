@@ -4,72 +4,74 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../models/client.dart';
+import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 
-class EditClientPage extends StatelessWidget {
-  const EditClientPage({super.key});
+class EditUserPage extends StatelessWidget {
+  const EditUserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final role = context.watch<RoleProvider>().selectedRole;
     final service = context.watch<AppointmentService>();
-    final clients = service.clients;
+    final users = service.users;
 
     if (role != UserRole.professional) {
       return const Scaffold(
-        body: Center(
-          child: Text('Available only for professionals'),
-        ),
+        body: Center(child: Text('Available only for professionals')),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clients'),
+        title: const Text('Users'),
       ),
       body: ListView.builder(
-        itemCount: clients.length,
+        itemCount: users.length,
         itemBuilder: (context, index) {
-          final client = clients[index];
+          final user = users[index];
+          final roleText = user.roles.map((r) => r.name).join(', ');
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: client.photoUrl != null && client.photoUrl!.isNotEmpty
-                  ? FileImage(File(client.photoUrl!))
+              backgroundImage: user.photoUrl != null && user.photoUrl!.isNotEmpty
+                  ? FileImage(File(user.photoUrl!))
                   : null,
-              child: client.photoUrl == null || client.photoUrl!.isEmpty
+              child: user.photoUrl == null || user.photoUrl!.isEmpty
                   ? const Icon(Icons.person)
                   : null,
             ),
-            title: Text(client.name),
-            onTap: () => _showClientDialog(context, client: client),
+            title: Text(user.name),
+            subtitle: Text(roleText),
+            onTap: () => _showUserDialog(context, user: user),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () => service.deleteClient(client.id),
+              onPressed: () => service.deleteUser(user.id),
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showClientDialog(context),
+        onPressed: () => _showUserDialog(context),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> _showClientDialog(BuildContext context, {Client? client}) async {
-    final nameController = TextEditingController(text: client?.name ?? '');
+  Future<void> _showUserDialog(BuildContext context, {UserProfile? user}) async {
+    final nameController = TextEditingController(text: user?.name ?? '');
     final formKey = GlobalKey<FormState>();
-    String? photoUrl = client?.photoUrl;
+    String? photoUrl = user?.photoUrl;
     final picker = ImagePicker();
+    final roles = <UserRole>{...user?.roles ?? {}};
+
     await showDialog(
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text(client == null ? 'New Client' : 'Edit Client'),
+            title: Text(user == null ? 'New User' : 'Edit User'),
             content: Form(
               key: formKey,
               child: Column(
@@ -100,6 +102,32 @@ class EditClientPage extends StatelessWidget {
                         ? 'Please enter a name'
                         : null,
                   ),
+                  CheckboxListTile(
+                    value: roles.contains(UserRole.customer),
+                    title: const Text('Customer'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value == true) {
+                          roles.add(UserRole.customer);
+                        } else {
+                          roles.remove(UserRole.customer);
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    value: roles.contains(UserRole.professional),
+                    title: const Text('Professional'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value == true) {
+                          roles.add(UserRole.professional);
+                        } else {
+                          roles.remove(UserRole.professional);
+                        }
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -110,16 +138,20 @@ class EditClientPage extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () async {
-                  if (!formKey.currentState!.validate()) return;
+                  if (!formKey.currentState!.validate() || roles.isEmpty) return;
                   final service = context.read<AppointmentService>();
-                  final id = client?.id ??
+                  final id = user?.id ??
                       DateTime.now().millisecondsSinceEpoch.toString();
-                  final newClient =
-                      Client(id: id, name: nameController.text, photoUrl: photoUrl);
-                  if (client == null) {
-                    await service.addClient(newClient);
+                  final newUser = UserProfile(
+                    id: id,
+                    name: nameController.text,
+                    photoUrl: photoUrl,
+                    roles: roles,
+                  );
+                  if (user == null) {
+                    await service.addUser(newUser);
                   } else {
-                    await service.updateClient(newClient);
+                    await service.updateUser(newUser);
                   }
                   Navigator.pop(context);
                 },

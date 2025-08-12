@@ -9,8 +9,7 @@ import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 import 'edit_appointment_page.dart';
-import 'edit_client_page.dart';
-import 'edit_provider_page.dart';
+import 'edit_user_page.dart';
 import 'role_selection_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
@@ -42,26 +41,13 @@ class AppointmentsPage extends StatelessWidget {
           ),
           if (role == UserRole.professional)
             IconButton(
-              icon: const Icon(Icons.person),
-              tooltip: 'Clients',
+              icon: const Icon(Icons.people),
+              tooltip: 'Users',
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const EditClientPage(),
-                  ),
-                );
-              },
-            ),
-          if (role == UserRole.professional)
-            IconButton(
-              icon: const Icon(Icons.work),
-              tooltip: 'Providers',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const EditProviderPage(),
+                    builder: (_) => const EditUserPage(),
                   ),
                 );
               },
@@ -72,7 +58,7 @@ class AppointmentsPage extends StatelessWidget {
         itemCount: appointments.length,
         itemBuilder: (context, index) {
           final Appointment appt = appointments[index];
-          final client = service.getClient(appt.clientId);
+          final client = service.getUser(appt.clientId);
           return ListTile(
             leading: CircleAvatar(
               backgroundColor: serviceTypeColor(appt.service),

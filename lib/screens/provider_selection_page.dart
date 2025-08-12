@@ -15,9 +15,7 @@ class ProviderSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final providers = service.providers
-        .where((p) => p.serviceType == serviceType)
-        .toList();
+    final providers = service.providers;
 
     return Scaffold(
       appBar: AppBar(
