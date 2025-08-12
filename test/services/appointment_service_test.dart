@@ -90,13 +90,21 @@ void main() {
       expect(notified, isTrue);
     });
 
-    test('delete provider removes provider and notifies listeners', () async {
+    test('delete provider removes provider and related appointments', () async {
       final provider = ServiceProvider(
         id: 'p1',
         name: 'Jane',
         serviceType: ServiceType.barber,
       );
+      final appointment = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        providerId: 'p1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
       await service.addProvider(provider);
+      await service.addAppointment(appointment);
 
       var notified = false;
       service.addListener(() => notified = true);
@@ -105,7 +113,39 @@ void main() {
 
       expect(service.getProvider('p1'), isNull);
       expect(service.providers, isEmpty);
+      expect(service.getAppointment('a1'), isNull);
+      expect(service.appointments, isEmpty);
       expect(notified, isTrue);
+    });
+
+    test('delete provider reassigns appointments when id provided', () async {
+      final p1 = ServiceProvider(
+        id: 'p1',
+        name: 'Jane',
+        serviceType: ServiceType.barber,
+      );
+      final p2 = ServiceProvider(
+        id: 'p2',
+        name: 'John',
+        serviceType: ServiceType.barber,
+      );
+      final appointment = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        providerId: 'p1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+      await service.addProvider(p1);
+      await service.addProvider(p2);
+      await service.addAppointment(appointment);
+
+      await service.deleteProvider('p1', reassignedProviderId: 'p2');
+
+      final updated = service.getAppointment('a1');
+      expect(updated?.providerId, 'p2');
+      expect(service.getProvider('p1'), isNull);
+      expect(service.providers.length, 1);
     });
   });
 
