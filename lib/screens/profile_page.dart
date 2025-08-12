@@ -1,0 +1,121 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user_profile.dart';
+import '../models/user_role.dart';
+import '../models/service_type.dart';
+import '../services/appointment_service.dart';
+import '../services/auth_service.dart';
+import '../services/role_provider.dart';
+
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _picker = ImagePicker();
+
+  String? _photoUrl;
+  late String _userId;
+  late Set<UserRole> _roles;
+  late Set<ServiceType> _services;
+
+  @override
+  void initState() {
+    super.initState();
+    final auth = context.read<AuthService>();
+    final service = context.read<AppointmentService>();
+    final roleProvider = context.read<RoleProvider>();
+    _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
+    final user = service.getUser(_userId);
+    _nameController.text = user?.name ?? '';
+    _photoUrl = user?.photoUrl;
+    _roles = {...(user?.roles ?? roleProvider.roles)};
+    _services = {...(user?.services ?? <ServiceType>{})};
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() => _photoUrl = picked.path);
+    }
+  }
+
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    final service = context.read<AppointmentService>();
+    final user = UserProfile(
+      id: _userId,
+      name: _nameController.text,
+      photoUrl: _photoUrl,
+      roles: _roles,
+      services: _services,
+    );
+    await service.updateUser(user);
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: _pickImage,
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: _photoUrl != null && _photoUrl!.isNotEmpty
+                      ? FileImage(File(_photoUrl!))
+                      : null,
+                  child: _photoUrl == null || _photoUrl!.isEmpty
+                      ? const Icon(Icons.person, size: 40)
+                      : null,
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+                validator: (value) =>
+                    value == null || value.trim().isEmpty ? 'Please enter a name' : null,
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _save,
+                  child: const Text('Save'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
