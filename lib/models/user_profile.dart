@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:collection/collection.dart';
 
 import 'user_role.dart';
@@ -11,8 +14,8 @@ class UserProfile {
   /// Display name of the user.
   final String name;
 
-  /// Optional path or URL to a profile image.
-  final String? photoUrl;
+  /// Optional raw bytes of a profile image.
+  final Uint8List? photoBytes;
 
   /// The set of roles this user can assume.
   final Set<UserRole> roles;
@@ -23,7 +26,7 @@ class UserProfile {
   UserProfile({
     required this.id,
     required this.name,
-    this.photoUrl,
+    this.photoBytes,
     Set<UserRole>? roles,
     Set<ServiceType>? services,
   })  :
@@ -34,14 +37,14 @@ class UserProfile {
   UserProfile copyWith({
     String? id,
     String? name,
-    String? photoUrl,
+    Uint8List? photoBytes,
     Set<UserRole>? roles,
     Set<ServiceType>? services,
   }) {
     return UserProfile(
       id: id ?? this.id,
       name: name ?? this.name,
-      photoUrl: photoUrl ?? this.photoUrl,
+      photoBytes: photoBytes ?? this.photoBytes,
       roles: roles ?? this.roles,
       services: services ?? this.services,
     );
@@ -52,7 +55,9 @@ class UserProfile {
     return UserProfile(
       id: map['id'] as String,
       name: map['name'] as String,
-      photoUrl: map['photoUrl'] as String?,
+      photoBytes: map['photoBytes'] != null
+          ? base64Decode(map['photoBytes'] as String)
+          : null,
       roles: (map['roles'] as List?)
               ?.map((e) => UserRole.values.byName(e as String))
               .toSet() ??
@@ -69,7 +74,7 @@ class UserProfile {
     return {
       'id': id,
       'name': name,
-      'photoUrl': photoUrl,
+      'photoBytes': photoBytes != null ? base64Encode(photoBytes!) : null,
       'roles': roles.map((e) => e.name).toList(),
       'services': services.map((e) => e.name).toList(),
     };
@@ -82,7 +87,7 @@ class UserProfile {
           runtimeType == other.runtimeType &&
           id == other.id &&
           name == other.name &&
-          photoUrl == other.photoUrl &&
+          const ListEquality<int>().equals(photoBytes, other.photoBytes) &&
           const SetEquality<UserRole>().equals(roles, other.roles) &&
           const SetEquality<ServiceType>().equals(services, other.services);
 
@@ -90,7 +95,7 @@ class UserProfile {
   int get hashCode =>
       id.hashCode ^
       name.hashCode ^
-      photoUrl.hashCode ^
+      const ListEquality<int>().hash(photoBytes) ^
       roles.hashCode ^
       services.hashCode;
 }

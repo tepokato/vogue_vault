@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/user_role.dart';
@@ -9,7 +11,7 @@ void main() {
       final profile = UserProfile(
         id: 'u1',
         name: 'Alice',
-        photoUrl: 'photo.png',
+        photoBytes: Uint8List.fromList([1, 2, 3]),
         roles: {UserRole.customer, UserRole.professional},
         services: {ServiceType.barber, ServiceType.nails},
       );
@@ -20,7 +22,7 @@ void main() {
       expect(from, equals(profile));
     });
 
-    test('handles null photoUrl and empty sets', () {
+    test('handles null photoBytes and empty sets', () {
       final profile = UserProfile(
         id: 'u2',
         name: 'Bob',
@@ -29,7 +31,7 @@ void main() {
       final map = profile.toMap();
       final from = UserProfile.fromMap(map);
 
-      expect(from.photoUrl, isNull);
+      expect(from.photoBytes, isNull);
       expect(from.roles, isEmpty);
       expect(from.services, isEmpty);
       expect(from, equals(profile));
