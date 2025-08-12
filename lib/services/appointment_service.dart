@@ -36,34 +36,43 @@ class AppointmentService extends ChangeNotifier {
 
   List<Appointment> get appointments {
     if (!_initialized) return [];
-    return _appointmentsBox.values.map(Appointment.fromMap).toList();
+    return _appointmentsBox.values
+        .map((m) => Appointment.fromMap(Map<String, dynamic>.from(m)))
+        .toList();
   }
 
   List<Client> get clients {
     if (!_initialized) return [];
-    return _clientsBox.values.map(Client.fromMap).toList();
+    return _clientsBox.values
+        .map((m) => Client.fromMap(Map<String, dynamic>.from(m)))
+        .toList();
   }
 
   List<ServiceProvider> get providers {
     if (!_initialized) return [];
-    return _providersBox.values.map(ServiceProvider.fromMap).toList();
+    return _providersBox.values
+        .map((m) =>
+            ServiceProvider.fromMap(Map<String, dynamic>.from(m)))
+        .toList();
   }
 
   Client? getClient(String id) {
     _ensureInitialized();
     final map = _clientsBox.get(id);
     if (map == null) return null;
-    return Client.fromMap(map);
+    final clientMap = Map<String, dynamic>.from(map);
+    return Client.fromMap(clientMap);
   }
 
   Appointment? getAppointment(String id) {
     _ensureInitialized();
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
+    final appointmentMap = Map<String, dynamic>.from(map);
     // Ensure providerId is available for older stored appointments.
     return Appointment.fromMap({
-      ...map,
-      'providerId': map['providerId'] ?? '',
+      ...appointmentMap,
+      'providerId': appointmentMap['providerId'] ?? '',
     });
   }
 
@@ -71,7 +80,8 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
     final map = _providersBox.get(id);
     if (map == null) return null;
-    return ServiceProvider.fromMap(map);
+    final providerMap = Map<String, dynamic>.from(map);
+    return ServiceProvider.fromMap(providerMap);
   }
 
   Future<void> addClient(Client client) async {
