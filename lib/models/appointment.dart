@@ -5,10 +5,10 @@ class Appointment {
   /// Unique identifier for the appointment.
   final String id;
 
-  /// Identifier of the client booking the appointment.
+  /// Identifier of the user acting as the client.
   final String clientId;
 
-  /// Identifier of the service provider handling the appointment.
+  /// Identifier of the user acting as the service provider.
   final String providerId;
 
   /// The type of service being scheduled.

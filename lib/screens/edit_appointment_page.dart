@@ -38,8 +38,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
-    final providers =
-        service.providers.where((p) => p.serviceType == _service).toList();
+    final providers = service.providers;
     if (_selectedClientId != null &&
         !clients.any((c) => c.id == _selectedClientId)) {
       _selectedClientId = null;
@@ -129,12 +128,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                 onChanged: (value) {
                   setState(() {
                     _service = value!;
-                    final available = service.providers
-                        .where((p) => p.serviceType == _service)
-                        .toList();
-                    if (!available.any((p) => p.id == _selectedProviderId)) {
-                      _selectedProviderId = null;
-                    }
                   });
                 },
                 validator: (value) =>

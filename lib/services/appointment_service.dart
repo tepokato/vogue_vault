@@ -2,17 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/appointment.dart';
-import '../models/client.dart';
-import '../models/service_provider.dart';
+import '../models/user_profile.dart';
+import '../models/user_role.dart';
 
 class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
-  static const _clientsBoxName = 'clients';
-  static const _providersBoxName = 'providers';
+  static const _usersBoxName = 'users';
 
   late Box<Map<String, dynamic>> _appointmentsBox;
-  late Box<Map<String, dynamic>> _clientsBox;
-  late Box<Map<String, dynamic>> _providersBox;
+  late Box<Map<String, dynamic>> _usersBox;
 
   bool _initialized = false;
   bool get isInitialized => _initialized;
@@ -21,10 +19,7 @@ class AppointmentService extends ChangeNotifier {
     await Hive.initFlutter();
     _appointmentsBox =
         await Hive.openBox<Map<String, dynamic>>(_appointmentsBoxName);
-    _clientsBox =
-        await Hive.openBox<Map<String, dynamic>>(_clientsBoxName);
-    _providersBox =
-        await Hive.openBox<Map<String, dynamic>>(_providersBoxName);
+    _usersBox = await Hive.openBox<Map<String, dynamic>>(_usersBoxName);
     _initialized = true;
   }
 
@@ -41,28 +36,25 @@ class AppointmentService extends ChangeNotifier {
         .toList();
   }
 
-  List<Client> get clients {
+  List<UserProfile> get users {
     if (!_initialized) return [];
-    // photoUrl is parsed within Client.fromMap.
-    return _clientsBox.values
-        .map((m) => Client.fromMap(Map<String, dynamic>.from(m)))
+    return _usersBox.values
+        .map((m) => UserProfile.fromMap(Map<String, dynamic>.from(m)))
         .toList();
   }
 
-  List<ServiceProvider> get providers {
-    if (!_initialized) return [];
-    // photoUrl is parsed within ServiceProvider.fromMap.
-    return _providersBox.values
-        .map((m) => ServiceProvider.fromMap(Map<String, dynamic>.from(m)))
-        .toList();
-  }
+  List<UserProfile> get clients =>
+      users.where((u) => u.roles.contains(UserRole.customer)).toList();
 
-  Client? getClient(String id) {
+  List<UserProfile> get providers =>
+      users.where((u) => u.roles.contains(UserRole.professional)).toList();
+
+  UserProfile? getUser(String id) {
     _ensureInitialized();
-    final map = _clientsBox.get(id);
+    final map = _usersBox.get(id);
     if (map == null) return null;
-    final clientMap = Map<String, dynamic>.from(map);
-    return Client.fromMap(clientMap);
+    final userMap = Map<String, dynamic>.from(map);
+    return UserProfile.fromMap(userMap);
   }
 
   Appointment? getAppointment(String id) {
@@ -77,39 +69,32 @@ class AppointmentService extends ChangeNotifier {
     });
   }
 
-  ServiceProvider? getProvider(String id) {
+  Future<void> addUser(UserProfile user) async {
     _ensureInitialized();
-    final map = _providersBox.get(id);
-    if (map == null) return null;
-    final providerMap = Map<String, dynamic>.from(map);
-    return ServiceProvider.fromMap(providerMap);
-  }
-
-  Future<void> addClient(Client client) async {
-    _ensureInitialized();
-    // photoUrl is persisted via the client's toMap representation.
-    await _clientsBox.put(client.id, client.toMap());
+    await _usersBox.put(user.id, user.toMap());
     notifyListeners();
   }
 
-  Future<void> updateClient(Client client) async {
+  Future<void> updateUser(UserProfile user) async {
     _ensureInitialized();
-    // photoUrl is persisted via the client's toMap representation.
-    await _clientsBox.put(client.id, client.toMap());
+    await _usersBox.put(user.id, user.toMap());
     notifyListeners();
   }
 
-  Future<void> deleteClient(String id, {String? reassignedClientId}) async {
+  Future<void> deleteUser(String id, {String? reassignedUserId}) async {
     _ensureInitialized();
 
     final affected = _appointmentsBox.values
         .map(Appointment.fromMap)
-        .where((a) => a.clientId == id)
+        .where((a) => a.clientId == id || a.providerId == id)
         .toList();
 
-    if (reassignedClientId != null) {
+    if (reassignedUserId != null) {
       for (final appt in affected) {
-        final updated = appt.copyWith(clientId: reassignedClientId);
+        final updated = appt.copyWith(
+          clientId: appt.clientId == id ? reassignedUserId : appt.clientId,
+          providerId: appt.providerId == id ? reassignedUserId : appt.providerId,
+        );
         await _appointmentsBox.put(updated.id, updated.toMap());
       }
     } else {
@@ -118,44 +103,7 @@ class AppointmentService extends ChangeNotifier {
       }
     }
 
-    await _clientsBox.delete(id);
-    notifyListeners();
-  }
-
-  Future<void> addProvider(ServiceProvider provider) async {
-    _ensureInitialized();
-    // photoUrl is persisted via the provider's toMap representation.
-    await _providersBox.put(provider.id, provider.toMap());
-    notifyListeners();
-  }
-
-  Future<void> updateProvider(ServiceProvider provider) async {
-    _ensureInitialized();
-    // photoUrl is persisted via the provider's toMap representation.
-    await _providersBox.put(provider.id, provider.toMap());
-    notifyListeners();
-  }
-
-  Future<void> deleteProvider(String id, {String? reassignedProviderId}) async {
-    _ensureInitialized();
-
-    final affected = _appointmentsBox.values
-        .map(Appointment.fromMap)
-        .where((a) => a.providerId == id)
-        .toList();
-
-    if (reassignedProviderId != null) {
-      for (final appt in affected) {
-        final updated = appt.copyWith(providerId: reassignedProviderId);
-        await _appointmentsBox.put(updated.id, updated.toMap());
-      }
-    } else {
-      for (final appt in affected) {
-        await _appointmentsBox.delete(appt.id);
-      }
-    }
-
-    await _providersBox.delete(id);
+    await _usersBox.delete(id);
     notifyListeners();
   }
 
@@ -183,8 +131,7 @@ class AppointmentService extends ChangeNotifier {
   void dispose() {
     if (_initialized) {
       _appointmentsBox.close();
-      _clientsBox.close();
-      _providersBox.close();
+      _usersBox.close();
     }
     super.dispose();
   }
