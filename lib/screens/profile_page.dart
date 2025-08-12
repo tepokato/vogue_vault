@@ -81,27 +81,73 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
             children: [
-              GestureDetector(
-                onTap: _pickImage,
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: _photoUrl != null && _photoUrl!.isNotEmpty
-                      ? FileImage(File(_photoUrl!))
-                      : null,
-                  child: _photoUrl == null || _photoUrl!.isEmpty
-                      ? const Icon(Icons.person, size: 40)
-                      : null,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: _pickImage,
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundImage: _photoUrl != null && _photoUrl!.isNotEmpty
+                              ? FileImage(File(_photoUrl!))
+                              : null,
+                          child: _photoUrl == null || _photoUrl!.isEmpty
+                              ? const Icon(Icons.person, size: 40)
+                              : null,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(labelText: 'Name'),
+                        validator: (value) => value == null || value.trim().isEmpty
+                            ? 'Please enter a name'
+                            : null,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-                validator: (value) =>
-                    value == null || value.trim().isEmpty ? 'Please enter a name' : null,
+              const SizedBox(height: 24),
+              Text('Roles', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              SegmentedButton<UserRole>(
+                segments: UserRole.values
+                    .map((role) => ButtonSegment(
+                        value: role, label: Text(role.name)))
+                    .toList(),
+                multiSelectionEnabled: true,
+                selected: _roles,
+                onSelectionChanged: (selection) {
+                  setState(() => _roles = selection);
+                },
+              ),
+              const SizedBox(height: 24),
+              Text('Services', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: ServiceType.values
+                    .map((service) => FilterChip(
+                          label: Text(service.name),
+                          selected: _services.contains(service),
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _services.add(service);
+                              } else {
+                                _services.remove(service);
+                              }
+                            });
+                          },
+                        ))
+                    .toList(),
               ),
               const SizedBox(height: 24),
               SizedBox(
