@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/service_type.dart';
 import '../utils/service_type_utils.dart';
 import 'appointments_page.dart';
+import 'provider_selection_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -67,7 +68,7 @@ class _ServiceCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AppointmentsPage(),
+              builder: (_) => ProviderSelectionPage(serviceType: type),
             ),
           );
         },

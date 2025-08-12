@@ -3,14 +3,15 @@ import 'package:provider/provider.dart';
 
 import '../models/appointment.dart';
 import '../models/service_type.dart';
-import '../models/user_role.dart';
 import '../services/appointment_service.dart';
-import '../services/role_provider.dart';
 
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
+  final ServiceType? initialService;
+  final String? initialProviderId;
 
-  const EditAppointmentPage({super.key, this.appointment});
+  const EditAppointmentPage(
+      {super.key, this.appointment, this.initialService, this.initialProviderId});
 
   @override
   State<EditAppointmentPage> createState() => _EditAppointmentPageState();
@@ -21,20 +22,24 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
   String? _selectedClientId;
+  String? _selectedProviderId;
 
   @override
   void initState() {
     super.initState();
-    _service = widget.appointment?.service ?? ServiceType.barber;
+    _service =
+        widget.appointment?.service ?? widget.initialService ?? ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
     _selectedClientId = widget.appointment?.clientId;
+    _selectedProviderId = widget.appointment?.providerId ?? widget.initialProviderId;
   }
 
   @override
   Widget build(BuildContext context) {
-    final role = context.watch<RoleProvider>().selectedRole;
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
+    final providers =
+        service.providers.where((p) => p.serviceType == _service).toList();
     if (_selectedClientId != null &&
         !clients.any((c) => c.id == _selectedClientId)) {
       _selectedClientId = null;
@@ -48,15 +53,20 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
         );
       });
     }
-    final isEditing = widget.appointment != null;
-
-    if (role != UserRole.professional) {
-      return const Scaffold(
-        body: Center(
-          child: Text('Available only for professionals'),
-        ),
-      );
+    if (_selectedProviderId != null &&
+        !providers.any((p) => p.id == _selectedProviderId)) {
+      _selectedProviderId = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Previously selected provider was removed. Please choose another.'),
+          ),
+        );
+      });
     }
+    final isEditing = widget.appointment != null;
 
     if (clients.isEmpty) {
       return Scaffold(
@@ -65,6 +75,17 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
         ),
         body: const Center(
           child: Text('No clients available. Please add a client first.'),
+        ),
+      );
+    }
+
+    if (providers.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(isEditing ? 'Edit Appointment' : 'New Appointment'),
+        ),
+        body: const Center(
+          child: Text('No providers available. Please add a provider first.'),
         ),
       );
     }
@@ -105,9 +126,34 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       ),
                     )
                     .toList(),
-                onChanged: (value) => setState(() => _service = value!),
+                onChanged: (value) {
+                  setState(() {
+                    _service = value!;
+                    final available = service.providers
+                        .where((p) => p.serviceType == _service)
+                        .toList();
+                    if (!available.any((p) => p.id == _selectedProviderId)) {
+                      _selectedProviderId = null;
+                    }
+                  });
+                },
                 validator: (value) =>
                     value == null ? 'Please select a service' : null,
+              ),
+              DropdownButtonFormField<String>(
+                value: _selectedProviderId,
+                decoration: const InputDecoration(labelText: 'Provider'),
+                items: providers
+                    .map(
+                      (p) => DropdownMenuItem<String>(
+                        value: p.id,
+                        child: Text(p.name),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) => setState(() => _selectedProviderId = value),
+                validator: (value) =>
+                    value == null ? 'Please select a provider' : null,
               ),
               const SizedBox(height: 12),
               Row(
@@ -146,9 +192,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   final newAppt = Appointment(
                     id: id,
                     clientId: _selectedClientId!,
-                    providerId: service.providers.isNotEmpty
-                        ? service.providers.first.id
-                        : '',
+                    providerId: _selectedProviderId!,
                     service: _service,
                     dateTime: _dateTime,
                   );
