@@ -7,6 +7,8 @@ import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/models/service_provider.dart';
 import 'package:vogue_vault/screens/appointments_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
+import 'package:vogue_vault/models/user_role.dart';
+import 'package:vogue_vault/services/role_provider.dart';
 
 class FakeAppointmentService extends ChangeNotifier implements AppointmentService {
   final Map<String, Appointment> _appointments = {};
@@ -112,9 +114,13 @@ void main() {
     await service.addClient(client);
     await service.addAppointment(appointment);
 
+    final roleProvider = RoleProvider()..selectedRole = UserRole.professional;
     await tester.pumpWidget(
-      ChangeNotifierProvider<AppointmentService>.value(
-        value: service,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppointmentService>.value(value: service),
+          ChangeNotifierProvider<RoleProvider>.value(value: roleProvider),
+        ],
         child: const MaterialApp(home: AppointmentsPage()),
       ),
     );
