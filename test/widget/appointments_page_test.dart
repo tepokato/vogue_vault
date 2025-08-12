@@ -76,7 +76,14 @@ class FakeAppointmentService extends ChangeNotifier implements AppointmentServic
   }
 
   @override
-  Future<void> deleteProvider(String id) async {
+  Future<void> deleteProvider(String id, {String? reassignedProviderId}) async {
+    if (reassignedProviderId != null) {
+      _appointments.updateAll((key, appt) => appt.providerId == id
+          ? appt.copyWith(providerId: reassignedProviderId)
+          : appt);
+    } else {
+      _appointments.removeWhere((key, appt) => appt.providerId == id);
+    }
     _providers.remove(id);
     notifyListeners();
   }
@@ -145,5 +152,42 @@ void main() {
     await tester.tap(find.byTooltip('Clients'));
     await tester.pumpAndSettle();
     expect(find.text('Clients'), findsOneWidget);
+  });
+
+  testWidgets('Deleting a provider removes its appointments from the UI',
+      (tester) async {
+    final service = FakeAppointmentService();
+    final client = Client(id: 'c1', name: 'Alice');
+    final provider =
+        ServiceProvider(id: 'p1', name: 'Bob', serviceType: ServiceType.barber);
+    final appointment = Appointment(
+      id: 'a1',
+      clientId: 'c1',
+      providerId: 'p1',
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 9, 10, 10),
+    );
+    await service.addClient(client);
+    await service.addProvider(provider);
+    await service.addAppointment(appointment);
+
+    final roleProvider = RoleProvider()..selectedRole = UserRole.professional;
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppointmentService>.value(value: service),
+          ChangeNotifierProvider<RoleProvider>.value(value: roleProvider),
+        ],
+        child: const MaterialApp(home: AppointmentsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Alice - Barbershop'), findsOneWidget);
+
+    await service.deleteProvider('p1');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Alice - Barbershop'), findsNothing);
   });
 }

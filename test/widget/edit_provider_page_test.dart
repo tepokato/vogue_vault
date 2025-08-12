@@ -60,7 +60,7 @@ class FakeAppointmentService extends ChangeNotifier implements AppointmentServic
   }
 
   @override
-  Future<void> deleteProvider(String id) async {
+  Future<void> deleteProvider(String id, {String? reassignedProviderId}) async {
     _providers.remove(id);
     notifyListeners();
   }

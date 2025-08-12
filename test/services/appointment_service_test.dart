@@ -147,6 +147,45 @@ void main() {
       expect(service.getProvider('p1'), isNull);
       expect(service.providers.length, 1);
     });
+
+    test('delete provider removes only its appointments', () async {
+      final p1 = ServiceProvider(
+        id: 'p1',
+        name: 'Jane',
+        serviceType: ServiceType.barber,
+      );
+      final p2 = ServiceProvider(
+        id: 'p2',
+        name: 'John',
+        serviceType: ServiceType.barber,
+      );
+      final a1 = Appointment(
+        id: 'a1',
+        clientId: 'c1',
+        providerId: 'p1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 10, 0),
+      );
+      final a2 = Appointment(
+        id: 'a2',
+        clientId: 'c2',
+        providerId: 'p2',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 11, 11, 0),
+      );
+      await service.addProvider(p1);
+      await service.addProvider(p2);
+      await service.addAppointment(a1);
+      await service.addAppointment(a2);
+
+      await service.deleteProvider('p1');
+
+      expect(service.getProvider('p1'), isNull);
+      expect(service.getAppointment('a1'), isNull);
+      expect(service.getAppointment('a2'), isNotNull);
+      expect(service.providers.length, 1);
+      expect(service.appointments.length, 1);
+    });
   });
 
   group('Client operations', () {
