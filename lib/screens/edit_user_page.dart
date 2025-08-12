@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
+import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 
@@ -65,6 +66,7 @@ class EditUserPage extends StatelessWidget {
     String? photoUrl = user?.photoUrl;
     final picker = ImagePicker();
     final roles = <UserRole>{...user?.roles ?? {}};
+    final selectedServices = <ServiceType>{...user?.services ?? {}};
 
     await showDialog(
       context: context,
@@ -128,6 +130,22 @@ class EditUserPage extends StatelessWidget {
                       });
                     },
                   ),
+                  if (roles.contains(UserRole.professional))
+                    ...ServiceType.values.map(
+                      (s) => CheckboxListTile(
+                        value: selectedServices.contains(s),
+                        title: Text(s.name),
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == true) {
+                              selectedServices.add(s);
+                            } else {
+                              selectedServices.remove(s);
+                            }
+                          });
+                        },
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -139,6 +157,15 @@ class EditUserPage extends StatelessWidget {
               TextButton(
                 onPressed: () async {
                   if (!formKey.currentState!.validate() || roles.isEmpty) return;
+                  if (roles.contains(UserRole.professional) &&
+                      selectedServices.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please select at least one service'),
+                      ),
+                    );
+                    return;
+                  }
                   final service = context.read<AppointmentService>();
                   final id = user?.id ??
                       DateTime.now().millisecondsSinceEpoch.toString();
@@ -147,6 +174,9 @@ class EditUserPage extends StatelessWidget {
                     name: nameController.text,
                     photoUrl: photoUrl,
                     roles: roles,
+                    services: roles.contains(UserRole.professional)
+                        ? selectedServices
+                        : <ServiceType>{},
                   );
                   if (user == null) {
                     await service.addUser(newUser);

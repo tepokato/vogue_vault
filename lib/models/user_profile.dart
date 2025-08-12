@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 
 import 'user_role.dart';
+import 'service_type.dart';
 
 /// Represents a user within the application that may assume multiple roles.
 class UserProfile {
@@ -16,12 +17,18 @@ class UserProfile {
   /// The set of roles this user can assume.
   final Set<UserRole> roles;
 
+  /// The services offered by this user when acting as a professional.
+  final Set<ServiceType> services;
+
   UserProfile({
     required this.id,
     required this.name,
     this.photoUrl,
     Set<UserRole>? roles,
-  }) : roles = roles ?? <UserRole>{};
+    Set<ServiceType>? services,
+  })  :
+        roles = roles ?? <UserRole>{},
+        services = services ?? <ServiceType>{};
 
   /// Returns a copy of this profile with the given fields replaced.
   UserProfile copyWith({
@@ -29,12 +36,14 @@ class UserProfile {
     String? name,
     String? photoUrl,
     Set<UserRole>? roles,
+    Set<ServiceType>? services,
   }) {
     return UserProfile(
       id: id ?? this.id,
       name: name ?? this.name,
       photoUrl: photoUrl ?? this.photoUrl,
       roles: roles ?? this.roles,
+      services: services ?? this.services,
     );
   }
 
@@ -48,6 +57,10 @@ class UserProfile {
               ?.map((e) => UserRole.values.byName(e as String))
               .toSet() ??
           <UserRole>{},
+      services: (map['services'] as List?)
+              ?.map((e) => ServiceType.values.byName(e as String))
+              .toSet() ??
+          <ServiceType>{},
     );
   }
 
@@ -58,6 +71,7 @@ class UserProfile {
       'name': name,
       'photoUrl': photoUrl,
       'roles': roles.map((e) => e.name).toList(),
+      'services': services.map((e) => e.name).toList(),
     };
   }
 
@@ -69,10 +83,15 @@ class UserProfile {
           id == other.id &&
           name == other.name &&
           photoUrl == other.photoUrl &&
-          const SetEquality<UserRole>().equals(roles, other.roles);
+          const SetEquality<UserRole>().equals(roles, other.roles) &&
+          const SetEquality<ServiceType>().equals(services, other.services);
 
   @override
   int get hashCode =>
-      id.hashCode ^ name.hashCode ^ photoUrl.hashCode ^ roles.hashCode;
+      id.hashCode ^
+      name.hashCode ^
+      photoUrl.hashCode ^
+      roles.hashCode ^
+      services.hashCode;
 }
 
