@@ -5,6 +5,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:hive/hive.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/client.dart';
+import 'package:vogue_vault/models/service_provider.dart';
 import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 
@@ -51,6 +52,61 @@ void main() {
     service.dispose();
     await Hive.deleteFromDisk();
     await tempDir.delete(recursive: true);
+  });
+
+  group('Provider operations', () {
+    test('add provider stores provider and notifies listeners', () async {
+      final provider = ServiceProvider(
+        id: 'p1',
+        name: 'Jane',
+        serviceType: ServiceType.barber,
+      );
+      var notified = false;
+      service.addListener(() => notified = true);
+
+      await service.addProvider(provider);
+
+      expect(service.getProvider('p1'), equals(provider));
+      expect(service.providers, contains(provider));
+      expect(notified, isTrue);
+    });
+
+    test('update provider updates data and notifies listeners', () async {
+      final provider = ServiceProvider(
+        id: 'p1',
+        name: 'Jane',
+        serviceType: ServiceType.barber,
+      );
+      await service.addProvider(provider);
+
+      final updated = provider.copyWith(name: 'Jane Updated');
+      var notified = false;
+      service.addListener(() => notified = true);
+
+      await service.updateProvider(updated);
+
+      expect(service.getProvider('p1'), equals(updated));
+      expect(service.providers.length, 1);
+      expect(notified, isTrue);
+    });
+
+    test('delete provider removes provider and notifies listeners', () async {
+      final provider = ServiceProvider(
+        id: 'p1',
+        name: 'Jane',
+        serviceType: ServiceType.barber,
+      );
+      await service.addProvider(provider);
+
+      var notified = false;
+      service.addListener(() => notified = true);
+
+      await service.deleteProvider('p1');
+
+      expect(service.getProvider('p1'), isNull);
+      expect(service.providers, isEmpty);
+      expect(notified, isTrue);
+    });
   });
 
   group('Client operations', () {
