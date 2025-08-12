@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/role_selection_page.dart';
+import 'screens/auth_page.dart';
 import 'services/appointment_service.dart';
+import 'services/auth_service.dart';
 import 'services/role_provider.dart';
 
 Future<void> main() async {
@@ -12,12 +13,17 @@ Future<void> main() async {
 
   final appointmentService = AppointmentService();
   await appointmentService.init();
+  final authService = AuthService();
+  await authService.init();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AppointmentService>.value(
           value: appointmentService,
+        ),
+        ChangeNotifierProvider<AuthService>.value(
+          value: authService,
         ),
         ChangeNotifierProvider<RoleProvider>(
           create: (_) => RoleProvider(),
@@ -38,8 +44,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // Start the app by letting the user pick a role.
-      home: const RoleSelectionPage(),
+      // Start the app with authentication.
+      home: const AuthPage(),
     );
   }
 }

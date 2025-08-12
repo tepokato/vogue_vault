@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_role.dart';
+import '../services/auth_service.dart';
 import '../services/role_provider.dart';
+import 'auth_page.dart';
 import 'appointments_page.dart';
 import 'welcome_page.dart';
 
@@ -13,9 +15,34 @@ class RoleSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final roles = context.watch<RoleProvider>().roles;
+    final auth = context.watch<AuthService>();
+
+    if (!auth.isLoggedIn) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AuthPage()),
+        );
+      });
+      return const SizedBox.shrink();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Role'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<AuthService>().logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const AuthPage()),
+              );
+            },
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+          ),
+        ],
       ),
       body: Center(
         child: Padding(
