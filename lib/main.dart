@@ -39,10 +39,39 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const seed = Colors.deepPurple;
+    final lightScheme = ColorScheme.fromSeed(seedColor: seed);
+    final darkScheme = ColorScheme.fromSeed(
+      seedColor: seed,
+      brightness: Brightness.dark,
+    );
+
     return MaterialApp(
       title: 'Vogue Vault',
+      useMaterial3: true,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+        colorScheme: lightScheme,
+        fontFamily: 'Poppins',
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkScheme,
+        fontFamily: 'Poppins',
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
       ),
       // Start the app with authentication.
       home: const AuthPage(),
