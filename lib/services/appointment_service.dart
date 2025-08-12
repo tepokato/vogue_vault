@@ -43,6 +43,7 @@ class AppointmentService extends ChangeNotifier {
 
   List<Client> get clients {
     if (!_initialized) return [];
+    // photoUrl is parsed within Client.fromMap.
     return _clientsBox.values
         .map((m) => Client.fromMap(Map<String, dynamic>.from(m)))
         .toList();
@@ -50,9 +51,9 @@ class AppointmentService extends ChangeNotifier {
 
   List<ServiceProvider> get providers {
     if (!_initialized) return [];
+    // photoUrl is parsed within ServiceProvider.fromMap.
     return _providersBox.values
-        .map((m) =>
-            ServiceProvider.fromMap(Map<String, dynamic>.from(m)))
+        .map((m) => ServiceProvider.fromMap(Map<String, dynamic>.from(m)))
         .toList();
   }
 
@@ -86,12 +87,14 @@ class AppointmentService extends ChangeNotifier {
 
   Future<void> addClient(Client client) async {
     _ensureInitialized();
+    // photoUrl is persisted via the client's toMap representation.
     await _clientsBox.put(client.id, client.toMap());
     notifyListeners();
   }
 
   Future<void> updateClient(Client client) async {
     _ensureInitialized();
+    // photoUrl is persisted via the client's toMap representation.
     await _clientsBox.put(client.id, client.toMap());
     notifyListeners();
   }
@@ -121,12 +124,14 @@ class AppointmentService extends ChangeNotifier {
 
   Future<void> addProvider(ServiceProvider provider) async {
     _ensureInitialized();
+    // photoUrl is persisted via the provider's toMap representation.
     await _providersBox.put(provider.id, provider.toMap());
     notifyListeners();
   }
 
   Future<void> updateProvider(ServiceProvider provider) async {
     _ensureInitialized();
+    // photoUrl is persisted via the provider's toMap representation.
     await _providersBox.put(provider.id, provider.toMap());
     notifyListeners();
   }

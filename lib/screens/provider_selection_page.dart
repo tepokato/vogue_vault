@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +32,16 @@ class ProviderSelectionPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final provider = providers[index];
                 return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: provider.photoUrl != null &&
+                            provider.photoUrl!.isNotEmpty
+                        ? FileImage(File(provider.photoUrl!))
+                        : null,
+                    child: provider.photoUrl == null ||
+                            provider.photoUrl!.isEmpty
+                        ? const Icon(Icons.person)
+                        : null,
+                  ),
                   title: Text(provider.name),
                   onTap: () {
                     Navigator.push(

@@ -8,6 +8,9 @@ class ServiceProvider {
   /// Display name of the provider.
   final String name;
 
+  /// URL or file path to the provider's profile photo.
+  final String? photoUrl;
+
   /// The type of service this provider offers.
   final ServiceType serviceType;
 
@@ -16,6 +19,7 @@ class ServiceProvider {
     required this.id,
     required this.name,
     required this.serviceType,
+    this.photoUrl,
   });
 
   /// Returns a copy of this provider with the provided values replaced.
@@ -23,11 +27,13 @@ class ServiceProvider {
     String? id,
     String? name,
     ServiceType? serviceType,
+    String? photoUrl,
   }) {
     return ServiceProvider(
       id: id ?? this.id,
       name: name ?? this.name,
       serviceType: serviceType ?? this.serviceType,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 
@@ -37,6 +43,7 @@ class ServiceProvider {
       id: map['id'] as String,
       name: map['name'] as String,
       serviceType: ServiceType.values.byName(map['serviceType'] as String),
+      photoUrl: map['photoUrl'] as String?,
     );
   }
 
@@ -46,6 +53,7 @@ class ServiceProvider {
       'id': id,
       'name': name,
       'serviceType': serviceType.name,
+      'photoUrl': photoUrl,
     };
   }
 
@@ -56,9 +64,10 @@ class ServiceProvider {
           runtimeType == other.runtimeType &&
           id == other.id &&
           name == other.name &&
-          serviceType == other.serviceType;
+          serviceType == other.serviceType &&
+          photoUrl == other.photoUrl;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ serviceType.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ serviceType.hashCode ^ photoUrl.hashCode;
 }
 

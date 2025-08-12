@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../models/service_provider.dart';
@@ -33,6 +36,14 @@ class EditProviderPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final provider = providers[index];
           return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: provider.photoUrl != null && provider.photoUrl!.isNotEmpty
+                  ? FileImage(File(provider.photoUrl!))
+                  : null,
+              child: provider.photoUrl == null || provider.photoUrl!.isEmpty
+                  ? const Icon(Icons.person)
+                  : null,
+            ),
             title: Text(provider.name),
             subtitle: Text(provider.serviceType.name),
             onTap: () => _showProviderDialog(context, provider: provider),
@@ -55,6 +66,8 @@ class EditProviderPage extends StatelessWidget {
     final nameController = TextEditingController(text: provider?.name ?? '');
     final formKey = GlobalKey<FormState>();
     var selectedType = provider?.serviceType ?? ServiceType.barber;
+    String? photoUrl = provider?.photoUrl;
+    final picker = ImagePicker();
 
     await showDialog(
       context: context,
@@ -67,6 +80,24 @@ class EditProviderPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  GestureDetector(
+                    onTap: () async {
+                      final picked =
+                          await picker.pickImage(source: ImageSource.gallery);
+                      if (picked != null) {
+                        setState(() => photoUrl = picked.path);
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: photoUrl != null && photoUrl!.isNotEmpty
+                          ? FileImage(File(photoUrl!))
+                          : null,
+                      child: photoUrl == null || photoUrl!.isEmpty
+                          ? const Icon(Icons.person)
+                          : null,
+                    ),
+                  ),
                   TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(labelText: 'Name'),
@@ -106,6 +137,7 @@ class EditProviderPage extends StatelessWidget {
                     id: id,
                     name: nameController.text,
                     serviceType: selectedType,
+                    photoUrl: photoUrl,
                   );
                   if (provider == null) {
                     await service.addProvider(newProvider);
