@@ -10,6 +10,7 @@ import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 import 'edit_appointment_page.dart';
 import 'edit_client_page.dart';
+import 'edit_provider_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
@@ -33,6 +34,19 @@ class AppointmentsPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const EditClientPage(),
+                  ),
+                );
+              },
+            ),
+          if (role == UserRole.professional)
+            IconButton(
+              icon: const Icon(Icons.work),
+              tooltip: 'Providers',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const EditProviderPage(),
                   ),
                 );
               },
