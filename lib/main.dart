@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Vogue Vault',
-      useMaterial3: true,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightScheme,
