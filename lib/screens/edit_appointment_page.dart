@@ -38,7 +38,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
-    final providers = service.providers;
+    final providers = service.providersFor(_service);
     if (_selectedClientId != null &&
         !clients.any((c) => c.id == _selectedClientId)) {
       _selectedClientId = null;
@@ -60,7 +60,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-                'Previously selected provider was removed. Please choose another.'),
+                'Previously selected provider was removed or unavailable. Please choose another.'),
           ),
         );
       });
@@ -126,8 +126,16 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     )
                     .toList(),
                 onChanged: (value) {
+                  if (value == null) return;
+                  final availableProviders =
+                      context.read<AppointmentService>().providersFor(value);
                   setState(() {
-                    _service = value!;
+                    _service = value;
+                    if (_selectedProviderId != null &&
+                        !availableProviders
+                            .any((p) => p.id == _selectedProviderId)) {
+                      _selectedProviderId = null;
+                    }
                   });
                 },
                 validator: (value) =>
