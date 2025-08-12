@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +8,7 @@ import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../services/role_provider.dart';
+import '../utils/avatar_image.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -92,9 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onTap: _pickImage,
                         child: CircleAvatar(
                           radius: 40,
-                          backgroundImage: _photoUrl != null && _photoUrl!.isNotEmpty
-                              ? FileImage(File(_photoUrl!))
-                              : null,
+                          backgroundImage: avatarImage(_photoUrl),
                           child: _photoUrl == null || _photoUrl!.isEmpty
                               ? const Icon(Icons.person, size: 40)
                               : null,
