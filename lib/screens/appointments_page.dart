@@ -10,6 +10,7 @@ import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 import 'edit_appointment_page.dart';
 import 'edit_user_page.dart';
+import 'profile_page.dart';
 import 'role_selection_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
@@ -25,6 +26,18 @@ class AppointmentsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Appointments'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'Profile',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ProfilePage(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.switch_account),
             tooltip: 'Switch Role',

@@ -6,6 +6,7 @@ import '../utils/service_type_utils.dart';
 import '../services/role_provider.dart';
 import 'appointments_page.dart';
 import 'provider_selection_page.dart';
+import 'profile_page.dart';
 import 'role_selection_page.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -17,6 +18,18 @@ class WelcomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Welcome'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'Profile',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ProfilePage(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.switch_account),
             tooltip: 'Switch Role',
