@@ -62,7 +62,18 @@ class WelcomePage extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: ServiceType.values
-                    .map((type) => _ServiceCard(type: type))
+                    .map(
+                      (type) => Card(
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: _ServiceCard(type: type),
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
             ),
@@ -94,29 +105,44 @@ class _ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ProviderSelectionPage(serviceType: type),
-            ),
-          );
-        },
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                serviceTypeIcon(type),
-                size: 40,
-                color: serviceTypeColor(type),
-              ),
-              const SizedBox(height: 8),
-              Text(serviceTypeLabel(type)),
+    final Color color = serviceTypeColor(type);
+    final Widget visual = Icon(
+      serviceTypeIcon(type),
+      size: 40,
+      color: color,
+    );
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      splashColor: color.withOpacity(0.2),
+      hoverColor: color.withOpacity(0.1),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProviderSelectionPage(serviceType: type),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              color.withOpacity(0.05),
+              color.withOpacity(0.15),
             ],
           ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.all(16),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            visual,
+            const SizedBox(height: 8),
+            Text(serviceTypeLabel(type)),
+          ],
         ),
       ),
     );
