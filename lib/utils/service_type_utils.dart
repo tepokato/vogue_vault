@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../models/service_type.dart';
 
+/// Returns a human-readable label for the given [ServiceType].
+///
+/// The switch is exhaustive; a label is provided for every service type.
 String serviceTypeLabel(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
@@ -15,6 +18,9 @@ String serviceTypeLabel(ServiceType type) {
   throw ArgumentError('Unhandled ServiceType: $type');
 }
 
+/// Returns an [IconData] representing the given [ServiceType].
+///
+/// The switch is exhaustive; each service type has a corresponding icon.
 IconData serviceTypeIcon(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
@@ -28,6 +34,9 @@ IconData serviceTypeIcon(ServiceType type) {
   throw ArgumentError('Unhandled ServiceType: $type');
 }
 
+/// Returns a themed [Color] for the given [ServiceType].
+///
+/// The switch is exhaustive; each service type maps to a color.
 Color serviceTypeColor(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
