@@ -6,13 +6,13 @@ class AuthService extends ChangeNotifier {
   static const _usersKey = 'users';
   static const _currentUserKey = 'currentUser';
 
-  late Box _box;
+  late Box<Map<String, String>> _box;
   bool _initialized = false;
 
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    _box = await Hive.openBox(_boxName);
+    _box = await Hive.openBox<Map<String, String>>(_boxName);
     _initialized = true;
   }
 
@@ -23,11 +23,11 @@ class AuthService extends ChangeNotifier {
   }
 
   Map<String, String> get _users =>
-      Map<String, String>.from(_box.get(_usersKey, defaultValue: <String, String>{}));
+      _box.get(_usersKey) ?? <String, String>{};
 
   String? get currentUser {
     _ensureInitialized();
-    return _box.get(_currentUserKey) as String?;
+    return _box.get(_currentUserKey)?['email'];
   }
 
   bool get isLoggedIn => currentUser != null;
@@ -37,7 +37,7 @@ class AuthService extends ChangeNotifier {
     final users = _users;
     final storedPassword = users[email];
     if (storedPassword == password) {
-      await _box.put(_currentUserKey, email);
+      await _box.put(_currentUserKey, {'email': email});
       notifyListeners();
       return true;
     }
@@ -49,7 +49,7 @@ class AuthService extends ChangeNotifier {
     final users = _users;
     users[email] = password;
     await _box.put(_usersKey, users);
-    await _box.put(_currentUserKey, email);
+    await _box.put(_currentUserKey, {'email': email});
     notifyListeners();
   }
 
