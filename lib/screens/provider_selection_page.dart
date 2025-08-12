@@ -15,7 +15,7 @@ class ProviderSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final providers = service.providers;
+    final providers = service.providersFor(serviceType);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,6 +42,17 @@ class ProviderSelectionPage extends StatelessWidget {
                   ),
                   title: Text(provider.name),
                   onTap: () {
+                    final validProviders =
+                        service.providersFor(serviceType);
+                    if (!validProviders.any((p) => p.id == provider.id)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Selected provider no longer offers this service.'),
+                        ),
+                      );
+                      return;
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(

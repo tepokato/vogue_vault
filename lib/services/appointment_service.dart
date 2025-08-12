@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/appointment.dart';
+import '../models/service_type.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 
@@ -52,6 +53,9 @@ class AppointmentService extends ChangeNotifier {
 
   List<UserProfile> get providers =>
       users.where((u) => u.roles.contains(UserRole.professional)).toList();
+
+  List<UserProfile> providersFor(ServiceType type) =>
+      providers.where((p) => p.services.contains(type)).toList();
 
   UserProfile? getUser(String id) {
     _ensureInitialized();
