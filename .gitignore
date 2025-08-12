@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Generated icon files
+android/app/src/main/res/mipmap-*/ic_launcher.png
+ios/Runner/Assets.xcassets/AppIcon.appiconset/*.png
+macos/Runner/Assets.xcassets/AppIcon.appiconset/*.png
+web/icons/*.png
+web/favicon.png
+windows/runner/resources/app_icon.ico
