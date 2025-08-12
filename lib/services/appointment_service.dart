@@ -121,8 +121,25 @@ class AppointmentService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteProvider(String id) async {
+  Future<void> deleteProvider(String id, {String? reassignedProviderId}) async {
     _ensureInitialized();
+
+    final affected = _appointmentsBox.values
+        .map(Appointment.fromMap)
+        .where((a) => a.providerId == id)
+        .toList();
+
+    if (reassignedProviderId != null) {
+      for (final appt in affected) {
+        final updated = appt.copyWith(providerId: reassignedProviderId);
+        await _appointmentsBox.put(updated.id, updated.toMap());
+      }
+    } else {
+      for (final appt in affected) {
+        await _appointmentsBox.delete(appt.id);
+      }
+    }
+
     await _providersBox.delete(id);
     notifyListeners();
   }
