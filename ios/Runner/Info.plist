@@ -41,9 +41,15 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+        <key>CADisableMinimumFrameDurationOnPhone</key>
+        <true/>
+        <key>UIApplicationSupportsIndirectInputEvents</key>
+        <true/>
+        <key>NSCameraUsageDescription</key>
+        <string>Vogue Vault uses the camera to capture photos of your outfits.</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Vogue Vault needs photo library access to choose existing photos for your wardrobe.</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Vogue Vault saves outfit photos to your photo library.</string>
 </dict>
 </plist>
