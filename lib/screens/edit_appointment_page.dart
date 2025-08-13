@@ -5,6 +5,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/appointment.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
+import '../utils/service_type_utils.dart';
 
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
@@ -136,7 +137,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     .map(
                       (s) => DropdownMenuItem<ServiceType>(
                         value: s,
-                        child: Text(s.name),
+                        child: Text(serviceTypeLabel(s)),
                       ),
                     )
                     .toList(),
