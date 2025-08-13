@@ -48,6 +48,9 @@ class AuthService extends ChangeNotifier {
   Future<void> register(String email, String password) async {
     _ensureInitialized();
     final users = _users;
+    if (users.containsKey(email)) {
+      throw StateError('User with email $email already exists.');
+    }
     users[email] = password;
     await _box.put(_usersKey, users);
     await _box.put(_currentUserKey, {'email': email});

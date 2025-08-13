@@ -43,4 +43,15 @@ void main() {
     expect(success, isTrue);
     expect(service.currentUser, email);
   });
+
+  test('duplicate registration is rejected', () async {
+    final service = AuthService();
+    await service.init();
+
+    const email = 'dup@example.com';
+    const password = 'password';
+
+    await service.register(email, password);
+    expect(service.register(email, password), throwsStateError);
+  });
 }
