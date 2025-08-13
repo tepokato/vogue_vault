@@ -43,7 +43,7 @@ dependencies:
   image_picker: ^1.0.4
   file_selector: ^1.0.3
   crypto: ^3.0.3
-  flutter_gen: ^5.11.0
+  flutter_gen: ^5.10.0
 
 dev_dependencies:
   flutter_test:
