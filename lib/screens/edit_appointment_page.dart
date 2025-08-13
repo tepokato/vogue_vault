@@ -100,8 +100,14 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
             ? AppLocalizations.of(context)!.editAppointmentTitle
             : AppLocalizations.of(context)!.newAppointmentTitle),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
