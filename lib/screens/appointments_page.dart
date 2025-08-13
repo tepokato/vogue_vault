@@ -32,9 +32,7 @@ class AppointmentsPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const ProfilePage(),
-                ),
+                MaterialPageRoute(builder: (_) => const ProfilePage()),
               );
             },
           ),
@@ -45,9 +43,7 @@ class AppointmentsPage extends StatelessWidget {
               context.read<RoleProvider>().clearRole();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const RoleSelectionPage(),
-                ),
+                MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
                 (route) => false,
               );
             },
@@ -59,9 +55,7 @@ class AppointmentsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const EditUserPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const EditUserPage()),
                 );
               },
             ),
@@ -109,16 +103,15 @@ class AppointmentsPage extends StatelessWidget {
                     '${client?.name ?? AppLocalizations.of(context)!.unknownUser} - ${serviceTypeLabel(appt.service)}',
                   ),
                   subtitle: Text(
-                    DateFormat.yMMMd().add_jm().format(
-                          appt.dateTime.toLocal(),
-                        ),
+                    DateFormat.yMMMd().add_jm().format(appt.dateTime.toLocal()),
                   ),
                   onTap: role == UserRole.professional
                       ? () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => EditAppointmentPage(appointment: appt),
+                              builder: (_) =>
+                                  EditAppointmentPage(appointment: appt),
                             ),
                           );
                         }
@@ -126,7 +119,9 @@ class AppointmentsPage extends StatelessWidget {
                   trailing: role == UserRole.professional
                       ? IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () => service.deleteAppointment(appt.id),
+                          onPressed: () async {
+                            await service.deleteAppointment(appt.id);
+                          },
                         )
                       : null,
                 );
