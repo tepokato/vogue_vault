@@ -12,7 +12,6 @@ class AuthService extends ChangeNotifier {
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    await Hive.initFlutter();
     _box = await Hive.openBox<Map<String, String>>(_boxName);
     _initialized = true;
   }
