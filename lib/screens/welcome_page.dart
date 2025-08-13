@@ -58,13 +58,21 @@ class WelcomePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                children: ServiceType.values
-                    .map(
-                      (type) => Card(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount =
+                      (constraints.maxWidth / 200).floor();
+                  if (crossAxisCount < 2) crossAxisCount = 2;
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: ServiceType.values.length,
+                    itemBuilder: (context, index) {
+                      final type = ServiceType.values[index];
+                      return Card(
                         elevation: 6,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -73,9 +81,10 @@ class WelcomePage extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: _ServiceCard(type: type),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      );
+                    },
+                  );
+                },
               ),
             ),
             SizedBox(
