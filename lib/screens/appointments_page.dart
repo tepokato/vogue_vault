@@ -67,46 +67,71 @@ class AppointmentsPage extends StatelessWidget {
             ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: appointments.length,
-        itemBuilder: (context, index) {
-          final Appointment appt = appointments[index];
-          final client = service.getUser(appt.clientId);
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundColor: serviceTypeColor(appt.service),
-              child: Icon(
-                serviceTypeIcon(appt.service),
-                color: Colors.white,
-              ),
-            ),
-            title: Text(
-              '${client?.name ?? AppLocalizations.of(context)!.unknownUser} - ${serviceTypeLabel(appt.service)}',
-            ),
-            subtitle: Text(
-              DateFormat.yMMMd().add_jm().format(
-                    appt.dateTime.toLocal(),
-                  ),
-            ),
-            onTap: role == UserRole.professional
-                ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => EditAppointmentPage(appointment: appt),
+      body: appointments.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppLocalizations.of(context)!.noAppointmentsScheduled),
+                  if (role == UserRole.professional) ...[
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EditAppointmentPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.addFirstAppointment,
                       ),
-                    );
-                  }
-                : null,
-            trailing: role == UserRole.professional
-                ? IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => service.deleteAppointment(appt.id),
-                  )
-                : null,
-          );
-        },
-      ),
+                    ),
+                  ],
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: appointments.length,
+              itemBuilder: (context, index) {
+                final Appointment appt = appointments[index];
+                final client = service.getUser(appt.clientId);
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: serviceTypeColor(appt.service),
+                    child: Icon(
+                      serviceTypeIcon(appt.service),
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(
+                    '${client?.name ?? AppLocalizations.of(context)!.unknownUser} - ${serviceTypeLabel(appt.service)}',
+                  ),
+                  subtitle: Text(
+                    DateFormat.yMMMd().add_jm().format(
+                          appt.dateTime.toLocal(),
+                        ),
+                  ),
+                  onTap: role == UserRole.professional
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditAppointmentPage(appointment: appt),
+                            ),
+                          );
+                        }
+                      : null,
+                  trailing: role == UserRole.professional
+                      ? IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => service.deleteAppointment(appt.id),
+                        )
+                      : null,
+                );
+              },
+            ),
       floatingActionButton: role == UserRole.professional
           ? FloatingActionButton(
               onPressed: () {
