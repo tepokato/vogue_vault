@@ -13,6 +13,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLogin = true;
@@ -33,21 +34,33 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
     final email = _emailController.text;
     final password = _passwordController.text;
     final auth = context.read<AuthService>();
 
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
     bool success = false;
-    if (_isLogin) {
-      success = await auth.login(email, password);
-      if (!success) {
-        setState(() =>
-            _error = AppLocalizations.of(context)!.invalidCredentials);
-        return;
+    try {
+      if (_isLogin) {
+        success = await auth.login(email, password);
+        if (!success) {
+          setState(() =>
+              _error = AppLocalizations.of(context)!.invalidCredentials);
+        }
+      } else {
+        await auth.register(email, password);
+        success = true;
       }
-    } else {
-      await auth.register(email, password);
-      success = true;
+    } finally {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
     }
 
     if (success && mounted) {
@@ -77,60 +90,75 @@ class _AuthPageState extends State<AuthPage> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      labelText: AppLocalizations.of(context)!.emailLabel,
-                      border: const OutlineInputBorder(),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.email),
+                        labelText: AppLocalizations.of(context)!.emailLabel,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      labelText: AppLocalizations.of(context)!.passwordLabel,
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
-                  if (_error != null) ...[
                     const SizedBox(height: 16),
-                    Text(
-                      _error!,
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: theme.colorScheme.error),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.lock),
+                        labelText: AppLocalizations.of(context)!.passwordLabel,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                    ),
+                    if (_error != null) ...[
+                      const SizedBox(height: 16),
+                      Text(
+                        _error!,
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(color: theme.colorScheme.error),
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _submit,
+                        child: Text(_isLogin
+                            ? AppLocalizations.of(context)!.loginButton
+                            : AppLocalizations.of(context)!.registerButton),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLogin = !_isLogin;
+                          _error = null;
+                        });
+                      },
+                      child: Text(
+                          _isLogin
+                              ? AppLocalizations.of(context)!.createAccount
+                              : AppLocalizations.of(context)!.haveAccountSignIn),
                     ),
                   ],
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _submit,
-                      child: Text(_isLogin
-                          ? AppLocalizations.of(context)!.loginButton
-                          : AppLocalizations.of(context)!.registerButton),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                        _error = null;
-                      });
-                    },
-                    child: Text(
-                        _isLogin
-                            ? AppLocalizations.of(context)!.createAccount
-                            : AppLocalizations.of(context)!.haveAccountSignIn),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
