@@ -169,4 +169,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addFirstAppointment => 'Add your first appointment';
+
+  @override
+  String get guestNameLabel => 'Guest Name';
+
+  @override
+  String get guestContactLabel => 'Guest Contact (optional)';
+
+  @override
+  String get clientOrGuestValidation =>
+      'Please select a client or enter a guest name';
 }

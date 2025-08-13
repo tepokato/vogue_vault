@@ -418,6 +418,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add your first appointment'**
   String get addFirstAppointment;
+
+  /// No description provided for @guestNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Name'**
+  String get guestNameLabel;
+
+  /// No description provided for @guestContactLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Contact (optional)'**
+  String get guestContactLabel;
+
+  /// No description provided for @clientOrGuestValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a client or enter a guest name'**
+  String get clientOrGuestValidation;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -22,6 +22,23 @@ void main() {
       expect(from.dateTime, appointment.dateTime);
     });
 
+    test('supports guest clients', () {
+      final appointment = Appointment(
+        id: 'a2',
+        guestName: 'Walk-in',
+        guestContact: '555-1234',
+        providerId: 'p1',
+        service: ServiceType.barber,
+        dateTime: DateTime(2023, 9, 10, 11, 0),
+      );
+      final map = appointment.toMap();
+      final from = Appointment.fromMap(map);
+
+      expect(from.clientId, isNull);
+      expect(from.guestName, appointment.guestName);
+      expect(from.guestContact, appointment.guestContact);
+    });
+
     test('fromMap validates required data', () {
       final missingFields = {'id': 'a1'};
       expect(() => Appointment.fromMap(missingFields), throwsA(isA<TypeError>()));
@@ -54,6 +71,28 @@ void main() {
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
 
+      expect(a1, equals(a2));
+      expect(a1.hashCode, equals(a2.hashCode));
+    });
+
+    test('appointments with same guest values are equal', () {
+      final dt = DateTime(2023, 9, 10, 10, 0);
+      final a1 = Appointment(
+        id: 'a1',
+        guestName: 'Walk-in',
+        guestContact: '555',
+        providerId: 'p1',
+        service: ServiceType.barber,
+        dateTime: dt,
+      );
+      final a2 = Appointment(
+        id: 'a1',
+        guestName: 'Walk-in',
+        guestContact: '555',
+        providerId: 'p1',
+        service: ServiceType.barber,
+        dateTime: dt,
+      );
       expect(a1, equals(a2));
       expect(a1.hashCode, equals(a2.hashCode));
     });

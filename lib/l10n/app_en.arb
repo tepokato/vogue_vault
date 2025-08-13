@@ -53,5 +53,8 @@
   "createAccount": "Create an account",
   "haveAccountSignIn": "Have an account? Sign in",
   "noAppointmentsScheduled": "No appointments scheduled.",
-  "addFirstAppointment": "Add your first appointment"
+  "addFirstAppointment": "Add your first appointment",
+  "guestNameLabel": "Guest Name",
+  "guestContactLabel": "Guest Contact (optional)",
+  "clientOrGuestValidation": "Please select a client or enter a guest name"
 }

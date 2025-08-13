@@ -90,7 +90,11 @@ class AppointmentsPage extends StatelessWidget {
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 final Appointment appt = appointments[index];
-                final client = service.getUser(appt.clientId);
+                final clientName = appt.clientId != null
+                    ? service.getUser(appt.clientId!)?.name ??
+                        AppLocalizations.of(context)!.unknownUser
+                    : appt.guestName ??
+                        AppLocalizations.of(context)!.unknownUser;
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: serviceTypeColor(appt.service),
@@ -100,7 +104,7 @@ class AppointmentsPage extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    '${client?.name ?? AppLocalizations.of(context)!.unknownUser} - ${serviceTypeLabel(appt.service)}',
+                    '$clientName - ${serviceTypeLabel(appt.service)}',
                   ),
                   subtitle: Text(
                     DateFormat.yMMMd().add_jm().format(appt.dateTime.toLocal()),

@@ -53,5 +53,8 @@
   "createAccount": "Crear una cuenta",
   "haveAccountSignIn": "¿Tienes una cuenta? Inicia sesión",
   "noAppointmentsScheduled": "No hay citas programadas.",
-  "addFirstAppointment": "Agrega tu primera cita"
+  "addFirstAppointment": "Agrega tu primera cita",
+  "guestNameLabel": "Nombre del invitado",
+  "guestContactLabel": "Contacto del invitado (opcional)",
+  "clientOrGuestValidation": "Selecciona un cliente o ingresa un nombre de invitado"
 }
