@@ -50,5 +50,7 @@
   "loginButton": "Ingresar",
   "registerButton": "Registrarse",
   "createAccount": "Crear una cuenta",
-  "haveAccountSignIn": "¿Tienes una cuenta? Inicia sesión"
+  "haveAccountSignIn": "¿Tienes una cuenta? Inicia sesión",
+  "noAppointmentsScheduled": "No hay citas programadas.",
+  "addFirstAppointment": "Agrega tu primera cita"
 }
