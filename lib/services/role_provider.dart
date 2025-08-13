@@ -18,6 +18,9 @@ class RoleProvider extends ChangeNotifier {
     _roles
       ..clear()
       ..addAll(roles);
+    if (_selectedRole != null && !_roles.contains(_selectedRole)) {
+      _selectedRole = null;
+    }
     notifyListeners();
   }
 
