@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
@@ -17,11 +18,12 @@ class ProviderSelectionPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Provider'),
+        title: Text(AppLocalizations.of(context)!.selectProviderTitle),
       ),
       body: providers.isEmpty
-          ? const Center(
-              child: Text('No providers available.'),
+          ? Center(
+              child: Text(
+                  AppLocalizations.of(context)!.noProvidersAvailable),
             )
           : ListView.builder(
               itemCount: providers.length,
@@ -43,9 +45,10 @@ class ProviderSelectionPage extends StatelessWidget {
                         service.providersFor(serviceType);
                     if (!validProviders.any((p) => p.id == provider.id)) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text(
-                              'Selected provider no longer offers this service.'),
+                              AppLocalizations.of(context)!
+                                  .providerNoLongerOffersService),
                         ),
                       );
                       return;

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
@@ -20,14 +21,18 @@ class EditUserPage extends StatelessWidget {
     final users = service.users;
 
     if (role != UserRole.professional) {
-      return const Scaffold(
-        body: Center(child: Text('Available only for professionals')),
+      return Scaffold(
+        body: Center(
+          child: Text(
+            AppLocalizations.of(context)!.professionalsOnlyMessage,
+          ),
+        ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Users'),
+        title: Text(AppLocalizations.of(context)!.usersTooltip),
       ),
       body: ListView.builder(
         itemCount: users.length,
@@ -72,7 +77,9 @@ class EditUserPage extends StatelessWidget {
       builder: (_) => StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text(user == null ? 'New User' : 'Edit User'),
+            title: Text(user == null
+                ? AppLocalizations.of(context)!.newUserTitle
+                : AppLocalizations.of(context)!.editUserTitle),
             content: Form(
               key: formKey,
               child: Column(
@@ -82,9 +89,10 @@ class EditUserPage extends StatelessWidget {
                     onTap: () async {
                       if (!isImagePickerSupported) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
-                                'Image selection not supported on this platform'),
+                                AppLocalizations.of(context)!
+                                    .imageSelectionUnsupported),
                           ),
                         );
                         return;
@@ -106,14 +114,16 @@ class EditUserPage extends StatelessWidget {
                   ),
                   TextFormField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: 'Name'),
+                    decoration: InputDecoration(
+                        labelText:
+                            AppLocalizations.of(context)!.nameLabel),
                     validator: (value) => value == null || value.trim().isEmpty
-                        ? 'Please enter a name'
+                        ? AppLocalizations.of(context)!.nameRequired
                         : null,
                   ),
                   CheckboxListTile(
                     value: roles.contains(UserRole.customer),
-                    title: const Text('Customer'),
+                    title: Text(AppLocalizations.of(context)!.customerRole),
                     onChanged: (value) {
                       setState(() {
                         if (value == true) {
@@ -126,7 +136,7 @@ class EditUserPage extends StatelessWidget {
                   ),
                   CheckboxListTile(
                     value: roles.contains(UserRole.professional),
-                    title: const Text('Professional'),
+                    title: Text(AppLocalizations.of(context)!.professionalRole),
                     onChanged: (value) {
                       setState(() {
                         if (value == true) {
@@ -159,18 +169,19 @@ class EditUserPage extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
               TextButton(
                 onPressed: () async {
                   if (!formKey.currentState!.validate() || roles.isEmpty) return;
                   if (roles.contains(UserRole.professional) &&
                       selectedServices.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please select at least one service'),
-                      ),
-                    );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context)!
+                              .selectAtLeastOneService),
+                        ),
+                      );
                     return;
                   }
                   final service = context.read<AppointmentService>();
@@ -192,7 +203,7 @@ class EditUserPage extends StatelessWidget {
                   }
                   Navigator.pop(context);
                 },
-                child: const Text('Save'),
+                child: Text(AppLocalizations.of(context)!.saveButton),
               ),
             ],
           );
