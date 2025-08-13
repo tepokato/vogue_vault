@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_profile.dart';
@@ -10,6 +9,7 @@ import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../services/role_provider.dart';
+import '../utils/image_picking.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -21,7 +21,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _picker = ImagePicker();
 
   Uint8List? _photoBytes;
   late String _userId;
@@ -49,10 +48,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _pickImage() async {
-    final picked = await _picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      final bytes = await picked.readAsBytes();
+    final bytes = await pickImageBytes();
+    if (bytes != null) {
       setState(() => _photoBytes = bytes);
+    } else if (!isImagePickerSupported && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Image selection not supported on this platform'),
+        ),
+      );
     }
   }
 
