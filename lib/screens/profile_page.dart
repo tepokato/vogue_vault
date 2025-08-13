@@ -79,6 +79,13 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  String get _initials {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return '?';
+    final parts = name.split(RegExp(r'\s+'));
+    return parts.map((p) => p[0]).take(2).join().toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,14 +105,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       GestureDetector(
                         onTap: _pickImage,
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: _photoBytes != null
-                              ? MemoryImage(_photoBytes!)
-                              : null,
-                          child: _photoBytes == null || _photoBytes!.isEmpty
-                              ? const Icon(Icons.person, size: 40)
-                              : null,
+                        child: Semantics(
+                          label:
+                              AppLocalizations.of(context)!.userPhotoLabel,
+                          image: true,
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: _photoBytes != null
+                                ? MemoryImage(_photoBytes!)
+                                : null,
+                            child: _photoBytes == null || _photoBytes!.isEmpty
+                                ? Text(_initials)
+                                : null,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -115,6 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         controller: _nameController,
                         decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.nameLabel),
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value == null || value.trim().isEmpty
                             ? AppLocalizations.of(context)!.nameRequired
                             : null,
