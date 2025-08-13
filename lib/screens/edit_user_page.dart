@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_profile.dart';
@@ -9,6 +8,7 @@ import '../models/user_role.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
+import '../utils/image_picking.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -64,7 +64,6 @@ class EditUserPage extends StatelessWidget {
     final nameController = TextEditingController(text: user?.name ?? '');
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
-    final picker = ImagePicker();
     final roles = <UserRole>{...user?.roles ?? {}};
     final selectedServices = <ServiceType>{...user?.services ?? {}};
 
@@ -81,10 +80,17 @@ class EditUserPage extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      final picked =
-                          await picker.pickImage(source: ImageSource.gallery);
-                      if (picked != null) {
-                        final bytes = await picked.readAsBytes();
+                      if (!isImagePickerSupported) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Image selection not supported on this platform'),
+                          ),
+                        );
+                        return;
+                      }
+                      final bytes = await pickImageBytes();
+                      if (bytes != null) {
                         setState(() => photoBytes = bytes);
                       }
                     },
