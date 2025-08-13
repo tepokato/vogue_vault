@@ -6,6 +6,7 @@
   "switchRoleTooltip": "Cambiar rol",
   "usersTooltip": "Usuarios",
   "unknownUser": "Desconocido",
+  "userPhotoLabel": "Foto del usuario",
   "profileTitle": "Perfil",
   "imageSelectionUnsupported": "La selección de imágenes no es compatible con esta plataforma",
   "nameLabel": "Nombre",

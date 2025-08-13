@@ -29,15 +29,28 @@ class ProviderSelectionPage extends StatelessWidget {
               itemCount: providers.length,
               itemBuilder: (context, index) {
                 final provider = providers[index];
+                final initials = provider.name.trim().isNotEmpty
+                    ? provider.name
+                        .trim()
+                        .split(RegExp(r'\s+'))
+                        .map((p) => p[0])
+                        .take(2)
+                        .join()
+                        .toUpperCase()
+                    : '?';
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: provider.photoBytes != null
-                        ? MemoryImage(provider.photoBytes!)
-                        : null,
-                    child: provider.photoBytes == null ||
-                            provider.photoBytes!.isEmpty
-                        ? const Icon(Icons.person)
-                        : null,
+                  leading: Semantics(
+                    label: AppLocalizations.of(context)!.userPhotoLabel,
+                    image: true,
+                    child: CircleAvatar(
+                      backgroundImage: provider.photoBytes != null
+                          ? MemoryImage(provider.photoBytes!)
+                          : null,
+                      child: provider.photoBytes == null ||
+                              provider.photoBytes!.isEmpty
+                          ? Text(initials)
+                          : null,
+                    ),
                   ),
                   title: Text(provider.name),
                   onTap: () {
