@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'Vogue Vault',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightScheme,
@@ -75,6 +77,13 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(fontSize: 16),
         ),
       ),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       // Start the app with authentication.
       home: const AuthPage(),
     );
