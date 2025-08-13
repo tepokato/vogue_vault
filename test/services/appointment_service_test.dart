@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/models/service_type.dart';
+import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -68,5 +69,22 @@ void main() {
 
     expect(apptsBox.isEmpty, isTrue);
     expect(usersBox.get('c1'), isNull);
+  });
+
+  test('addAppointment supports guest clients', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    final appt = Appointment(
+      id: 'a2',
+      guestName: 'Walk-in',
+      providerId: 'p1',
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-01'),
+    );
+    await service.addAppointment(appt);
+    final stored = service.getAppointment('a2');
+    expect(stored?.guestName, 'Walk-in');
+    expect(stored?.clientId, isNull);
   });
 }
