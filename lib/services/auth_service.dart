@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -32,11 +35,18 @@ class AuthService extends ChangeNotifier {
 
   bool get isLoggedIn => currentUser != null;
 
+  String _hashPassword(String password) {
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
   Future<bool> login(String email, String password) async {
     _ensureInitialized();
     final users = _users;
     final storedPassword = users[email];
-    if (storedPassword == password) {
+    final hashed = _hashPassword(password);
+    if (storedPassword == hashed) {
       await _box.put(_currentUserKey, {'email': email});
       notifyListeners();
       return true;
@@ -50,7 +60,7 @@ class AuthService extends ChangeNotifier {
     if (users.containsKey(email)) {
       throw StateError('User with email $email already exists.');
     }
-    users[email] = password;
+    users[email] = _hashPassword(password);
     await _box.put(_usersKey, users);
     await _box.put(_currentUserKey, {'email': email});
     notifyListeners();
