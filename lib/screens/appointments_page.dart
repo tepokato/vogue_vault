@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/appointment.dart';
 import '../models/user_role.dart';
@@ -23,11 +24,11 @@ class AppointmentsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appointments'),
+        title: Text(AppLocalizations.of(context)!.appointmentsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle),
-            tooltip: 'Profile',
+            tooltip: AppLocalizations.of(context)!.profileTooltip,
             onPressed: () {
               Navigator.push(
                 context,
@@ -39,7 +40,7 @@ class AppointmentsPage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.switch_account),
-            tooltip: 'Switch Role',
+            tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
             onPressed: () {
               context.read<RoleProvider>().clearRole();
               Navigator.pushAndRemoveUntil(
@@ -54,7 +55,7 @@ class AppointmentsPage extends StatelessWidget {
           if (role == UserRole.professional)
             IconButton(
               icon: const Icon(Icons.people),
-              tooltip: 'Users',
+              tooltip: AppLocalizations.of(context)!.usersTooltip,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -80,7 +81,7 @@ class AppointmentsPage extends StatelessWidget {
               ),
             ),
             title: Text(
-              '${client?.name ?? 'Unknown'} - ${serviceTypeLabel(appt.service)}',
+              '${client?.name ?? AppLocalizations.of(context)!.unknownUser} - ${serviceTypeLabel(appt.service)}',
             ),
             subtitle: Text(
               DateFormat.yMMMd().add_jm().format(

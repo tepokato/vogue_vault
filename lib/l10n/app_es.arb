@@ -1,0 +1,9 @@
+{
+  "@@locale": "es",
+  "appTitle": "Bóveda de la Moda",
+  "appointmentsTitle": "Citas",
+  "profileTooltip": "Perfil",
+  "switchRoleTooltip": "Cambiar rol",
+  "usersTooltip": "Usuarios",
+  "unknownUser": "Desconocido"
+}

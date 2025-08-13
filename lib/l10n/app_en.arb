@@ -1,0 +1,9 @@
+{
+  "@@locale": "en",
+  "appTitle": "Vogue Vault",
+  "appointmentsTitle": "Appointments",
+  "profileTooltip": "Profile",
+  "switchRoleTooltip": "Switch Role",
+  "usersTooltip": "Users",
+  "unknownUser": "Unknown"
+}
