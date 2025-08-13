@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../models/appointment.dart';
-import '../models/service_type.dart';
 import '../models/user_role.dart';
 import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
