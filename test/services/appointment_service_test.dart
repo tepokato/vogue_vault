@@ -38,7 +38,7 @@ void main() {
     await box.put('a1', {
       'id': 'a1',
       'clientId': 'c1',
-      'service': ServiceType.hairCut.name,
+      'service': ServiceType.hairdresser.name,
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
 
@@ -59,7 +59,7 @@ void main() {
     await apptsBox.put('a1', {
       'id': 'a1',
       'clientId': 'c1',
-      'service': ServiceType.hairCut.name,
+      'service': ServiceType.hairdresser.name,
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
 
