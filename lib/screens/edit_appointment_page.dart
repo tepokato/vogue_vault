@@ -75,7 +75,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ? AppLocalizations.of(context)!.editAppointmentTitle
               : AppLocalizations.of(context)!.newAppointmentTitle),
         ),
-        body: const Center(
+        body: Center(
           child: Text(AppLocalizations.of(context)!.noClientsAvailable),
         ),
       );
@@ -88,7 +88,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ? AppLocalizations.of(context)!.editAppointmentTitle
               : AppLocalizations.of(context)!.newAppointmentTitle),
         ),
-        body: const Center(
+        body: Center(
           child: Text(AppLocalizations.of(context)!.noProvidersAvailableAdd),
         ),
       );
