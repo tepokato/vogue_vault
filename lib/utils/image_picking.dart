@@ -28,7 +28,7 @@ Future<Uint8List?> pickImageBytes() async {
   } else {
     file = await openFile(
       acceptedTypeGroups: [
-        XTypeGroup(
+        const XTypeGroup(
           label: 'images',
           extensions: ['jpg', 'jpeg', 'png', 'gif'],
         ),
