@@ -17,7 +17,6 @@ class AppointmentService extends ChangeNotifier {
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    await Hive.initFlutter();
     _appointmentsBox =
         await Hive.openBox<Map<String, dynamic>>(_appointmentsBoxName);
     _usersBox = await Hive.openBox<Map<String, dynamic>>(_usersBoxName);

@@ -22,8 +22,9 @@ class _FakePathProviderPlatform extends PathProviderPlatform {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() {
+  setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
+    await Hive.initFlutter();
   });
 
   tearDown(() async {
