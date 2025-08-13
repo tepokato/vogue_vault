@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
@@ -53,8 +54,10 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() => _photoBytes = bytes);
     } else if (!isImagePickerSupported && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Image selection not supported on this platform'),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.imageSelectionUnsupported,
+          ),
         ),
       );
     }
@@ -80,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(AppLocalizations.of(context)!.profileTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -110,9 +113,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _nameController,
-                        decoration: const InputDecoration(labelText: 'Name'),
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.nameLabel),
                         validator: (value) => value == null || value.trim().isEmpty
-                            ? 'Please enter a name'
+                            ? AppLocalizations.of(context)!.nameRequired
                             : null,
                       ),
                     ],
@@ -120,7 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text('Roles', style: Theme.of(context).textTheme.titleMedium),
+              Text(AppLocalizations.of(context)!.rolesTitle,
+                  style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               SegmentedButton<UserRole>(
                 segments: UserRole.values
@@ -134,7 +139,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
               const SizedBox(height: 24),
-              Text('Services', style: Theme.of(context).textTheme.titleMedium),
+              Text(AppLocalizations.of(context)!.servicesTitle,
+                  style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -159,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _save,
-                  child: const Text('Save'),
+                  child: Text(AppLocalizations.of(context)!.saveButton),
                 ),
               ),
             ],

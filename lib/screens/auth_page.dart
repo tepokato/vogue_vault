@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
 import 'role_selection_page.dart';
@@ -40,7 +41,8 @@ class _AuthPageState extends State<AuthPage> {
     if (_isLogin) {
       success = await auth.login(email, password);
       if (!success) {
-        setState(() => _error = 'Invalid credentials');
+        setState(() =>
+            _error = AppLocalizations.of(context)!.invalidCredentials);
         return;
       }
     } else {
@@ -61,7 +63,9 @@ class _AuthPageState extends State<AuthPage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isLogin ? 'Sign In' : 'Register'),
+        title: Text(_isLogin
+            ? AppLocalizations.of(context)!.signInTitle
+            : AppLocalizations.of(context)!.registerTitle),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -79,20 +83,20 @@ class _AuthPageState extends State<AuthPage> {
                 children: [
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.email),
+                      labelText: AppLocalizations.of(context)!.emailLabel,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      labelText: AppLocalizations.of(context)!.passwordLabel,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   if (_error != null) ...[
@@ -108,7 +112,9 @@ class _AuthPageState extends State<AuthPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _submit,
-                      child: Text(_isLogin ? 'Login' : 'Register'),
+                      child: Text(_isLogin
+                          ? AppLocalizations.of(context)!.loginButton
+                          : AppLocalizations.of(context)!.registerButton),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -121,8 +127,8 @@ class _AuthPageState extends State<AuthPage> {
                     },
                     child: Text(
                         _isLogin
-                            ? 'Create an account'
-                            : 'Have an account? Sign in'),
+                            ? AppLocalizations.of(context)!.createAccount
+                            : AppLocalizations.of(context)!.haveAccountSignIn),
                   ),
                 ],
               ),

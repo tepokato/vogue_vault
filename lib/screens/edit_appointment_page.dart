@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/appointment.dart';
 import '../models/service_type.dart';
@@ -45,9 +46,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-                'Previously selected client was removed. Please choose another.'),
+                AppLocalizations.of(context)!.selectedClientRemoved),
           ),
         );
       });
@@ -58,9 +59,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-                'Previously selected provider was removed or unavailable. Please choose another.'),
+                AppLocalizations.of(context)!.selectedProviderRemoved),
           ),
         );
       });
@@ -70,10 +71,12 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     if (clients.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(isEditing ? 'Edit Appointment' : 'New Appointment'),
+          title: Text(isEditing
+              ? AppLocalizations.of(context)!.editAppointmentTitle
+              : AppLocalizations.of(context)!.newAppointmentTitle),
         ),
         body: const Center(
-          child: Text('No clients available. Please add a client first.'),
+          child: Text(AppLocalizations.of(context)!.noClientsAvailable),
         ),
       );
     }
@@ -81,17 +84,21 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     if (providers.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(isEditing ? 'Edit Appointment' : 'New Appointment'),
+          title: Text(isEditing
+              ? AppLocalizations.of(context)!.editAppointmentTitle
+              : AppLocalizations.of(context)!.newAppointmentTitle),
         ),
         body: const Center(
-          child: Text('No providers available. Please add a provider first.'),
+          child: Text(AppLocalizations.of(context)!.noProvidersAvailableAdd),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Appointment' : 'New Appointment'),
+        title: Text(isEditing
+            ? AppLocalizations.of(context)!.editAppointmentTitle
+            : AppLocalizations.of(context)!.newAppointmentTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -101,7 +108,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
             children: [
               DropdownButtonFormField<String>(
                 value: _selectedClientId,
-                hint: const Text('Select Client'),
+                hint: Text(AppLocalizations.of(context)!.selectClientHint),
                 items: clients
                     .map(
                       (c) => DropdownMenuItem<String>(
@@ -111,12 +118,14 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     )
                     .toList(),
                 onChanged: (value) => setState(() => _selectedClientId = value),
-                validator: (value) =>
-                    value == null ? 'Please select a client' : null,
+                validator: (value) => value == null
+                    ? AppLocalizations.of(context)!.selectClientValidation
+                    : null,
               ),
               DropdownButtonFormField<ServiceType>(
                 value: _service,
-                decoration: const InputDecoration(labelText: 'Service'),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.serviceLabel),
                 items: ServiceType.values
                     .map(
                       (s) => DropdownMenuItem<ServiceType>(
@@ -138,12 +147,14 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     }
                   });
                 },
-                validator: (value) =>
-                    value == null ? 'Please select a service' : null,
+                validator: (value) => value == null
+                    ? AppLocalizations.of(context)!.selectServiceValidation
+                    : null,
               ),
               DropdownButtonFormField<String>(
                 value: _selectedProviderId,
-                decoration: const InputDecoration(labelText: 'Provider'),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.providerLabel),
                 items: providers
                     .map(
                       (p) => DropdownMenuItem<String>(
@@ -153,8 +164,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     )
                     .toList(),
                 onChanged: (value) => setState(() => _selectedProviderId = value),
-                validator: (value) =>
-                    value == null ? 'Please select a provider' : null,
+                validator: (value) => value == null
+                    ? AppLocalizations.of(context)!.selectProviderValidation
+                    : null,
               ),
               const SizedBox(height: 12),
               Row(
@@ -180,7 +192,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                             date.year, date.month, date.day, time.hour, time.minute);
                       });
                     },
-                    child: const Text('Select Date'),
+                    child: Text(
+                        AppLocalizations.of(context)!.selectDateButton),
                   ),
                 ],
               ),
@@ -204,7 +217,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   }
                   Navigator.pop(context);
                 },
-                child: const Text('Save'),
+                child: Text(AppLocalizations.of(context)!.saveButton),
               ),
             ],
           ),

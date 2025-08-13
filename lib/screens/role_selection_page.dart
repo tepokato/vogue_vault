@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/user_role.dart';
 import '../services/auth_service.dart';
@@ -29,7 +30,7 @@ class RoleSelectionPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Role'),
+        title: Text(AppLocalizations.of(context)!.selectRoleTitle),
         actions: [
           IconButton(
             onPressed: () {
@@ -40,7 +41,7 @@ class RoleSelectionPage extends StatelessWidget {
               );
             },
             icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
+            tooltip: AppLocalizations.of(context)!.logoutTooltip,
           ),
         ],
       ),
@@ -51,7 +52,7 @@ class RoleSelectionPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'I am a...',
+                AppLocalizations.of(context)!.iAmA,
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 24),
@@ -68,7 +69,7 @@ class RoleSelectionPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('Customer'),
+                    child: Text(AppLocalizations.of(context)!.customerRole),
                   ),
                 ),
               if (roles.contains(UserRole.customer))
@@ -86,7 +87,7 @@ class RoleSelectionPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('Professional'),
+                    child: Text(AppLocalizations.of(context)!.professionalRole),
                   ),
                 ),
             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/service_type.dart';
 import '../utils/service_type_utils.dart';
@@ -16,11 +17,11 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome'),
+        title: Text(AppLocalizations.of(context)!.welcomeTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle),
-            tooltip: 'Profile',
+            tooltip: AppLocalizations.of(context)!.profileTooltip,
             onPressed: () {
               Navigator.push(
                 context,
@@ -32,7 +33,7 @@ class WelcomePage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.switch_account),
-            tooltip: 'Switch Role',
+            tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
             onPressed: () {
               context.read<RoleProvider>().clearRole();
               Navigator.pushAndRemoveUntil(
@@ -52,7 +53,7 @@ class WelcomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Explore our services',
+              AppLocalizations.of(context)!.exploreServices,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
@@ -88,7 +89,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Get Started'),
+                child: Text(AppLocalizations.of(context)!.getStarted),
               ),
             )
           ],
