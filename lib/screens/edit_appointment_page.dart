@@ -205,7 +205,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
                   final id = widget.appointment?.id ??
                       DateTime.now().millisecondsSinceEpoch.toString();
@@ -217,10 +217,11 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     dateTime: _dateTime,
                   );
                   if (isEditing) {
-                    service.updateAppointment(newAppt);
+                    await service.updateAppointment(newAppt);
                   } else {
-                    service.addAppointment(newAppt);
+                    await service.addAppointment(newAppt);
                   }
+                  if (!mounted) return;
                   Navigator.pop(context);
                 },
                 child: Text(AppLocalizations.of(context)!.saveButton),
