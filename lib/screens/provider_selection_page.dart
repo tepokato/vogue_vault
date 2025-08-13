@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
