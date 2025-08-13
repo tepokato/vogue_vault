@@ -12,4 +12,13 @@ void main() {
 
     expect(provider.selectedRole, isNull);
   });
+
+  test('selectedRole is cleared when removing selected role', () {
+    final provider = RoleProvider();
+    provider.selectedRole = UserRole.customer;
+
+    provider.removeRole(UserRole.customer);
+
+    expect(provider.selectedRole, isNull);
+  });
 }
