@@ -30,8 +30,8 @@ class UserProfile {
     Set<UserRole>? roles,
     Set<ServiceType>? services,
   })  :
-        roles = roles ?? <UserRole>{},
-        services = services ?? <ServiceType>{};
+        roles = Set.unmodifiable(roles ?? <UserRole>{}),
+        services = Set.unmodifiable(services ?? <ServiceType>{});
 
   /// Returns a copy of this profile with the given fields replaced.
   UserProfile copyWith({
@@ -45,8 +45,8 @@ class UserProfile {
       id: id ?? this.id,
       name: name ?? this.name,
       photoBytes: photoBytes ?? this.photoBytes,
-      roles: roles ?? this.roles,
-      services: services ?? this.services,
+      roles: roles != null ? Set.unmodifiable(roles) : this.roles,
+      services: services != null ? Set.unmodifiable(services) : this.services,
     );
   }
 
@@ -58,14 +58,16 @@ class UserProfile {
       photoBytes: map['photoBytes'] != null
           ? base64Decode(map['photoBytes'] as String)
           : null,
-      roles: (map['roles'] as List?)
-              ?.map((e) => UserRole.values.byName(e as String))
-              .toSet() ??
-          <UserRole>{},
-      services: (map['services'] as List?)
-              ?.map((e) => ServiceType.values.byName(e as String))
-              .toSet() ??
-          <ServiceType>{},
+      roles: Set.unmodifiable(
+          (map['roles'] as List?)
+                  ?.map((e) => UserRole.values.byName(e as String))
+                  .toSet() ??
+              <UserRole>{}),
+      services: Set.unmodifiable(
+          (map['services'] as List?)
+                  ?.map((e) => ServiceType.values.byName(e as String))
+                  .toSet() ??
+              <ServiceType>{}),
     );
   }
 
