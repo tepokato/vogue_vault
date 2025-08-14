@@ -11,6 +11,7 @@ import '../models/service_type.dart';
 import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
+import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 
 class EditUserPage extends StatelessWidget {
@@ -40,8 +41,10 @@ class EditUserPage extends StatelessWidget {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
+          final currentUser = context.watch<AuthService>().currentUser;
           final roleText =
               user.roles.map((r) => _roleLabel(context, r)).join(', ');
+          final isSelf = user.id == currentUser;
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: user.photoBytes != null
@@ -54,23 +57,30 @@ class EditUserPage extends StatelessWidget {
             title: Text(user.fullName),
             subtitle: Text(roleText),
             onTap: () => _showUserDialog(context, user: user),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                try {
-                  await service.deleteUser(user.id);
-                } catch (e) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        AppLocalizations.of(context)!.deleteUserFailed,
-                      ),
-                    ),
-                  );
-                }
-              },
-            ),
+            trailing: isSelf
+                ? const IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: null,
+                    tooltip: 'Cannot delete yourself',
+                  )
+                : IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      try {
+                        await service.deleteUser(user.id);
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.of(context)!
+                                  .deleteUserFailed,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
           );
         },
       ),
