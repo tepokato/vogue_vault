@@ -506,7 +506,7 @@ abstract class AppLocalizations {
   /// No description provided for @serviceTypeBarber.
   ///
   /// In en, this message translates to:
-  /// **'Barbershop'**
+  /// **'Barber'**
   String get serviceTypeBarber;
 
   /// No description provided for @serviceTypeHairdresser.

@@ -213,7 +213,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientOrGuestValidation => 'Please select a client or enter a guest name';
 
   @override
-  String get serviceTypeBarber => 'Barbershop';
+  String get serviceTypeBarber => 'Barber';
 
   @override
   String get serviceTypeHairdresser => 'Hairdresser';

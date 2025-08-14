@@ -68,7 +68,7 @@
   "guestNameLabel": "Nombre del invitado",
   "guestContactLabel": "Contacto del invitado (opcional)",
   "clientOrGuestValidation": "Selecciona un cliente o ingresa un nombre de invitado",
-  "serviceTypeBarber": "Barbería",
+  "serviceTypeBarber": "Barbero",
   "serviceTypeHairdresser": "Peluquería",
   "serviceTypeNails": "Uñas",
   "serviceTypeTattoo": "Tatuador"
