@@ -42,6 +42,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nameRequired => 'Por favor ingresa un nombre';
 
   @override
+  String get firstNameLabel => 'Nombre';
+
+  @override
+  String get firstNameRequired => 'Por favor ingresa un nombre';
+
+  @override
+  String get lastNameLabel => 'Apellido';
+
+  @override
+  String get lastNameRequired => 'Por favor ingresa un apellido';
+
+  @override
+  String get nicknameLabel => 'Apodo (opcional)';
+
+  @override
   String get rolesTitle => 'Roles';
 
   @override

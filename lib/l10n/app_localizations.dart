@@ -161,6 +161,36 @@ abstract class AppLocalizations {
   /// **'Please enter a name'**
   String get nameRequired;
 
+  /// No description provided for @firstNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'First name'**
+  String get firstNameLabel;
+
+  /// No description provided for @firstNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a first name'**
+  String get firstNameRequired;
+
+  /// No description provided for @lastNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last name'**
+  String get lastNameLabel;
+
+  /// No description provided for @lastNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a last name'**
+  String get lastNameRequired;
+
+  /// No description provided for @nicknameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname (optional)'**
+  String get nicknameLabel;
+
   /// No description provided for @rolesTitle.
   ///
   /// In en, this message translates to:
