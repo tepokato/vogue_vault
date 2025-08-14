@@ -31,6 +31,9 @@ class RoleProvider extends ChangeNotifier {
 
   void removeRole(UserRole role) {
     _roles.remove(role);
+    if (_selectedRole == role) {
+      _selectedRole = null;
+    }
     notifyListeners();
   }
 

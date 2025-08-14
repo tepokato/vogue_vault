@@ -5,6 +5,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/appointment.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
+import '../utils/service_type_utils.dart';
 
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
@@ -24,6 +25,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   DateTime _dateTime = DateTime.now();
   String? _selectedClientId;
   String? _selectedProviderId;
+  late final TextEditingController _guestNameController;
+  late final TextEditingController _guestContactController;
 
   @override
   void initState() {
@@ -33,6 +36,17 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
     _selectedClientId = widget.appointment?.clientId;
     _selectedProviderId = widget.appointment?.providerId ?? widget.initialProviderId;
+    _guestNameController =
+        TextEditingController(text: widget.appointment?.guestName ?? '');
+    _guestContactController =
+        TextEditingController(text: widget.appointment?.guestContact ?? '');
+  }
+
+  @override
+  void dispose() {
+    _guestNameController.dispose();
+    _guestContactController.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,19 +82,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     }
     final isEditing = widget.appointment != null;
 
-    if (clients.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(isEditing
-              ? AppLocalizations.of(context)!.editAppointmentTitle
-              : AppLocalizations.of(context)!.newAppointmentTitle),
-        ),
-        body: Center(
-          child: Text(AppLocalizations.of(context)!.noClientsAvailable),
-        ),
-      );
-    }
-
     if (providers.isEmpty) {
       return Scaffold(
         appBar: AppBar(
@@ -112,21 +113,47 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
           key: _formKey,
           child: Column(
             children: [
-              DropdownButtonFormField<String>(
-                value: _selectedClientId,
-                hint: Text(AppLocalizations.of(context)!.selectClientHint),
-                items: clients
-                    .map(
-                      (c) => DropdownMenuItem<String>(
-                        value: c.id,
-                        child: Text(c.name),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) => setState(() => _selectedClientId = value),
-                validator: (value) => value == null
-                    ? AppLocalizations.of(context)!.selectClientValidation
-                    : null,
+              if (clients.isNotEmpty)
+                DropdownButtonFormField<String>(
+                  value: _selectedClientId,
+                  hint: Text(AppLocalizations.of(context)!.selectClientHint),
+                  items: clients
+                      .map(
+                        (c) => DropdownMenuItem<String>(
+                          value: c.id,
+                          child: Text(c.name),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) => setState(() => _selectedClientId = value),
+                  validator: (_) {
+                    if ((_selectedClientId == null || _selectedClientId!.isEmpty) &&
+                        _guestNameController.text.isEmpty) {
+                      return AppLocalizations.of(context)!
+                          .clientOrGuestValidation;
+                    }
+                    return null;
+                  },
+                ),
+              TextFormField(
+                controller: _guestNameController,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.guestNameLabel,
+                ),
+                validator: (value) {
+                  if ((_selectedClientId == null || _selectedClientId!.isEmpty) &&
+                      (value == null || value.isEmpty)) {
+                    return AppLocalizations.of(context)!
+                        .clientOrGuestValidation;
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _guestContactController,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.guestContactLabel,
+                ),
               ),
               DropdownButtonFormField<ServiceType>(
                 value: _service,
@@ -136,7 +163,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     .map(
                       (s) => DropdownMenuItem<ServiceType>(
                         value: s,
-                        child: Text(s.name),
+                        child: Text(serviceTypeLabel(s)),
                       ),
                     )
                     .toList(),
@@ -205,22 +232,31 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
                   final id = widget.appointment?.id ??
                       DateTime.now().millisecondsSinceEpoch.toString();
                   final newAppt = Appointment(
                     id: id,
-                    clientId: _selectedClientId!,
+                    clientId: _selectedClientId,
+                    guestName:
+                        _selectedClientId == null || _selectedClientId!.isEmpty
+                            ? _guestNameController.text
+                            : null,
+                    guestContact:
+                        _selectedClientId == null || _selectedClientId!.isEmpty
+                            ? _guestContactController.text
+                            : null,
                     providerId: _selectedProviderId!,
                     service: _service,
                     dateTime: _dateTime,
                   );
                   if (isEditing) {
-                    service.updateAppointment(newAppt);
+                    await service.updateAppointment(newAppt);
                   } else {
-                    service.addAppointment(newAppt);
+                    await service.addAppointment(newAppt);
                   }
+                  if (!mounted) return;
                   Navigator.pop(context);
                 },
                 child: Text(AppLocalizations.of(context)!.saveButton),
