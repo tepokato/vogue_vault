@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
+import '../utils/color_palette.dart';
 import 'role_selection_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -79,7 +80,7 @@ class _AuthPageState extends State<AuthPage> {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+            colors: [AppColors.primary, AppColors.accent],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -101,7 +102,7 @@ class _AuthPageState extends State<AuthPage> {
                       hintText: AppLocalizations.of(context)!.emailLabel,
                       prefixIcon: const Icon(Icons.email),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: AppColors.base,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -122,7 +123,7 @@ class _AuthPageState extends State<AuthPage> {
                       hintText: AppLocalizations.of(context)!.passwordLabel,
                       prefixIcon: const Icon(Icons.lock),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: AppColors.base,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -165,8 +166,8 @@ class _AuthPageState extends State<AuthPage> {
                       });
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white),
+                      foregroundColor: AppColors.base,
+                      side: const BorderSide(color: AppColors.base),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
