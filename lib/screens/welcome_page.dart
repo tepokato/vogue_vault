@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.welcomeTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
+            icon: const Icon(Icons.person),
             tooltip: AppLocalizations.of(context)!.profileTooltip,
             onPressed: () {
               Navigator.push(
@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.switch_account),
+            icon: const Icon(Icons.swap_horiz),
             tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
             onPressed: () {
               context.read<RoleProvider>().clearRole();
