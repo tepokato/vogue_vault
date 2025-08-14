@@ -53,7 +53,17 @@ class EditUserPage extends StatelessWidget {
             onTap: () => _showUserDialog(context, user: user),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () => service.deleteUser(user.id),
+              onPressed: () async {
+                try {
+                  await service.deleteUser(user.id);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Failed to delete user'),
+                    ),
+                  );
+                }
+              },
             ),
           );
         },
