@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/models/service_type.dart';
@@ -38,15 +39,19 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
+    final uuid = const Uuid();
+    final providerId = uuid.v4();
+    final laterId = uuid.v4();
+    final earlierId = uuid.v4();
     final later = Appointment(
-      id: 'a1',
-      providerId: 'p1',
+      id: laterId,
+      providerId: providerId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-02'),
     );
     final earlier = Appointment(
-      id: 'a2',
-      providerId: 'p1',
+      id: earlierId,
+      providerId: providerId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
     );
@@ -55,17 +60,20 @@ void main() {
     await service.addAppointment(earlier);
 
     final appts = service.appointments;
-    expect(appts.map((a) => a.id), ['a2', 'a1']);
+    expect(appts.map((a) => a.id), [earlierId, laterId]);
   });
 
   test('legacy appointments load with default providerId', () async {
     final service = AppointmentService();
     await service.init();
 
+    final uuid = const Uuid();
     final box = Hive.box('appointments');
-    await box.put('a1', {
-      'id': 'a1',
-      'clientId': 'c1',
+    final id = uuid.v4();
+    final clientId = uuid.v4();
+    await box.put(id, {
+      'id': id,
+      'clientId': clientId,
       'service': ServiceType.hairdresser.name,
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
@@ -79,43 +87,49 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
+    final uuid = const Uuid();
     final apptsBox = Hive.box('appointments');
     final usersBox = Hive.box('users');
 
+    final clientId = uuid.v4();
+    final apptId = uuid.v4();
+
     await usersBox.put(
-        'c1',
+        clientId,
         UserProfile(
-          id: 'c1',
+          id: clientId,
           firstName: 'Client',
           lastName: 'User',
         ).toMap());
 
-    await apptsBox.put('a1', {
-      'id': 'a1',
-      'clientId': 'c1',
+    await apptsBox.put(apptId, {
+      'id': apptId,
+      'clientId': clientId,
       'service': ServiceType.hairdresser.name,
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
 
-    await service.deleteUser('c1');
+    await service.deleteUser(clientId);
 
     expect(apptsBox.isEmpty, isTrue);
-    expect(usersBox.get('c1'), isNull);
+    expect(usersBox.get(clientId), isNull);
   });
 
   test('addAppointment supports guest clients', () async {
     final service = AppointmentService();
     await service.init();
 
+    final uuid = const Uuid();
+    final id = uuid.v4();
     final appt = Appointment(
-      id: 'a2',
+      id: id,
       guestName: 'Walk-in',
-      providerId: 'p1',
+      providerId: uuid.v4(),
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
     );
     await service.addAppointment(appt);
-    final stored = service.getAppointment('a2');
+    final stored = service.getAppointment(id);
     expect(stored?.guestName, 'Walk-in');
     expect(stored?.clientId, isNull);
   });
@@ -124,8 +138,12 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
+    final uuid = const Uuid();
+    final p1Id = uuid.v4();
+    final p2Id = uuid.v4();
+    final p3Id = uuid.v4();
     final p1 = UserProfile(
-      id: 'p1',
+      id: p1Id,
       firstName: 'Pro',
       lastName: 'One',
       roles: {UserRole.professional},
@@ -134,7 +152,7 @@ void main() {
       ],
     );
     final p2 = UserProfile(
-      id: 'p2',
+      id: p2Id,
       firstName: 'Pro',
       lastName: 'Two',
       roles: {UserRole.professional},
@@ -143,7 +161,7 @@ void main() {
       ],
     );
     final p3 = UserProfile(
-      id: 'p3',
+      id: p3Id,
       firstName: 'Pro',
       lastName: 'Three',
       roles: {UserRole.professional},
@@ -157,12 +175,12 @@ void main() {
     await service.addUser(p3);
 
     final barbers = service.providersFor(ServiceType.barber);
-    expect(barbers.map((p) => p.id), ['p1']);
+    expect(barbers.map((p) => p.id), [p1Id]);
 
     final nailTechs = service.providersFor(ServiceType.nails);
-    expect(nailTechs.map((p) => p.id), ['p2']);
+    expect(nailTechs.map((p) => p.id), [p2Id]);
 
     final tattooArtists = service.providersFor(ServiceType.tattoo);
-    expect(tattooArtists.map((p) => p.id), ['p3']);
+    expect(tattooArtists.map((p) => p.id), [p3Id]);
   });
 }

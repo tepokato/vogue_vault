@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/appointment.dart';
@@ -235,8 +236,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ElevatedButton(
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
-                  final id = widget.appointment?.id ??
-                      DateTime.now().millisecondsSinceEpoch.toString();
+                  final id =
+                      widget.appointment?.id ?? const Uuid().v4();
                   final newAppt = Appointment(
                     id: id,
                     clientId: _selectedClientId,

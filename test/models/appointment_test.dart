@@ -1,14 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/service_type.dart';
 
 void main() {
   group('Appointment serialization', () {
     test('toMap and fromMap produce equivalent objects', () {
+      final uuid = const Uuid();
+      final id = uuid.v4();
+      final clientId = uuid.v4();
+      final providerId = uuid.v4();
       final appointment = Appointment(
-        id: 'a1',
-        clientId: 'c1',
-        providerId: 'p1',
+        id: id,
+        clientId: clientId,
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -23,11 +28,12 @@ void main() {
     });
 
     test('supports guest clients', () {
+      final uuid = const Uuid();
       final appointment = Appointment(
-        id: 'a2',
+        id: uuid.v4(),
         guestName: 'Walk-in',
         guestContact: '555-1234',
-        providerId: 'p1',
+        providerId: uuid.v4(),
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 11, 0),
       );
@@ -40,13 +46,14 @@ void main() {
     });
 
     test('fromMap validates required data', () {
-      final missingFields = {'id': 'a1'};
+      final uuid = const Uuid();
+      final missingFields = {'id': uuid.v4()};
       expect(() => Appointment.fromMap(missingFields), throwsA(isA<TypeError>()));
 
       final invalidDate = {
-        'id': 'a1',
-        'clientId': 'c1',
-        'providerId': 'p1',
+        'id': uuid.v4(),
+        'clientId': uuid.v4(),
+        'providerId': uuid.v4(),
         'service': 'barber',
         'dateTime': 'invalid',
       };
@@ -56,17 +63,21 @@ void main() {
 
   group('Appointment equality', () {
     test('appointments with the same values are equal', () {
+      final uuid = const Uuid();
+      final id = uuid.v4();
+      final clientId = uuid.v4();
+      final providerId = uuid.v4();
       final a1 = Appointment(
-        id: 'a1',
-        clientId: 'c1',
-        providerId: 'p1',
+        id: id,
+        clientId: clientId,
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
       final a2 = Appointment(
-        id: 'a1',
-        clientId: 'c1',
-        providerId: 'p1',
+        id: id,
+        clientId: clientId,
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
@@ -76,20 +87,23 @@ void main() {
     });
 
     test('appointments with same guest values are equal', () {
+      final uuid = const Uuid();
       final dt = DateTime(2023, 9, 10, 10, 0);
+      final id = uuid.v4();
+      final providerId = uuid.v4();
       final a1 = Appointment(
-        id: 'a1',
+        id: id,
         guestName: 'Walk-in',
         guestContact: '555',
-        providerId: 'p1',
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: dt,
       );
       final a2 = Appointment(
-        id: 'a1',
+        id: id,
         guestName: 'Walk-in',
         guestContact: '555',
-        providerId: 'p1',
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: dt,
       );
@@ -98,17 +112,22 @@ void main() {
     });
 
     test('appointments with different values are not equal', () {
+      final uuid = const Uuid();
+      final id1 = uuid.v4();
+      final id2 = uuid.v4();
+      final clientId = uuid.v4();
+      final providerId = uuid.v4();
       final a1 = Appointment(
-        id: 'a1',
-        clientId: 'c1',
-        providerId: 'p1',
+        id: id1,
+        clientId: clientId,
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );
       final a2 = Appointment(
-        id: 'a2',
-        clientId: 'c1',
-        providerId: 'p1',
+        id: id2,
+        clientId: clientId,
+        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
       );

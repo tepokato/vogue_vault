@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/user_role.dart';
 import 'package:vogue_vault/models/service_type.dart';
@@ -9,8 +10,9 @@ import 'package:vogue_vault/models/service_offering.dart';
 void main() {
   group('UserProfile serialization', () {
     test('toMap and fromMap produce equivalent objects', () {
+      final uuid = const Uuid();
       final profile = UserProfile(
-        id: 'u1',
+        id: uuid.v4(),
         firstName: 'Alice',
         lastName: 'Smith',
         nickname: 'Ally',
@@ -32,7 +34,7 @@ void main() {
 
     test('handles null photoBytes and empty sets', () {
       final profile = UserProfile(
-        id: 'u2',
+        id: const Uuid().v4(),
         firstName: 'Bob',
         lastName: 'Builder',
       );
@@ -51,8 +53,10 @@ void main() {
 
   group('UserProfile equality', () {
     test('profiles with the same values are equal and hashCodes match', () {
+      final uuid = const Uuid();
+      final id = uuid.v4();
       final p1 = UserProfile(
-        id: 'u1',
+        id: id,
         firstName: 'Alice',
         lastName: 'Smith',
         nickname: 'Ally',
@@ -63,7 +67,7 @@ void main() {
         ],
       );
       final p2 = UserProfile(
-        id: 'u1',
+        id: id,
         firstName: 'Alice',
         lastName: 'Smith',
         nickname: 'Ally',
@@ -79,13 +83,14 @@ void main() {
     });
 
     test('profiles with different data are not equal', () {
+      final id = const Uuid().v4();
       final p1 = UserProfile(
-        id: 'u1',
+        id: id,
         firstName: 'Alice',
         lastName: 'Smith',
       );
       final p2 = UserProfile(
-        id: 'u1',
+        id: id,
         firstName: 'Alice',
         lastName: 'Smith',
         nickname: 'Ally',
@@ -97,8 +102,9 @@ void main() {
 
   group('UserProfile service type parsing', () {
     test('skips invalid service types in legacy services list', () {
+      final uuid = const Uuid();
       final map = {
-        'id': 'u1',
+        'id': uuid.v4(),
         'firstName': 'Alice',
         'lastName': 'Smith',
         'services': ['barber', 'unknown']
@@ -111,8 +117,9 @@ void main() {
     });
 
     test('defaults invalid offering type to first enum value', () {
+      final uuid = const Uuid();
       final map = {
-        'id': 'u1',
+        'id': uuid.v4(),
         'firstName': 'Alice',
         'lastName': 'Smith',
         'offerings': [
