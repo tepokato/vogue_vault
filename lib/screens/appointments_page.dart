@@ -27,7 +27,7 @@ class AppointmentsPage extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.appointmentsTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
+            icon: const Icon(Icons.person),
             tooltip: AppLocalizations.of(context)!.profileTooltip,
             onPressed: () {
               Navigator.push(
@@ -37,7 +37,7 @@ class AppointmentsPage extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.switch_account),
+            icon: const Icon(Icons.swap_horiz),
             tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
             onPressed: () {
               context.read<RoleProvider>().clearRole();
@@ -50,7 +50,7 @@ class AppointmentsPage extends StatelessWidget {
           ),
           if (role == UserRole.professional)
             IconButton(
-              icon: const Icon(Icons.people),
+              icon: const Icon(Icons.group),
               tooltip: AppLocalizations.of(context)!.usersTooltip,
               onPressed: () {
                 Navigator.push(
