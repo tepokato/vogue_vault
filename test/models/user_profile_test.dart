@@ -10,7 +10,9 @@ void main() {
     test('toMap and fromMap produce equivalent objects', () {
       final profile = UserProfile(
         id: 'u1',
-        name: 'Alice',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        nickname: 'Ally',
         photoBytes: Uint8List.fromList([1, 2, 3]),
         roles: {UserRole.customer, UserRole.professional},
         services: {ServiceType.barber, ServiceType.nails},
@@ -20,20 +22,24 @@ void main() {
       final from = UserProfile.fromMap(map);
 
       expect(from, equals(profile));
+      expect(from.fullName, 'Ally');
     });
 
     test('handles null photoBytes and empty sets', () {
       final profile = UserProfile(
         id: 'u2',
-        name: 'Bob',
+        firstName: 'Bob',
+        lastName: 'Builder',
       );
 
       final map = profile.toMap();
       final from = UserProfile.fromMap(map);
 
       expect(from.photoBytes, isNull);
+      expect(from.nickname, isNull);
       expect(from.roles, isEmpty);
       expect(from.services, isEmpty);
+      expect(from.fullName, 'Bob Builder');
       expect(from, equals(profile));
     });
   });
@@ -42,13 +48,17 @@ void main() {
     test('profiles with the same values are equal and hashCodes match', () {
       final p1 = UserProfile(
         id: 'u1',
-        name: 'Alice',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        nickname: 'Ally',
         roles: {UserRole.customer, UserRole.professional},
         services: {ServiceType.barber},
       );
       final p2 = UserProfile(
         id: 'u1',
-        name: 'Alice',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        nickname: 'Ally',
         roles: {UserRole.professional, UserRole.customer},
         services: {ServiceType.barber},
       );
@@ -60,11 +70,14 @@ void main() {
     test('profiles with different data are not equal', () {
       final p1 = UserProfile(
         id: 'u1',
-        name: 'Alice',
+        firstName: 'Alice',
+        lastName: 'Smith',
       );
       final p2 = UserProfile(
-        id: 'u2',
-        name: 'Alice',
+        id: 'u1',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        nickname: 'Ally',
       );
 
       expect(p1, isNot(equals(p2)));

@@ -56,7 +56,13 @@ void main() {
     final apptsBox = Hive.box('appointments');
     final usersBox = Hive.box('users');
 
-    await usersBox.put('c1', UserProfile(id: 'c1', name: 'Client').toMap());
+    await usersBox.put(
+        'c1',
+        UserProfile(
+          id: 'c1',
+          firstName: 'Client',
+          lastName: 'User',
+        ).toMap());
 
     await apptsBox.put('a1', {
       'id': 'a1',
