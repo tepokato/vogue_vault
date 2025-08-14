@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:collection/collection.dart';
 
 import 'user_role.dart';
+import 'service_offering.dart';
 import 'service_type.dart';
 
 /// Represents a user within the application that may assume multiple roles.
@@ -27,7 +28,7 @@ class UserProfile {
   final Set<UserRole> roles;
 
   /// The services offered by this user when acting as a professional.
-  final Set<ServiceType> services;
+  final List<ServiceOffering> offerings;
 
   UserProfile({
     required this.id,
@@ -36,13 +37,16 @@ class UserProfile {
     this.nickname,
     this.photoBytes,
     Set<UserRole>? roles,
-    Set<ServiceType>? services,
+    List<ServiceOffering>? offerings,
   })  :
         roles = Set.unmodifiable(roles ?? <UserRole>{}),
-        services = Set.unmodifiable(services ?? <ServiceType>{});
+        offerings = List.unmodifiable(offerings ?? <ServiceOffering>[]);
 
   /// The full display name for the user.
   String get fullName => nickname ?? '$firstName $lastName';
+
+  /// Convenience getter matching older API expecting a single name field.
+  String get name => fullName;
 
   /// Returns a copy of this profile with the given fields replaced.
   UserProfile copyWith({
@@ -52,7 +56,7 @@ class UserProfile {
     String? nickname,
     Uint8List? photoBytes,
     Set<UserRole>? roles,
-    Set<ServiceType>? services,
+    List<ServiceOffering>? offerings,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -61,7 +65,8 @@ class UserProfile {
       nickname: nickname ?? this.nickname,
       photoBytes: photoBytes ?? this.photoBytes,
       roles: roles != null ? Set.unmodifiable(roles) : this.roles,
-      services: services != null ? Set.unmodifiable(services) : this.services,
+      offerings:
+          offerings != null ? List.unmodifiable(offerings) : this.offerings,
     );
   }
 
@@ -80,11 +85,19 @@ class UserProfile {
                   ?.map((e) => UserRole.values.byName(e as String))
                   .toSet() ??
               <UserRole>{}),
-      services: Set.unmodifiable(
-          (map['services'] as List?)
-                  ?.map((e) => ServiceType.values.byName(e as String))
-                  .toSet() ??
-              <ServiceType>{}),
+      offerings: List.unmodifiable(
+          (map['offerings'] as List?)
+                  ?.map((e) => ServiceOffering.fromMap(
+                      Map<String, dynamic>.from(e as Map)))
+                  .toList() ??
+              (map['services'] as List?)
+                      ?.map((e) {
+                        final type = ServiceType.values.byName(e as String);
+                        return ServiceOffering(
+                            type: type, name: type.name, price: 0);
+                      })
+                      .toList() ??
+                  <ServiceOffering>[]),
     );
   }
 
@@ -97,7 +110,7 @@ class UserProfile {
       'nickname': nickname,
       'photoBytes': photoBytes != null ? base64Encode(photoBytes!) : null,
       'roles': roles.map((e) => e.name).toList(),
-      'services': services.map((e) => e.name).toList(),
+      'offerings': offerings.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -112,7 +125,8 @@ class UserProfile {
           nickname == other.nickname &&
           const ListEquality<int>().equals(photoBytes, other.photoBytes) &&
           const SetEquality<UserRole>().equals(roles, other.roles) &&
-          const SetEquality<ServiceType>().equals(services, other.services);
+          const ListEquality<ServiceOffering>()
+              .equals(offerings, other.offerings);
 
   @override
   int get hashCode =>
@@ -122,6 +136,6 @@ class UserProfile {
       nickname.hashCode ^
       const ListEquality<int>().hash(photoBytes) ^
       roles.hashCode ^
-      services.hashCode;
+      const ListEquality<ServiceOffering>().hash(offerings);
 }
 

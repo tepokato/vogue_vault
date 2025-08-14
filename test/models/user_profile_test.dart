@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/user_role.dart';
 import 'package:vogue_vault/models/service_type.dart';
+import 'package:vogue_vault/models/service_offering.dart';
 
 void main() {
   group('UserProfile serialization', () {
@@ -15,7 +16,10 @@ void main() {
         nickname: 'Ally',
         photoBytes: Uint8List.fromList([1, 2, 3]),
         roles: {UserRole.customer, UserRole.professional},
-        services: {ServiceType.barber, ServiceType.nails},
+        offerings: [
+          ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+          ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 15),
+        ],
       );
 
       final map = profile.toMap();
@@ -38,7 +42,7 @@ void main() {
       expect(from.photoBytes, isNull);
       expect(from.nickname, isNull);
       expect(from.roles, isEmpty);
-      expect(from.services, isEmpty);
+      expect(from.offerings, isEmpty);
       expect(from.fullName, 'Bob Builder');
       expect(from, equals(profile));
     });
@@ -52,7 +56,9 @@ void main() {
         lastName: 'Smith',
         nickname: 'Ally',
         roles: {UserRole.customer, UserRole.professional},
-        services: {ServiceType.barber},
+        offerings: [
+          ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+        ],
       );
       final p2 = UserProfile(
         id: 'u1',
@@ -60,7 +66,9 @@ void main() {
         lastName: 'Smith',
         nickname: 'Ally',
         roles: {UserRole.professional, UserRole.customer},
-        services: {ServiceType.barber},
+        offerings: [
+          ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+        ],
       );
 
       expect(p1, equals(p2));
