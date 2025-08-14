@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/user_profile.dart';
@@ -318,8 +319,8 @@ class EditUserPage extends StatelessWidget {
                       return;
                     }
                     final service = context.read<AppointmentService>();
-                    final id = user?.id ??
-                        DateTime.now().millisecondsSinceEpoch.toString();
+                    final id =
+                        user?.id ?? const Uuid().v4();
                     final newUser = UserProfile(
                       id: id,
                       firstName: firstNameController.text.trim(),
