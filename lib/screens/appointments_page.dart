@@ -100,7 +100,7 @@ class AppointmentsPage extends StatelessWidget {
                     backgroundColor: serviceTypeColor(appt.service),
                     child: Icon(
                       serviceTypeIcon(appt.service),
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                   title: Text(
