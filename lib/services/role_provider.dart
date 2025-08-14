@@ -4,7 +4,7 @@ import '../models/user_role.dart';
 
 class RoleProvider extends ChangeNotifier {
   UserRole? _selectedRole;
-  final Set<UserRole> _roles = {UserRole.customer, UserRole.professional};
+  final Set<UserRole> _roles = {UserRole.customer};
 
   UserRole? get selectedRole => _selectedRole;
   Set<UserRole> get roles => Set.unmodifiable(_roles);
