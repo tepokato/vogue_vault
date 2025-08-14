@@ -135,7 +135,7 @@ class UserProfile {
       lastName.hashCode ^
       nickname.hashCode ^
       const ListEquality<int>().hash(photoBytes) ^
-      roles.hashCode ^
+      const SetEquality<UserRole>().hash(roles) ^
       const ListEquality<ServiceOffering>().hash(offerings);
 }
 
