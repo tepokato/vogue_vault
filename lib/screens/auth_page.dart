@@ -5,6 +5,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../utils/color_palette.dart';
 import 'role_selection_page.dart';
+import 'profile_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -47,6 +48,7 @@ class _AuthPageState extends State<AuthPage> {
     );
 
     bool success = false;
+    bool isRegister = false;
     try {
       if (_isLogin) {
         success = await auth.login(email, password);
@@ -57,6 +59,7 @@ class _AuthPageState extends State<AuthPage> {
       } else {
         await auth.register(email, password);
         success = true;
+        isRegister = true;
       }
     } finally {
       if (mounted) {
@@ -65,6 +68,13 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     if (success && mounted) {
+      if (isRegister) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ProfilePage()),
+        );
+        if (!mounted) return;
+      }
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
