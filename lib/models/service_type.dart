@@ -8,5 +8,8 @@ enum ServiceType {
 
   /// Manicure or pedicure services.
   nails,
+
+  /// Permanent body art services.
+  tattoo,
 }
 

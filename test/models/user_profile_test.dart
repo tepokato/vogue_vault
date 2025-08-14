@@ -19,6 +19,7 @@ void main() {
         offerings: [
           ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
           ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 15),
+          ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 25),
         ],
       );
 
@@ -58,6 +59,7 @@ void main() {
         roles: {UserRole.customer, UserRole.professional},
         offerings: [
           ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+          ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
         ],
       );
       final p2 = UserProfile(
@@ -68,6 +70,7 @@ void main() {
         roles: {UserRole.professional, UserRole.customer},
         offerings: [
           ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+          ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
         ],
       );
 
