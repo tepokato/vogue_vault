@@ -48,7 +48,7 @@ class EditUserPage extends StatelessWidget {
                   ? const Icon(Icons.person)
                   : null,
             ),
-            title: Text(user.name),
+            title: Text(user.fullName),
             subtitle: Text(roleText),
             onTap: () => _showUserDialog(context, user: user),
             trailing: IconButton(
@@ -77,7 +77,7 @@ class EditUserPage extends StatelessWidget {
   }
 
   Future<void> _showUserDialog(BuildContext context, {UserProfile? user}) async {
-    final nameController = TextEditingController(text: user?.name ?? '');
+    final nameController = TextEditingController(text: user?.fullName ?? '');
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
     final roles = <UserRole>{...user?.roles ?? {}};
@@ -205,9 +205,15 @@ class EditUserPage extends StatelessWidget {
                     final service = context.read<AppointmentService>();
                     final id = user?.id ??
                         DateTime.now().millisecondsSinceEpoch.toString();
+                    final parts =
+                        nameController.text.trim().split(RegExp(r'\s+'));
+                    final first = parts.isNotEmpty ? parts.first : '';
+                    final last =
+                        parts.length > 1 ? parts.sublist(1).join(' ') : '';
                     final newUser = UserProfile(
                       id: id,
-                      name: nameController.text,
+                      firstName: first,
+                      lastName: last,
                       photoBytes: photoBytes,
                       roles: roles,
                       services: roles.contains(UserRole.professional)

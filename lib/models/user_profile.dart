@@ -11,8 +11,14 @@ class UserProfile {
   /// Unique identifier for the user.
   final String id;
 
-  /// Display name of the user.
-  final String name;
+  /// The user's given name.
+  final String firstName;
+
+  /// The user's family name.
+  final String lastName;
+
+  /// Optional nickname for the user.
+  final String? nickname;
 
   /// Optional raw bytes of a profile image.
   final Uint8List? photoBytes;
@@ -25,7 +31,9 @@ class UserProfile {
 
   UserProfile({
     required this.id,
-    required this.name,
+    required this.firstName,
+    required this.lastName,
+    this.nickname,
     this.photoBytes,
     Set<UserRole>? roles,
     Set<ServiceType>? services,
@@ -33,17 +41,24 @@ class UserProfile {
         roles = Set.unmodifiable(roles ?? <UserRole>{}),
         services = Set.unmodifiable(services ?? <ServiceType>{});
 
+  /// The full display name for the user.
+  String get fullName => nickname ?? '$firstName $lastName';
+
   /// Returns a copy of this profile with the given fields replaced.
   UserProfile copyWith({
     String? id,
-    String? name,
+    String? firstName,
+    String? lastName,
+    String? nickname,
     Uint8List? photoBytes,
     Set<UserRole>? roles,
     Set<ServiceType>? services,
   }) {
     return UserProfile(
       id: id ?? this.id,
-      name: name ?? this.name,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      nickname: nickname ?? this.nickname,
       photoBytes: photoBytes ?? this.photoBytes,
       roles: roles != null ? Set.unmodifiable(roles) : this.roles,
       services: services != null ? Set.unmodifiable(services) : this.services,
@@ -54,7 +69,9 @@ class UserProfile {
   factory UserProfile.fromMap(Map<String, dynamic> map) {
     return UserProfile(
       id: map['id'] as String,
-      name: map['name'] as String,
+      firstName: map['firstName'] as String,
+      lastName: map['lastName'] as String,
+      nickname: map['nickname'] as String?,
       photoBytes: map['photoBytes'] != null
           ? base64Decode(map['photoBytes'] as String)
           : null,
@@ -75,7 +92,9 @@ class UserProfile {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
+      'firstName': firstName,
+      'lastName': lastName,
+      'nickname': nickname,
       'photoBytes': photoBytes != null ? base64Encode(photoBytes!) : null,
       'roles': roles.map((e) => e.name).toList(),
       'services': services.map((e) => e.name).toList(),
@@ -88,7 +107,9 @@ class UserProfile {
       other is UserProfile &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          name == other.name &&
+          firstName == other.firstName &&
+          lastName == other.lastName &&
+          nickname == other.nickname &&
           const ListEquality<int>().equals(photoBytes, other.photoBytes) &&
           const SetEquality<UserRole>().equals(roles, other.roles) &&
           const SetEquality<ServiceType>().equals(services, other.services);
@@ -96,7 +117,9 @@ class UserProfile {
   @override
   int get hashCode =>
       id.hashCode ^
-      name.hashCode ^
+      firstName.hashCode ^
+      lastName.hashCode ^
+      nickname.hashCode ^
       const ListEquality<int>().hash(photoBytes) ^
       roles.hashCode ^
       services.hashCode;

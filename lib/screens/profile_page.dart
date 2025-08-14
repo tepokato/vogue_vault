@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final roleProvider = context.read<RoleProvider>();
     _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
     final user = service.getUser(_userId);
-    _nameController.text = user?.name ?? '';
+    _nameController.text = user?.fullName ?? '';
     _photoBytes = user?.photoBytes;
     _roles = {...(user?.roles ?? roleProvider.roles)};
     _services = {...(user?.services ?? <ServiceType>{})};
@@ -66,9 +66,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     final service = context.read<AppointmentService>();
+    final parts = _nameController.text.trim().split(RegExp(r'\s+'));
+    final first = parts.isNotEmpty ? parts.first : '';
+    final last = parts.length > 1 ? parts.sublist(1).join(' ') : '';
     final user = UserProfile(
       id: _userId,
-      name: _nameController.text,
+      firstName: first,
+      lastName: last,
       photoBytes: _photoBytes,
       roles: _roles,
       services: _services,
