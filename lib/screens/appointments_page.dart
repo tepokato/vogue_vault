@@ -98,8 +98,8 @@ class AppointmentsPage extends StatelessWidget {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: serviceTypeColor(appt.service),
-                    child: Icon(
-                      serviceTypeIcon(appt.service),
+                    child: ImageIcon(
+                      AssetImage(serviceTypeIcon(appt.service)),
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),

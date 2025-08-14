@@ -116,8 +116,8 @@ class _ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = serviceTypeColor(type);
-    final Widget visual = Icon(
-      serviceTypeIcon(type),
+    final Widget visual = ImageIcon(
+      AssetImage(serviceTypeIcon(type)),
       size: 40,
       color: color,
     );

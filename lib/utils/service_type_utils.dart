@@ -23,19 +23,19 @@ String serviceTypeLabel(BuildContext context, ServiceType type) {
   throw ArgumentError('Unhandled ServiceType: $type');
 }
 
-/// Returns an [IconData] representing the given [ServiceType].
+/// Returns the asset path of an icon representing the given [ServiceType].
 ///
-/// The switch is exhaustive; each service type has a corresponding icon.
-IconData serviceTypeIcon(ServiceType type) {
+/// The switch is exhaustive; each service type has a corresponding asset.
+String serviceTypeIcon(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
-      return Icons.content_cut;
+      return 'razor.png';
     case ServiceType.hairdresser:
-      return Icons.brush;
+      return 'hair-dryer.png';
     case ServiceType.nails:
-      return Icons.spa;
+      return 'nail-polish.png';
     case ServiceType.tattoo:
-      return Icons.edit;
+      return 'tattoo-machine.png';
   }
   assert(false, 'Unhandled ServiceType: $type');
   throw ArgumentError('Unhandled ServiceType: $type');
