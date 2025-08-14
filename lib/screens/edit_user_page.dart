@@ -68,6 +68,7 @@ class EditUserPage extends StatelessWidget {
                     onPressed: () async {
                       try {
                         await service.deleteUser(user.id);
+                        await context.read<AuthService>().deleteUser(user.id);
                       } catch (e) {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(

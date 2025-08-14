@@ -120,5 +120,18 @@ class AuthService extends ChangeNotifier {
     await _box.delete(_currentUserKey);
     notifyListeners();
   }
+
+  Future<void> deleteUser(String email) async {
+    _ensureInitialized();
+    final users = _users;
+
+    if (currentUser == email) {
+      await logout();
+    }
+
+    users.remove(email);
+    await _box.put(_usersKey, users);
+    notifyListeners();
+  }
 }
 
