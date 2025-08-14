@@ -1,10 +1,14 @@
 # Vogue Vault
 
-Vogue Vault is a scheduling platform for barbers, hairdressers, nail technicians, tattoo artists, and other beauty professionals and their clients. Salon owners, barbers, stylists, nail techs, tattoo artists, and makeup artists can showcase services, manage calendars, and coordinate appointments in one place.
+Vogue Vault is an open-source Flutter application for scheduling appointments between beauty professionals and their clients. Barbers, hairdressers, nail technicians, tattoo artists and others can showcase their skills, manage availability and coordinate bookings in one place.
 
-## Setup
+> This repository contains software only; it does not provide or broker any professional services.
 
-This project targets **Flutter 3.19.x**. Verify your environment with:
+## Requirements
+
+- Flutter 3.19.x
+
+Check your environment:
 
 ```bash
 flutter --version
@@ -16,67 +20,52 @@ Install dependencies:
 flutter pub get
 ```
 
-### Run on each platform
+## Run
 
-- **Android:** `flutter run -d android`
-- **iOS:** `flutter run -d ios`
-- **Web:** `flutter run -d chrome`
-- **Windows:** `flutter run -d windows`
-- **macOS:** `flutter run -d macos`
-- **Linux:** `flutter run -d linux`
+Launch the app on your target platform:
 
-### Build release binaries
+```bash
+flutter run -d <platform>
+```
 
-- Android: `flutter build apk`
-- iOS: `flutter build ios`
-- Web: `flutter build web`
-- Windows: `flutter build windows`
-- macOS: `flutter build macos`
-- Linux: `flutter build linux`
+Supported platforms include Android, iOS, Web, Windows, macOS and Linux.
 
-## Core Features
+## Build
 
-- Browse profiles and services for barbers, hairdressers, nail technicians, tattoo artists, and other beauty professionals
-- Book, reschedule, and cancel appointments across all service types
-- Manage professional calendars and time slots
-- Local data persistence with Hive
-- State management using Provider
+Create release binaries:
 
-### Example Services
+```bash
+flutter build <platform>
+```
 
-- Barber cuts
-- Hair styling and coloring
-- Manicures and pedicures
-- Tattoo design and application
-- Makeup application
+## Features
 
-## Roadmap
+- Browse professional profiles and their offerings
+- Book, reschedule and cancel appointments
+- Manage calendars and availability
+- Local persistence with Hive
+- State management with Provider
 
-- In‑app payments and invoicing
-- Calendar sync with Google or Apple
-- Push notifications and reminders
-- Ratings and reviews for stylists
-- Advanced analytics for salon performance
+## Project Layout
 
-## Project Architecture
+```
+lib/
+  models/        # data classes such as Appointment and Client
+  services/      # service layer and persistence
+  screens/       # UI pages
+  utils/         # helpers and constants
+  main.dart      # app entry point
+```
 
-The app follows a feature-driven structure under `lib/`:
+## Testing
 
-- `models/` contains data classes such as `Appointment` and `Client`.
-- `services/` holds the service layer. For example, `AppointmentService` uses Hive for local persistence and exposes CRUD operations while notifying listeners via `ChangeNotifier`.
-- `screens/` provides the UI widgets for each page.
-- `utils/` includes shared helpers and constants.
-- `main.dart` wires everything together and registers providers.
-
-## Running Tests
-
-Run the full test suite, including unit and widget tests, with:
+Run unit and widget tests with:
 
 ```bash
 flutter test
 ```
 
-## Contribution Guidelines
+## Contributing
 
 1. Format code: `dart format .`
 2. Lint and analyze: `flutter analyze`

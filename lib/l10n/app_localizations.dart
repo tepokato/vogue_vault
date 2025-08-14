@@ -242,7 +242,7 @@ abstract class AppLocalizations {
   /// No description provided for @exploreServices.
   ///
   /// In en, this message translates to:
-  /// **'Explore our services'**
+  /// **'Explore our catalog'**
   String get exploreServices;
 
   /// No description provided for @getStarted.

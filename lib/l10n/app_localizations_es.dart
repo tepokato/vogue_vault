@@ -81,7 +81,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get welcomeTitle => 'Bienvenido';
 
   @override
-  String get exploreServices => 'Explora nuestros servicios';
+  String get exploreServices => 'Explora nuestro catálogo';
 
   @override
   String get getStarted => 'Comenzar';
