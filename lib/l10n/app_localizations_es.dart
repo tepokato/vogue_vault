@@ -153,6 +153,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get passwordLabel => 'Contraseña';
 
   @override
+  String get emailRequired => 'Por favor ingresa tu correo electrónico';
+
+  @override
+  String get passwordRequired => 'Por favor ingresa tu contraseña';
+
+  @override
   String get loginButton => 'Ingresar';
 
   @override
@@ -177,6 +183,5 @@ class AppLocalizationsEs extends AppLocalizations {
   String get guestContactLabel => 'Contacto del invitado (opcional)';
 
   @override
-  String get clientOrGuestValidation =>
-      'Selecciona un cliente o ingresa un nombre de invitado';
+  String get clientOrGuestValidation => 'Selecciona un cliente o ingresa un nombre de invitado';
 }
