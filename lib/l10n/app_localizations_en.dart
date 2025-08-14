@@ -153,6 +153,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordLabel => 'Password';
 
   @override
+  String get emailRequired => 'Please enter your email';
+
+  @override
+  String get passwordRequired => 'Please enter your password';
+
+  @override
   String get loginButton => 'Login';
 
   @override
@@ -177,6 +183,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guestContactLabel => 'Guest Contact (optional)';
 
   @override
-  String get clientOrGuestValidation =>
-      'Please select a client or enter a guest name';
+  String get clientOrGuestValidation => 'Please select a client or enter a guest name';
 }

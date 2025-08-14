@@ -48,6 +48,8 @@
   "registerTitle": "Register",
   "emailLabel": "Email",
   "passwordLabel": "Password",
+  "emailRequired": "Please enter your email",
+  "passwordRequired": "Please enter your password",
   "loginButton": "Login",
   "registerButton": "Register",
   "createAccount": "Create an account",

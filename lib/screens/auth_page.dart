@@ -105,7 +105,7 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return AppLocalizations.of(context)!.emailRequired;
                         }
                         return null;
                       },
@@ -121,7 +121,7 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return AppLocalizations.of(context)!.passwordRequired;
                         }
                         return null;
                       },
