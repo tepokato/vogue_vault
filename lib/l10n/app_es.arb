@@ -67,5 +67,9 @@
   "addFirstAppointment": "Agrega tu primera cita",
   "guestNameLabel": "Nombre del invitado",
   "guestContactLabel": "Contacto del invitado (opcional)",
-  "clientOrGuestValidation": "Selecciona un cliente o ingresa un nombre de invitado"
+  "clientOrGuestValidation": "Selecciona un cliente o ingresa un nombre de invitado",
+  "serviceTypeBarber": "Barbería",
+  "serviceTypeHairdresser": "Peluquería",
+  "serviceTypeNails": "Uñas",
+  "serviceTypeTattoo": "Tatuador"
 }

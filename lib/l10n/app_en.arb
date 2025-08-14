@@ -67,5 +67,9 @@
   "addFirstAppointment": "Add your first appointment",
   "guestNameLabel": "Guest Name",
   "guestContactLabel": "Guest Contact (optional)",
-  "clientOrGuestValidation": "Please select a client or enter a guest name"
+  "clientOrGuestValidation": "Please select a client or enter a guest name",
+  "serviceTypeBarber": "Barbershop",
+  "serviceTypeHairdresser": "Hairdresser",
+  "serviceTypeNails": "Nails",
+  "serviceTypeTattoo": "Tattoo Artist"
 }

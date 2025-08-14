@@ -502,6 +502,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select a client or enter a guest name'**
   String get clientOrGuestValidation;
+
+  /// No description provided for @serviceTypeBarber.
+  ///
+  /// In en, this message translates to:
+  /// **'Barbershop'**
+  String get serviceTypeBarber;
+
+  /// No description provided for @serviceTypeHairdresser.
+  ///
+  /// In en, this message translates to:
+  /// **'Hairdresser'**
+  String get serviceTypeHairdresser;
+
+  /// No description provided for @serviceTypeNails.
+  ///
+  /// In en, this message translates to:
+  /// **'Nails'**
+  String get serviceTypeNails;
+
+  /// No description provided for @serviceTypeTattoo.
+  ///
+  /// In en, this message translates to:
+  /// **'Tattoo Artist'**
+  String get serviceTypeTattoo;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
