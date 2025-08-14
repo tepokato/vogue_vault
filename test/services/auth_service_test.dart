@@ -67,12 +67,28 @@ void main() {
     );
     final key = await pbkdf2.deriveKey(
       secretKey: SecretKey(utf8.encode(password)),
-      nonce: utf8.encode(salt),
+      nonce: base64Url.decode(salt),
     );
     final expected = base64UrlEncode(await key.extractBytes());
     expect(hash, expected);
     expect(hash, isNot(password));
     expect(salt, isNotEmpty);
+  });
+
+  test('salt is stored as base64 and decodes to 16 bytes', () async {
+    final service = AuthService();
+    await service.init();
+
+    const email = 'saltlen@example.com';
+    const password = 'mypassword';
+
+    await service.register(email, password);
+
+    final box = Hive.box('auth');
+    final stored = box.get('users')![email] as Map;
+    final salt = stored['salt'] as String;
+    final decoded = base64Url.decode(salt);
+    expect(decoded.length, 16);
   });
 
   test('login compares hashed password', () async {
@@ -81,7 +97,8 @@ void main() {
 
     const email = 'login@example.com';
     const password = 'pass123';
-    const salt = 'fixedsalt';
+    final saltBytes = List<int>.generate(16, (i) => i);
+    final salt = base64UrlEncode(saltBytes);
     final pbkdf2 = Pbkdf2(
       macAlgorithm: Hmac.sha256(),
       iterations: 100000,
@@ -89,7 +106,7 @@ void main() {
     );
     final key = await pbkdf2.deriveKey(
       secretKey: SecretKey(utf8.encode(password)),
-      nonce: utf8.encode(salt),
+      nonce: saltBytes,
     );
     final hash = base64UrlEncode(await key.extractBytes());
 
