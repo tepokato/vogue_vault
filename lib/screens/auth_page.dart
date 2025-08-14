@@ -90,7 +90,7 @@ class _AuthPageState extends State<AuthPage> {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primary, AppColors.accent],
+            colors: [AppColors.primary, AppColors.secondary],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -112,7 +112,7 @@ class _AuthPageState extends State<AuthPage> {
                       hintText: AppLocalizations.of(context)!.emailLabel,
                       prefixIcon: const Icon(Icons.email),
                       filled: true,
-                      fillColor: AppColors.base,
+                      fillColor: AppColors.background,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -133,7 +133,7 @@ class _AuthPageState extends State<AuthPage> {
                       hintText: AppLocalizations.of(context)!.passwordLabel,
                       prefixIcon: const Icon(Icons.lock),
                       filled: true,
-                      fillColor: AppColors.base,
+                      fillColor: AppColors.background,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -176,8 +176,8 @@ class _AuthPageState extends State<AuthPage> {
                       });
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.base,
-                      side: const BorderSide(color: AppColors.base),
+                      foregroundColor: AppColors.background,
+                      side: const BorderSide(color: AppColors.background),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),

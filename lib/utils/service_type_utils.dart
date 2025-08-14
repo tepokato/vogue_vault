@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/service_type.dart';
+import 'color_palette.dart';
 
 /// Returns a localized label for the given [ServiceType].
 ///
@@ -46,13 +47,13 @@ IconData serviceTypeIcon(ServiceType type) {
 Color serviceTypeColor(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
-      return Colors.blue;
+      return AppColors.primary;
     case ServiceType.hairdresser:
-      return Colors.purple;
+      return AppColors.secondary;
     case ServiceType.nails:
-      return Colors.pink;
+      return AppColors.accent;
     case ServiceType.tattoo:
-      return Colors.black;
+      return AppColors.background;
   }
   assert(false, 'Unhandled ServiceType: $type');
   throw ArgumentError('Unhandled ServiceType: $type');
