@@ -56,7 +56,7 @@ void main() {
 
     await service.register(email, password);
 
-    final box = Hive.box<Map<String, String>>('auth');
+    final box = Hive.box('auth');
     final stored = box.get('users')![email]!;
     final expected = sha256.convert(utf8.encode(password)).toString();
     expect(stored, expected);
@@ -71,7 +71,7 @@ void main() {
     const password = 'pass123';
     final hashed = sha256.convert(utf8.encode(password)).toString();
 
-    final box = Hive.box<Map<String, String>>('auth');
+    final box = Hive.box('auth');
     await box.put('users', {email: hashed});
 
     final success = await service.login(email, password);

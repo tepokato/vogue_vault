@@ -10,16 +10,18 @@ class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
   static const _usersBoxName = 'users';
 
-  late Box<Map<String, dynamic>> _appointmentsBox;
-  late Box<Map<String, dynamic>> _usersBox;
+  /// Underlying storage boxes. Hive may return values as
+  /// `Map<dynamic, dynamic>` regardless of the generics provided. Using
+  /// untyped boxes prevents runtime cast errors when retrieving stored maps.
+  late Box _appointmentsBox;
+  late Box _usersBox;
 
   bool _initialized = false;
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    _appointmentsBox =
-        await Hive.openBox<Map<String, dynamic>>(_appointmentsBoxName);
-    _usersBox = await Hive.openBox<Map<String, dynamic>>(_usersBoxName);
+    _appointmentsBox = await Hive.openBox(_appointmentsBoxName);
+    _usersBox = await Hive.openBox(_usersBoxName);
     _initialized = true;
   }
 
