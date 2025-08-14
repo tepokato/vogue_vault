@@ -34,6 +34,30 @@ void main() {
     await Hive.deleteFromDisk();
   });
 
+  test('appointments getter returns appointments sorted by date', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    final later = Appointment(
+      id: 'a1',
+      providerId: 'p1',
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-02'),
+    );
+    final earlier = Appointment(
+      id: 'a2',
+      providerId: 'p1',
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-01'),
+    );
+
+    await service.addAppointment(later);
+    await service.addAppointment(earlier);
+
+    final appts = service.appointments;
+    expect(appts.map((a) => a.id), ['a2', 'a1']);
+  });
+
   test('legacy appointments load with default providerId', () async {
     final service = AppointmentService();
     await service.init();

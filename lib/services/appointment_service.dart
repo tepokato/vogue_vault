@@ -40,10 +40,12 @@ class AppointmentService extends ChangeNotifier {
 
   List<Appointment> get appointments {
     if (!_initialized) return [];
-    return _appointmentsBox.values
+    final appts = _appointmentsBox.values
         .map((m) => Appointment.fromMap(
             _withProviderId(Map<String, dynamic>.from(m))))
         .toList();
+    appts.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    return appts;
   }
 
   List<UserProfile> get users {
