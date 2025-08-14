@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'service_type.dart';
 
 /// Represents a specific service a professional offers including name and price.
@@ -39,8 +41,18 @@ class ServiceOffering {
 
   /// Creates a [ServiceOffering] from a JSON-compatible [map].
   factory ServiceOffering.fromMap(Map<String, dynamic> map) {
+    final typeName = map['type'] as String?;
+    final serviceType = ServiceType.values.firstWhere(
+      (e) => e.name == typeName,
+      orElse: () {
+        developer.log('Unknown service type: $typeName',
+            name: 'ServiceOffering');
+        return ServiceType.values.first;
+      },
+    );
+
     return ServiceOffering(
-      type: ServiceType.values.byName(map['type'] as String),
+      type: serviceType,
       name: map['name'] as String,
       price: (map['price'] as num).toDouble(),
     );

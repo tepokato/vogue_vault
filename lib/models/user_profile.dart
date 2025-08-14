@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
@@ -92,10 +93,18 @@ class UserProfile {
                   .toList() ??
               (map['services'] as List?)
                       ?.map((e) {
-                        final type = ServiceType.values.byName(e as String);
+                        final typeName = e as String;
+                        final type = ServiceType.values
+                            .firstWhereOrNull((t) => t.name == typeName);
+                        if (type == null) {
+                          developer.log('Unknown service type: $typeName',
+                              name: 'UserProfile');
+                          return null;
+                        }
                         return ServiceOffering(
                             type: type, name: type.name, price: 0);
                       })
+                      .whereType<ServiceOffering>()
                       .toList() ??
                   <ServiceOffering>[]),
     );
