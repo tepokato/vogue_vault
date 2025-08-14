@@ -66,6 +66,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get saveButton => 'Guardar';
 
   @override
+  String get addButton => 'Agregar';
+
+  @override
+  String get priceLabel => 'Precio';
+
+  @override
+  String get invalidPrice => 'Precio inválido';
+
+  @override
+  String get deleteUserFailed => 'No se pudo eliminar el usuario';
+
+  @override
   String get welcomeTitle => 'Bienvenido';
 
   @override

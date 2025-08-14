@@ -110,6 +110,16 @@ class _ProfilePageState extends State<ProfilePage> {
     return (firstInitial + lastInitial).toUpperCase();
   }
 
+  String _roleLabel(UserRole role) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (role) {
+      case UserRole.customer:
+        return l10n.customerRole;
+      case UserRole.professional:
+        return l10n.professionalRole;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SegmentedButton<UserRole>(
                 segments: UserRole.values
                     .map((role) => ButtonSegment(
-                        value: role, label: Text(role.name)))
+                        value: role, label: Text(_roleLabel(role))))
                     .toList(),
                 multiSelectionEnabled: true,
                 selected: _roles,
@@ -250,8 +260,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           Expanded(
                             child: TextFormField(
                               initialValue: _offerings[i].price.toString(),
-                              decoration:
-                                  const InputDecoration(labelText: 'Price'),
+                              decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.priceLabel),
                               keyboardType:
                                   const TextInputType.numberWithOptions(
                                       decimal: true),
@@ -263,7 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                               validator: (val) => val == null ||
                                       double.tryParse(val) == null
-                                  ? 'Invalid price'
+                                  ? AppLocalizations.of(context)!.invalidPrice
                                   : null,
                             ),
                           ),
@@ -289,7 +300,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           });
                         },
                         icon: const Icon(Icons.add),
-                        label: const Text('Add'),
+                        label:
+                            Text(AppLocalizations.of(context)!.addButton),
                       ),
                     ),
                   ],

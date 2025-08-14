@@ -39,7 +39,8 @@ class EditUserPage extends StatelessWidget {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final roleText = user.roles.map((r) => r.name).join(', ');
+          final roleText =
+              user.roles.map((r) => _roleLabel(context, r)).join(', ');
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: user.photoBytes != null
@@ -60,8 +61,10 @@ class EditUserPage extends StatelessWidget {
                 } catch (e) {
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to delete user'),
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)!.deleteUserFailed,
+                      ),
                     ),
                   );
                 }
@@ -218,8 +221,10 @@ class EditUserPage extends StatelessWidget {
                                     child: TextFormField(
                                       initialValue:
                                           offerings[i].price.toString(),
-                                      decoration: const InputDecoration(
-                                          labelText: 'Price'),
+                                      decoration: InputDecoration(
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .priceLabel),
                                       keyboardType:
                                           const TextInputType.numberWithOptions(
                                               decimal: true),
@@ -232,7 +237,8 @@ class EditUserPage extends StatelessWidget {
                                       },
                                       validator: (val) => val == null ||
                                               double.tryParse(val) == null
-                                          ? 'Invalid price'
+                                          ? AppLocalizations.of(context)!
+                                              .invalidPrice
                                           : null,
                                     ),
                                   ),
@@ -258,7 +264,8 @@ class EditUserPage extends StatelessWidget {
                                   });
                                 },
                                 icon: const Icon(Icons.add),
-                                label: const Text('Add'),
+                                label: Text(
+                                    AppLocalizations.of(context)!.addButton),
                               ),
                             ),
                           ],
@@ -322,6 +329,16 @@ class EditUserPage extends StatelessWidget {
       );
     } finally {
       nameController.dispose();
+    }
+  }
+
+  String _roleLabel(BuildContext context, UserRole role) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (role) {
+      case UserRole.customer:
+        return l10n.customerRole;
+      case UserRole.professional:
+        return l10n.professionalRole;
     }
   }
 }

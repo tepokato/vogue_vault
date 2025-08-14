@@ -209,6 +209,30 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveButton;
 
+  /// No description provided for @addButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addButton;
+
+  /// No description provided for @priceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get priceLabel;
+
+  /// No description provided for @invalidPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid price'**
+  String get invalidPrice;
+
+  /// No description provided for @deleteUserFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete user'**
+  String get deleteUserFailed;
+
   /// No description provided for @welcomeTitle.
   ///
   /// In en, this message translates to:
