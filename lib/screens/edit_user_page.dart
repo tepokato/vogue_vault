@@ -82,88 +82,90 @@ class EditUserPage extends StatelessWidget {
                 : AppLocalizations.of(context)!.editUserTitle),
             content: Form(
               key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      if (!isImagePickerSupported) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                AppLocalizations.of(context)!
-                                    .imageSelectionUnsupported),
-                          ),
-                        );
-                        return;
-                      }
-                      final bytes = await pickImageBytes();
-                      if (bytes != null) {
-                        setState(() => photoBytes = bytes);
-                      }
-                    },
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: photoBytes != null
-                          ? MemoryImage(photoBytes!)
-                          : null,
-                      child: photoBytes == null || photoBytes!.isEmpty
-                          ? const Icon(Icons.person)
-                          : null,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context)!.nameLabel),
-                    validator: (value) => value == null || value.trim().isEmpty
-                        ? AppLocalizations.of(context)!.nameRequired
-                        : null,
-                  ),
-                  CheckboxListTile(
-                    value: roles.contains(UserRole.customer),
-                    title: Text(AppLocalizations.of(context)!.customerRole),
-                    onChanged: (value) {
-                      setState(() {
-                        if (value == true) {
-                          roles.add(UserRole.customer);
-                        } else {
-                          roles.remove(UserRole.customer);
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        if (!isImagePickerSupported) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  AppLocalizations.of(context)!
+                                      .imageSelectionUnsupported),
+                            ),
+                          );
+                          return;
                         }
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    value: roles.contains(UserRole.professional),
-                    title: Text(AppLocalizations.of(context)!.professionalRole),
-                    onChanged: (value) {
-                      setState(() {
-                        if (value == true) {
-                          roles.add(UserRole.professional);
-                        } else {
-                          roles.remove(UserRole.professional);
+                        final bytes = await pickImageBytes();
+                        if (bytes != null) {
+                          setState(() => photoBytes = bytes);
                         }
-                      });
-                    },
-                  ),
-                  if (roles.contains(UserRole.professional))
-                    ...ServiceType.values.map(
-                      (s) => CheckboxListTile(
-                        value: selectedServices.contains(s),
-                        title: Text(s.name),
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == true) {
-                              selectedServices.add(s);
-                            } else {
-                              selectedServices.remove(s);
-                            }
-                          });
-                        },
+                      },
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: photoBytes != null
+                            ? MemoryImage(photoBytes!)
+                            : null,
+                        child: photoBytes == null || photoBytes!.isEmpty
+                            ? const Icon(Icons.person)
+                            : null,
                       ),
                     ),
-                ],
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.nameLabel),
+                      validator: (value) => value == null || value.trim().isEmpty
+                          ? AppLocalizations.of(context)!.nameRequired
+                          : null,
+                    ),
+                    CheckboxListTile(
+                      value: roles.contains(UserRole.customer),
+                      title: Text(AppLocalizations.of(context)!.customerRole),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value == true) {
+                            roles.add(UserRole.customer);
+                          } else {
+                            roles.remove(UserRole.customer);
+                          }
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      value: roles.contains(UserRole.professional),
+                      title: Text(AppLocalizations.of(context)!.professionalRole),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value == true) {
+                            roles.add(UserRole.professional);
+                          } else {
+                            roles.remove(UserRole.professional);
+                          }
+                        });
+                      },
+                    ),
+                    if (roles.contains(UserRole.professional))
+                      ...ServiceType.values.map(
+                        (s) => CheckboxListTile(
+                          value: selectedServices.contains(s),
+                          title: Text(s.name),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == true) {
+                                selectedServices.add(s);
+                              } else {
+                                selectedServices.remove(s);
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
             actions: [
@@ -210,6 +212,7 @@ class EditUserPage extends StatelessWidget {
         },
       ),
     );
+    await Future.delayed(Duration.zero);
     nameController.dispose();
   }
 }
