@@ -9,13 +9,18 @@ class AuthService extends ChangeNotifier {
   static const _usersKey = 'users';
   static const _currentUserKey = 'currentUser';
 
-  late Box<Map<String, String>> _box;
+  /// Underlying storage box. We avoid using a typed [Box] here because
+  /// Hive may return values as `Map<dynamic, dynamic>` regardless of the
+  /// generics provided. Using an untyped box prevents runtime cast errors
+  /// when retrieving stored maps.
+  late Box _box;
   bool _initialized = false;
 
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    _box = await Hive.openBox<Map<String, String>>(_boxName);
+    // Open the box without generics to bypass implicit casts from Hive.
+    _box = await Hive.openBox(_boxName);
     _initialized = true;
   }
 
@@ -27,13 +32,19 @@ class AuthService extends ChangeNotifier {
 
   Map<String, String> get _users {
     final raw = _box.get(_usersKey);
-    if (raw == null) return <String, String>{};
-    return Map<String, String>.from(raw);
+    if (raw is Map) {
+      return Map<String, String>.from(raw);
+    }
+    return <String, String>{};
   }
 
   String? get currentUser {
     _ensureInitialized();
-    return _box.get(_currentUserKey)?['email'];
+    final raw = _box.get(_currentUserKey);
+    if (raw is Map) {
+      return raw['email'] as String?;
+    }
+    return null;
   }
 
   bool get isLoggedIn => currentUser != null;
