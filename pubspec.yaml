@@ -42,7 +42,7 @@ dependencies:
   intl: ^0.20.2
   image_picker: ^1.0.4
   file_selector: ^1.0.3
-  crypto: ^3.0.3
+  cryptography: ^2.7.0
   flutter_gen: ^5.9.0
 
 dev_dependencies:

@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:crypto/crypto.dart';
+import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -30,12 +31,20 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Map<String, String> get _users {
+  Map<String, Map<String, String>> get _users {
     final raw = _box.get(_usersKey);
     if (raw is Map) {
-      return Map<String, String>.from(raw);
+      return raw.map((key, value) {
+        if (value is Map) {
+          return MapEntry(
+            key as String,
+            Map<String, String>.from(value as Map),
+          );
+        }
+        return MapEntry(key as String, <String, String>{});
+      });
     }
-    return <String, String>{};
+    return <String, Map<String, String>>{};
   }
 
   String? get currentUser {
@@ -49,18 +58,41 @@ class AuthService extends ChangeNotifier {
 
   bool get isLoggedIn => currentUser != null;
 
-  String _hashPassword(String password) {
-    final bytes = utf8.encode(password);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
+  final Pbkdf2 _pbkdf2 = Pbkdf2(
+    macAlgorithm: Hmac.sha256(),
+    iterations: 100000,
+    bits: 256,
+  );
+
+  String _generateSalt([int length = 16]) {
+    final rand = Random.secure();
+    final saltBytes = List<int>.generate(length, (_) => rand.nextInt(256));
+    return base64UrlEncode(saltBytes);
+  }
+
+  Future<String> _hashPassword(String password, String salt) async {
+    final secretKey = await _pbkdf2.deriveKey(
+      secretKey: SecretKey(utf8.encode(password)),
+      nonce: utf8.encode(salt),
+    );
+    final bytes = await secretKey.extractBytes();
+    return base64UrlEncode(bytes);
   }
 
   Future<bool> login(String email, String password) async {
     _ensureInitialized();
     final users = _users;
-    final storedPassword = users[email];
-    final hashed = _hashPassword(password);
-    if (storedPassword == hashed) {
+    final user = users[email];
+    if (user == null) {
+      return false;
+    }
+    final salt = user['salt'];
+    final storedHash = user['hash'];
+    if (salt == null || storedHash == null) {
+      return false;
+    }
+    final hashed = await _hashPassword(password, salt);
+    if (storedHash == hashed) {
       await _box.put(_currentUserKey, {'email': email});
       notifyListeners();
       return true;
@@ -74,7 +106,9 @@ class AuthService extends ChangeNotifier {
     if (users.containsKey(email)) {
       throw StateError('User with email $email already exists.');
     }
-    users[email] = _hashPassword(password);
+    final salt = _generateSalt();
+    final hashed = await _hashPassword(password, salt);
+    users[email] = {'salt': salt, 'hash': hashed};
     await _box.put(_usersKey, users);
     await _box.put(_currentUserKey, {'email': email});
     notifyListeners();
