@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:crypto/crypto.dart';
+import 'package:cryptography/cryptography.dart';
 
 import 'package:vogue_vault/services/auth_service.dart';
 
@@ -57,10 +57,22 @@ void main() {
     await service.register(email, password);
 
     final box = Hive.box('auth');
-    final stored = box.get('users')![email]!;
-    final expected = sha256.convert(utf8.encode(password)).toString();
-    expect(stored, expected);
-    expect(stored, isNot(password));
+    final stored = box.get('users')![email] as Map;
+    final salt = stored['salt'] as String;
+    final hash = stored['hash'] as String;
+    final pbkdf2 = Pbkdf2(
+      macAlgorithm: Hmac.sha256(),
+      iterations: 100000,
+      bits: 256,
+    );
+    final key = await pbkdf2.deriveKey(
+      secretKey: SecretKey(utf8.encode(password)),
+      nonce: utf8.encode(salt),
+    );
+    final expected = base64UrlEncode(await key.extractBytes());
+    expect(hash, expected);
+    expect(hash, isNot(password));
+    expect(salt, isNotEmpty);
   });
 
   test('login compares hashed password', () async {
@@ -69,10 +81,22 @@ void main() {
 
     const email = 'login@example.com';
     const password = 'pass123';
-    final hashed = sha256.convert(utf8.encode(password)).toString();
+    const salt = 'fixedsalt';
+    final pbkdf2 = Pbkdf2(
+      macAlgorithm: Hmac.sha256(),
+      iterations: 100000,
+      bits: 256,
+    );
+    final key = await pbkdf2.deriveKey(
+      secretKey: SecretKey(utf8.encode(password)),
+      nonce: utf8.encode(salt),
+    );
+    final hash = base64UrlEncode(await key.extractBytes());
 
     final box = Hive.box('auth');
-    await box.put('users', {email: hashed});
+    await box.put('users', {
+      email: {'salt': salt, 'hash': hash}
+    });
 
     final success = await service.login(email, password);
     expect(success, isTrue);
