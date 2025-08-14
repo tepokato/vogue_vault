@@ -259,11 +259,15 @@ class EditUserPage extends StatelessWidget {
                                                   double.tryParse(val) ?? 0);
                                         });
                                       },
-                                      validator: (val) => val == null ||
-                                              double.tryParse(val) == null
-                                          ? AppLocalizations.of(context)!
-                                              .invalidPrice
-                                          : null,
+                                      validator: (val) {
+                                        final parsed =
+                                            double.tryParse(val ?? '');
+                                        if (parsed == null || parsed < 0) {
+                                          return AppLocalizations.of(context)!
+                                              .invalidPrice;
+                                        }
+                                        return null;
+                                      },
                                     ),
                                   ),
                                   IconButton(
