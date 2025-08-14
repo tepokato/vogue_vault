@@ -21,7 +21,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  TextEditingController? _nicknameController;
 
   Uint8List? _photoBytes;
   late String _userId;
@@ -36,7 +38,9 @@ class _ProfilePageState extends State<ProfilePage> {
     final roleProvider = context.read<RoleProvider>();
     _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
     final user = service.getUser(_userId);
-    _nameController.text = user?.fullName ?? '';
+    _firstNameController.text = user?.firstName ?? '';
+    _lastNameController.text = user?.lastName ?? '';
+    _nicknameController = TextEditingController(text: user?.nickname ?? '');
     _photoBytes = user?.photoBytes;
     _roles = {...(user?.roles ?? roleProvider.roles)};
     _services = {...(user?.services ?? <ServiceType>{})};
@@ -44,7 +48,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _nicknameController?.dispose();
     super.dispose();
   }
 
@@ -66,13 +72,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     final service = context.read<AppointmentService>();
-    final parts = _nameController.text.trim().split(RegExp(r'\s+'));
-    final first = parts.isNotEmpty ? parts.first : '';
-    final last = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+    final first = _firstNameController.text.trim();
+    final last = _lastNameController.text.trim();
+    final nicknameText = _nicknameController?.text.trim() ?? '';
     final user = UserProfile(
       id: _userId,
       firstName: first,
       lastName: last,
+      nickname: nicknameText.isEmpty ? null : nicknameText,
       photoBytes: _photoBytes,
       roles: _roles,
       services: _services,
@@ -84,10 +91,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   String get _initials {
-    final name = _nameController.text.trim();
-    if (name.isEmpty) return '?';
-    final parts = name.split(RegExp(r'\s+'));
-    return parts.map((p) => p[0]).take(2).join().toUpperCase();
+    final first = _firstNameController.text.trim();
+    final last = _lastNameController.text.trim();
+    if (first.isEmpty && last.isEmpty) return '?';
+    final firstInitial = first.isNotEmpty ? first[0] : '';
+    final lastInitial = last.isNotEmpty ? last[0] : '';
+    return (firstInitial + lastInitial).toUpperCase();
   }
 
   @override
@@ -128,13 +137,36 @@ class _ProfilePageState extends State<ProfilePage> {
                       const Divider(),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _nameController,
+                        controller: _firstNameController,
                         decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.nameLabel),
+                          labelText:
+                              AppLocalizations.of(context)!.firstNameLabel,
+                        ),
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value == null || value.trim().isEmpty
-                            ? AppLocalizations.of(context)!.nameRequired
+                            ? AppLocalizations.of(context)!.firstNameRequired
                             : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _lastNameController,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.lastNameLabel,
+                        ),
+                        onChanged: (_) => setState(() {}),
+                        validator: (value) => value == null || value.trim().isEmpty
+                            ? AppLocalizations.of(context)!.lastNameRequired
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _nicknameController,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.nicknameLabel,
+                        ),
+                        onChanged: (_) => setState(() {}),
                       ),
                     ],
                   ),

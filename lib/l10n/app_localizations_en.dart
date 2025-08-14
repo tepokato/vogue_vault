@@ -42,6 +42,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nameRequired => 'Please enter a name';
 
   @override
+  String get firstNameLabel => 'First name';
+
+  @override
+  String get firstNameRequired => 'Please enter a first name';
+
+  @override
+  String get lastNameLabel => 'Last name';
+
+  @override
+  String get lastNameRequired => 'Please enter a last name';
+
+  @override
+  String get nicknameLabel => 'Nickname (optional)';
+
+  @override
   String get rolesTitle => 'Roles';
 
   @override
