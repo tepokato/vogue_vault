@@ -81,7 +81,12 @@ class EditUserPage extends StatelessWidget {
   }
 
   Future<void> _showUserDialog(BuildContext context, {UserProfile? user}) async {
-    final nameController = TextEditingController(text: user?.fullName ?? '');
+    final firstNameController =
+        TextEditingController(text: user?.firstName ?? '');
+    final lastNameController =
+        TextEditingController(text: user?.lastName ?? '');
+    final nicknameController =
+        TextEditingController(text: user?.nickname ?? '');
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
     final roles = <UserRole>{...user?.roles ?? {}};
@@ -130,14 +135,32 @@ class EditUserPage extends StatelessWidget {
                         ),
                       ),
                       TextFormField(
-                        controller: nameController,
+                        controller: firstNameController,
                         decoration: InputDecoration(
                             labelText:
-                                AppLocalizations.of(context)!.nameLabel),
+                                AppLocalizations.of(context)!.firstNameLabel),
                         validator: (value) =>
                             value == null || value.trim().isEmpty
-                                ? AppLocalizations.of(context)!.nameRequired
+                                ? AppLocalizations.of(context)!
+                                    .firstNameRequired
                                 : null,
+                      ),
+                      TextFormField(
+                        controller: lastNameController,
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.lastNameLabel),
+                        validator: (value) =>
+                            value == null || value.trim().isEmpty
+                                ? AppLocalizations.of(context)!
+                                    .lastNameRequired
+                                : null,
+                      ),
+                      TextFormField(
+                        controller: nicknameController,
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.nicknameLabel),
                       ),
                       CheckboxListTile(
                         value: roles.contains(UserRole.customer),
@@ -297,15 +320,13 @@ class EditUserPage extends StatelessWidget {
                     final service = context.read<AppointmentService>();
                     final id = user?.id ??
                         DateTime.now().millisecondsSinceEpoch.toString();
-                    final parts =
-                        nameController.text.trim().split(RegExp(r'\s+'));
-                    final first = parts.isNotEmpty ? parts.first : '';
-                    final last =
-                        parts.length > 1 ? parts.sublist(1).join(' ') : '';
                     final newUser = UserProfile(
                       id: id,
-                      firstName: first,
-                      lastName: last,
+                      firstName: firstNameController.text.trim(),
+                      lastName: lastNameController.text.trim(),
+                      nickname: nicknameController.text.trim().isEmpty
+                          ? null
+                          : nicknameController.text.trim(),
                       photoBytes: photoBytes,
                       roles: roles,
                       offerings: roles.contains(UserRole.professional)
@@ -328,7 +349,9 @@ class EditUserPage extends StatelessWidget {
         ),
       );
     } finally {
-      nameController.dispose();
+      firstNameController.dispose();
+      lastNameController.dispose();
+      nicknameController.dispose();
     }
   }
 
