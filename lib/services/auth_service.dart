@@ -64,16 +64,16 @@ class AuthService extends ChangeNotifier {
     bits: 256,
   );
 
-  String _generateSalt([int length = 16]) {
+  List<int> _generateSalt([int length = 16]) {
     final rand = Random.secure();
-    final saltBytes = List<int>.generate(length, (_) => rand.nextInt(256));
-    return base64UrlEncode(saltBytes);
+    return List<int>.generate(length, (_) => rand.nextInt(256));
   }
 
   Future<String> _hashPassword(String password, String salt) async {
+    final saltBytes = base64Url.decode(salt);
     final secretKey = await _pbkdf2.deriveKey(
       secretKey: SecretKey(utf8.encode(password)),
-      nonce: utf8.encode(salt),
+      nonce: saltBytes,
     );
     final bytes = await secretKey.extractBytes();
     return base64UrlEncode(bytes);
@@ -106,7 +106,8 @@ class AuthService extends ChangeNotifier {
     if (users.containsKey(email)) {
       throw StateError('User with email $email already exists.');
     }
-    final salt = _generateSalt();
+    final saltBytes = _generateSalt();
+    final salt = base64UrlEncode(saltBytes);
     final hashed = await _hashPassword(password, salt);
     users[email] = {'salt': salt, 'hash': hashed};
     await _box.put(_usersKey, users);
