@@ -94,4 +94,36 @@ void main() {
       expect(p1, isNot(equals(p2)));
     });
   });
+
+  group('UserProfile service type parsing', () {
+    test('skips invalid service types in legacy services list', () {
+      final map = {
+        'id': 'u1',
+        'firstName': 'Alice',
+        'lastName': 'Smith',
+        'services': ['barber', 'unknown']
+      };
+
+      final profile = UserProfile.fromMap(map);
+
+      expect(profile.offerings, hasLength(1));
+      expect(profile.offerings.first.type, ServiceType.barber);
+    });
+
+    test('defaults invalid offering type to first enum value', () {
+      final map = {
+        'id': 'u1',
+        'firstName': 'Alice',
+        'lastName': 'Smith',
+        'offerings': [
+          {'type': 'mystery', 'name': 'Mystery', 'price': 0}
+        ]
+      };
+
+      final profile = UserProfile.fromMap(map);
+
+      expect(profile.offerings, hasLength(1));
+      expect(profile.offerings.first.type, ServiceType.values.first);
+    });
+  });
 }
