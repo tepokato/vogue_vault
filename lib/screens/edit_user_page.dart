@@ -57,6 +57,7 @@ class EditUserPage extends StatelessWidget {
                 try {
                   await service.deleteUser(user.id);
                 } catch (e) {
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Failed to delete user'),
@@ -218,6 +219,7 @@ class EditUserPage extends StatelessWidget {
                     } else {
                       await service.updateUser(newUser);
                     }
+                    if (!context.mounted) return;
                     Navigator.pop(context);
                   },
                   child: Text(AppLocalizations.of(context)!.saveButton),
