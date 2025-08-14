@@ -118,14 +118,27 @@ void main() {
         ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 20),
       ],
     );
+    final p3 = UserProfile(
+      id: 'p3',
+      firstName: 'Pro',
+      lastName: 'Three',
+      roles: {UserRole.professional},
+      offerings: [
+        ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
+      ],
+    );
 
     await service.addUser(p1);
     await service.addUser(p2);
+    await service.addUser(p3);
 
     final barbers = service.providersFor(ServiceType.barber);
     expect(barbers.map((p) => p.id), ['p1']);
 
     final nailTechs = service.providersFor(ServiceType.nails);
     expect(nailTechs.map((p) => p.id), ['p2']);
+
+    final tattooArtists = service.providersFor(ServiceType.tattoo);
+    expect(tattooArtists.map((p) => p.id), ['p3']);
   });
 }
