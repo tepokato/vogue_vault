@@ -36,7 +36,7 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final box = Hive.box<Map<String, dynamic>>('appointments');
+    final box = Hive.box('appointments');
     await box.put('a1', {
       'id': 'a1',
       'clientId': 'c1',
@@ -53,8 +53,8 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final apptsBox = Hive.box<Map<String, dynamic>>('appointments');
-    final usersBox = Hive.box<Map<String, dynamic>>('users');
+    final apptsBox = Hive.box('appointments');
+    final usersBox = Hive.box('users');
 
     await usersBox.put('c1', UserProfile(id: 'c1', name: 'Client').toMap());
 
