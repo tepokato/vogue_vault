@@ -25,8 +25,11 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Map<String, String> get _users =>
-      _box.get(_usersKey) ?? <String, String>{};
+  Map<String, String> get _users {
+    final raw = _box.get(_usersKey);
+    if (raw == null) return <String, String>{};
+    return Map<String, String>.from(raw);
+  }
 
   String? get currentUser {
     _ensureInitialized();
