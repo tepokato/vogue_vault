@@ -66,6 +66,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveButton => 'Save';
 
   @override
+  String get addButton => 'Add';
+
+  @override
+  String get priceLabel => 'Price';
+
+  @override
+  String get invalidPrice => 'Invalid price';
+
+  @override
+  String get deleteUserFailed => 'Failed to delete user';
+
+  @override
   String get welcomeTitle => 'Welcome';
 
   @override
