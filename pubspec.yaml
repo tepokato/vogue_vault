@@ -72,6 +72,10 @@ flutter:
 
   assets:
     - assets/images/logonobg.png
+    - hair-dryer.png
+    - nail-polish.png
+    - razor.png
+    - tattoo-machine.png
 
   fonts:
     - family: Poppins
