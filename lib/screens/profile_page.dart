@@ -7,6 +7,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_type.dart';
+import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../services/role_provider.dart';
@@ -28,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Uint8List? _photoBytes;
   late String _userId;
   late Set<UserRole> _roles;
-  late Set<ServiceType> _services;
+  late List<ServiceOffering> _offerings;
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _nicknameController = TextEditingController(text: user?.nickname ?? '');
     _photoBytes = user?.photoBytes;
     _roles = {...(user?.roles ?? roleProvider.roles)};
-    _services = {...(user?.services ?? <ServiceType>{})};
+    _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
   }
 
   @override
@@ -71,6 +72,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
+    if (_roles.contains(UserRole.professional) && _offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.selectAtLeastOneService),
+        ),
+      );
+      return;
+    }
     final service = context.read<AppointmentService>();
     final first = _firstNameController.text.trim();
     final last = _lastNameController.text.trim();
@@ -82,7 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
       nickname: nicknameText.isEmpty ? null : nicknameText,
       photoBytes: _photoBytes,
       roles: _roles,
-      services: _services,
+      offerings:
+          _roles.contains(UserRole.professional) ? _offerings : <ServiceOffering>[],
     );
     await service.updateUser(user);
     if (mounted) {
@@ -188,28 +199,103 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
               const SizedBox(height: 24),
-              Text(AppLocalizations.of(context)!.servicesTitle,
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: ServiceType.values
-                    .map((service) => FilterChip(
-                          label: Text(service.name),
-                          selected: _services.contains(service),
-                          onSelected: (selected) {
-                            setState(() {
-                              if (selected) {
-                                _services.add(service);
-                              } else {
-                                _services.remove(service);
-                              }
-                            });
-                          },
-                        ))
-                    .toList(),
-              ),
-              const SizedBox(height: 24),
+              if (_roles.contains(UserRole.professional)) ...[
+                Text(AppLocalizations.of(context)!.servicesTitle,
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                Column(
+                  children: [
+                    for (int i = 0; i < _offerings.length; i++)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButtonFormField<ServiceType>(
+                              value: _offerings[i].type,
+                              decoration: InputDecoration(
+                                  labelText: AppLocalizations.of(context)!
+                                      .serviceLabel),
+                              items: ServiceType.values
+                                  .map(
+                                    (s) => DropdownMenuItem<ServiceType>(
+                                      value: s,
+                                      child: Text(s.name),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                if (value == null) return;
+                                setState(() {
+                                  _offerings[i] =
+                                      _offerings[i].copyWith(type: value);
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: _offerings[i].name,
+                              decoration: InputDecoration(
+                                  labelText: AppLocalizations.of(context)!
+                                      .nameLabel),
+                              onChanged: (val) {
+                                setState(() {
+                                  _offerings[i] =
+                                      _offerings[i].copyWith(name: val);
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: _offerings[i].price.toString(),
+                              decoration:
+                                  const InputDecoration(labelText: 'Price'),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              onChanged: (val) {
+                                setState(() {
+                                  _offerings[i] = _offerings[i].copyWith(
+                                      price: double.tryParse(val) ?? 0);
+                                });
+                              },
+                              validator: (val) => val == null ||
+                                      double.tryParse(val) == null
+                                  ? 'Invalid price'
+                                  : null,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle),
+                            onPressed: () {
+                              setState(() {
+                                _offerings.removeAt(i);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _offerings.add(ServiceOffering(
+                                type: ServiceType.values.first,
+                                name: '',
+                                price: 0));
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ],
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

@@ -52,7 +52,10 @@ class AppointmentService extends ChangeNotifier {
       final userMap = Map<String, dynamic>.from(m);
       return UserProfile.fromMap({
         ...userMap,
-        'services': userMap['services'] ?? <String>[],
+        'offerings': (userMap['offerings'] as List?)
+                ?.map((e) => Map<String, dynamic>.from(e as Map))
+                .toList() ??
+            <Map<String, dynamic>>[],
       });
     }).toList();
   }
@@ -64,7 +67,9 @@ class AppointmentService extends ChangeNotifier {
       users.where((u) => u.roles.contains(UserRole.professional)).toList();
 
   List<UserProfile> providersFor(ServiceType type) =>
-      providers.where((p) => p.services.contains(type)).toList();
+      providers
+          .where((p) => p.offerings.any((o) => o.type == type))
+          .toList();
 
   UserProfile? getUser(String id) {
     _ensureInitialized();
@@ -73,7 +78,10 @@ class AppointmentService extends ChangeNotifier {
     final userMap = Map<String, dynamic>.from(map);
     return UserProfile.fromMap({
       ...userMap,
-      'services': userMap['services'] ?? <String>[],
+      'offerings': (userMap['offerings'] as List?)
+              ?.map((e) => Map<String, dynamic>.from(e as Map))
+              .toList() ??
+          <Map<String, dynamic>>[],
     });
   }
 

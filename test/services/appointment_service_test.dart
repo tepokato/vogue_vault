@@ -8,6 +8,8 @@ import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/user_profile.dart';
+import 'package:vogue_vault/models/service_offering.dart';
+import 'package:vogue_vault/models/user_role.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -92,5 +94,38 @@ void main() {
     final stored = service.getAppointment('a2');
     expect(stored?.guestName, 'Walk-in');
     expect(stored?.clientId, isNull);
+  });
+
+  test('providersFor filters by offerings', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    final p1 = UserProfile(
+      id: 'p1',
+      firstName: 'Pro',
+      lastName: 'One',
+      roles: {UserRole.professional},
+      offerings: [
+        ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+      ],
+    );
+    final p2 = UserProfile(
+      id: 'p2',
+      firstName: 'Pro',
+      lastName: 'Two',
+      roles: {UserRole.professional},
+      offerings: [
+        ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 20),
+      ],
+    );
+
+    await service.addUser(p1);
+    await service.addUser(p2);
+
+    final barbers = service.providersFor(ServiceType.barber);
+    expect(barbers.map((p) => p.id), ['p1']);
+
+    final nailTechs = service.providersFor(ServiceType.nails);
+    expect(nailTechs.map((p) => p.id), ['p2']);
   });
 }

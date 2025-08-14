@@ -7,6 +7,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_type.dart';
+import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 import '../utils/image_picking.dart';
@@ -81,7 +82,7 @@ class EditUserPage extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
     final roles = <UserRole>{...user?.roles ?? {}};
-    final selectedServices = <ServiceType>{...user?.services ?? {}};
+    final offerings = <ServiceOffering>[...user?.offerings ?? []];
 
     try {
       await showDialog(
@@ -163,20 +164,104 @@ class EditUserPage extends StatelessWidget {
                         },
                       ),
                       if (roles.contains(UserRole.professional))
-                        ...ServiceType.values.map(
-                          (s) => CheckboxListTile(
-                            value: selectedServices.contains(s),
-                            title: Text(s.name),
-                            onChanged: (value) {
-                              setState(() {
-                                if (value == true) {
-                                  selectedServices.add(s);
-                                } else {
-                                  selectedServices.remove(s);
-                                }
-                              });
-                            },
-                          ),
+                        Column(
+                          children: [
+                            for (int i = 0; i < offerings.length; i++)
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child:
+                                        DropdownButtonFormField<ServiceType>(
+                                      value: offerings[i].type,
+                                      decoration: InputDecoration(
+                                          labelText: AppLocalizations.of(
+                                                  context)!
+                                              .serviceLabel),
+                                      items: ServiceType.values
+                                          .map(
+                                            (s) => DropdownMenuItem<
+                                                ServiceType>(
+                                              value: s,
+                                              child: Text(s.name),
+                                            ),
+                                          )
+                                          .toList(),
+                                      onChanged: (value) {
+                                        if (value == null) return;
+                                        setState(() {
+                                          offerings[i] =
+                                              offerings[i].copyWith(
+                                                  type: value);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: TextFormField(
+                                      initialValue: offerings[i].name,
+                                      decoration: InputDecoration(
+                                          labelText: AppLocalizations.of(
+                                                  context)!
+                                              .nameLabel),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          offerings[i] =
+                                              offerings[i].copyWith(
+                                                  name: val);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: TextFormField(
+                                      initialValue:
+                                          offerings[i].price.toString(),
+                                      decoration: const InputDecoration(
+                                          labelText: 'Price'),
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          offerings[i] = offerings[i].copyWith(
+                                              price:
+                                                  double.tryParse(val) ?? 0);
+                                        });
+                                      },
+                                      validator: (val) => val == null ||
+                                              double.tryParse(val) == null
+                                          ? 'Invalid price'
+                                          : null,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.remove_circle),
+                                    onPressed: () {
+                                      setState(() {
+                                        offerings.removeAt(i);
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    offerings.add(ServiceOffering(
+                                        type: ServiceType.values.first,
+                                        name: '',
+                                        price: 0));
+                                  });
+                                },
+                                icon: const Icon(Icons.add),
+                                label: const Text('Add'),
+                              ),
+                            ),
+                          ],
                         ),
                     ],
                   ),
@@ -193,7 +278,7 @@ class EditUserPage extends StatelessWidget {
                       return;
                     }
                     if (roles.contains(UserRole.professional) &&
-                        selectedServices.isEmpty) {
+                        offerings.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppLocalizations.of(context)!
@@ -216,9 +301,9 @@ class EditUserPage extends StatelessWidget {
                       lastName: last,
                       photoBytes: photoBytes,
                       roles: roles,
-                      services: roles.contains(UserRole.professional)
-                          ? selectedServices
-                          : <ServiceType>{},
+                      offerings: roles.contains(UserRole.professional)
+                          ? offerings
+                          : <ServiceOffering>[],
                     );
                     if (user == null) {
                       await service.addUser(newUser);
