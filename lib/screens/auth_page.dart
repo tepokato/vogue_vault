@@ -122,6 +122,10 @@ class _AuthPageState extends State<AuthPage> {
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)!.emailRequired;
                       }
+                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Invalid email format';
+                      }
                       return null;
                     },
                   ),
