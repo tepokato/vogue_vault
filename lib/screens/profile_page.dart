@@ -10,7 +10,6 @@ import '../models/service_type.dart';
 import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
-import '../services/role_provider.dart';
 import '../utils/image_picking.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -36,14 +35,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     final auth = context.read<AuthService>();
     final service = context.read<AppointmentService>();
-    final roleProvider = context.read<RoleProvider>();
     _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
     final user = service.getUser(_userId);
     _firstNameController.text = user?.firstName ?? '';
     _lastNameController.text = user?.lastName ?? '';
     _nicknameController = TextEditingController(text: user?.nickname ?? '');
     _photoBytes = user?.photoBytes;
-    _roles = {...(user?.roles ?? roleProvider.roles)};
+    _roles = user?.roles ?? {UserRole.customer};
     _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
   }
 
