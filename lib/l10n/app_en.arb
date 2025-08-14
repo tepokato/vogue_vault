@@ -68,7 +68,7 @@
   "guestNameLabel": "Guest Name",
   "guestContactLabel": "Guest Contact (optional)",
   "clientOrGuestValidation": "Please select a client or enter a guest name",
-  "serviceTypeBarber": "Barbershop",
+  "serviceTypeBarber": "Barber",
   "serviceTypeHairdresser": "Hairdresser",
   "serviceTypeNails": "Nails",
   "serviceTypeTattoo": "Tattoo Artist"
