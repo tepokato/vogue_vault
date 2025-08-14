@@ -6,6 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import 'utils/color_palette.dart';
+
 import 'screens/auth_page.dart';
 import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
@@ -44,11 +46,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const seed = Colors.deepPurple;
-    final lightScheme = ColorScheme.fromSeed(seedColor: seed);
+    final lightScheme = ColorScheme.fromSeed(
+      seedColor: AppColors.primary,
+    ).copyWith(
+      background: AppColors.base,
+      secondary: AppColors.accent,
+    );
     final darkScheme = ColorScheme.fromSeed(
-      seedColor: seed,
+      seedColor: AppColors.primary,
       brightness: Brightness.dark,
+    ).copyWith(
+      secondary: AppColors.accent,
     );
 
     return MaterialApp(
@@ -56,6 +64,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightScheme,
+        scaffoldBackgroundColor: AppColors.base,
         fontFamily: 'Poppins',
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
