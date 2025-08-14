@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/service_type.dart';
 
-/// Returns a human-readable label for the given [ServiceType].
+/// Returns a localized label for the given [ServiceType].
 ///
 /// The switch is exhaustive; a label is provided for every service type.
-String serviceTypeLabel(ServiceType type) {
+String serviceTypeLabel(BuildContext context, ServiceType type) {
+  final l10n = AppLocalizations.of(context)!;
   switch (type) {
     case ServiceType.barber:
-      return 'Barbershop';
+      return l10n.serviceTypeBarber;
     case ServiceType.hairdresser:
-      return 'Hairdresser';
+      return l10n.serviceTypeHairdresser;
     case ServiceType.nails:
-      return 'Nails';
+      return l10n.serviceTypeNails;
     case ServiceType.tattoo:
-      return 'Tattoo Artist';
+      return l10n.serviceTypeTattoo;
   }
   assert(false, 'Unhandled ServiceType: $type');
   throw ArgumentError('Unhandled ServiceType: $type');

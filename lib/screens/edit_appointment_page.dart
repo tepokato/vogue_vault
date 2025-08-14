@@ -164,7 +164,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     .map(
                       (s) => DropdownMenuItem<ServiceType>(
                         value: s,
-                        child: Text(serviceTypeLabel(s)),
+                        child: Text(serviceTypeLabel(context, s)),
                       ),
                     )
                     .toList(),

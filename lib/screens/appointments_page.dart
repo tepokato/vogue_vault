@@ -104,7 +104,7 @@ class AppointmentsPage extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    '$clientName - ${serviceTypeLabel(appt.service)}',
+                    '$clientName - ${serviceTypeLabel(context, appt.service)}',
                   ),
                   subtitle: Text(
                     DateFormat.yMMMd().add_jm().format(appt.dateTime.toLocal()),

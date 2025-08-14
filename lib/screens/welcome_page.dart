@@ -151,7 +151,7 @@ class _ServiceCard extends StatelessWidget {
           children: [
             visual,
             const SizedBox(height: 8),
-            Text(serviceTypeLabel(type)),
+            Text(serviceTypeLabel(context, type)),
           ],
         ),
       ),
