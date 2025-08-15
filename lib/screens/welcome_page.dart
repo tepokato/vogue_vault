@@ -122,7 +122,7 @@ class _ServiceCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withOpacity(0.15),
           borderRadius: BorderRadius.circular(16),
         ),
         padding: const EdgeInsets.all(16),
@@ -132,7 +132,10 @@ class _ServiceCard extends StatelessWidget {
           children: [
             visual,
             const SizedBox(height: 8),
-            Text(serviceTypeLabel(context, type)),
+            Text(
+              serviceTypeLabel(context, type),
+              style: TextStyle(color: color),
+            ),
           ],
         ),
       ),

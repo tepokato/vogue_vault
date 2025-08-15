@@ -53,7 +53,7 @@ Color serviceTypeColor(ServiceType type) {
     case ServiceType.nails:
       return AppColors.accent;
     case ServiceType.tattoo:
-      return AppColors.background;
+      return AppColors.highlight;
   }
   assert(false, 'Unhandled ServiceType: $type');
   throw ArgumentError('Unhandled ServiceType: $type');
