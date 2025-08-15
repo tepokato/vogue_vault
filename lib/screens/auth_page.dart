@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
-import '../utils/color_palette.dart';
 import 'role_selection_page.dart';
 import 'profile_page.dart';
 
@@ -70,8 +69,9 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -85,7 +85,7 @@ class _AuthPageState extends State<AuthPage> {
                   'Vogue Vault',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineMedium?.copyWith(
-                    color: AppColors.primary,
+                    color: colors.primary,
                     fontFamily: 'LibertinusSans',
                     fontWeight: FontWeight.w400,
                   ),
@@ -95,15 +95,14 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
-                    style:
-                        const TextStyle(color: AppColors.primary),
-                    cursorColor: AppColors.primary,
+                    style: TextStyle(color: colors.onBackground),
+                    cursorColor: colors.primary,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.emailLabel,
                       prefixIcon:
-                          const Icon(Icons.email, color: AppColors.primary),
+                          Icon(Icons.email, color: colors.primary),
                       filled: true,
-                      fillColor: AppColors.background,
+                      fillColor: colors.background,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -123,16 +122,15 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    style:
-                        const TextStyle(color: AppColors.primary),
-                    cursorColor: AppColors.primary,
+                    style: TextStyle(color: colors.onBackground),
+                    cursorColor: colors.primary,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
                       prefixIcon:
-                          const Icon(Icons.lock, color: AppColors.primary),
+                          Icon(Icons.lock, color: colors.primary),
                       filled: true,
-                      fillColor: AppColors.background,
+                      fillColor: colors.background,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -157,8 +155,8 @@ class _AuthPageState extends State<AuthPage> {
                   ElevatedButton(
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
+                      backgroundColor: colors.primary,
+                      foregroundColor: colors.onPrimary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -179,9 +177,9 @@ class _AuthPageState extends State<AuthPage> {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primary,
-                      side: const BorderSide(
-                        color: AppColors.primary,
+                      foregroundColor: colors.primary,
+                      side: BorderSide(
+                        color: colors.primary,
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
