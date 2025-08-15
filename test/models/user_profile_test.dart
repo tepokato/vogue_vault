@@ -10,7 +10,7 @@ import 'package:vogue_vault/models/service_offering.dart';
 void main() {
   group('UserProfile serialization', () {
     test('toMap and fromMap produce equivalent objects', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final profile = UserProfile(
         id: uuid.v4(),
         firstName: 'Alice',
@@ -19,9 +19,9 @@ void main() {
         photoBytes: Uint8List.fromList([1, 2, 3]),
         roles: {UserRole.customer, UserRole.professional},
         offerings: [
-          ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
-          ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 15),
-          ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 25),
+          const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+          const ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 15),
+          const ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 25),
         ],
       );
 
@@ -53,7 +53,7 @@ void main() {
 
   group('UserProfile equality', () {
     test('profiles with the same values are equal and hashCodes match', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final id = uuid.v4();
       final p1 = UserProfile(
         id: id,
@@ -62,8 +62,8 @@ void main() {
         nickname: 'Ally',
         roles: {UserRole.customer, UserRole.professional},
         offerings: [
-          ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
-          ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
+          const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+          const ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
         ],
       );
       final p2 = UserProfile(
@@ -73,8 +73,8 @@ void main() {
         nickname: 'Ally',
         roles: {UserRole.professional, UserRole.customer},
         offerings: [
-          ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
-          ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
+          const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+          const ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
         ],
       );
 
@@ -102,7 +102,7 @@ void main() {
 
   group('UserProfile service type parsing', () {
     test('skips invalid service types in legacy services list', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final map = {
         'id': uuid.v4(),
         'firstName': 'Alice',
@@ -117,7 +117,7 @@ void main() {
     });
 
     test('defaults invalid offering type to first enum value', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final map = {
         'id': uuid.v4(),
         'firstName': 'Alice',

@@ -15,10 +15,10 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider<AuthService>.value(
         value: FakeAuthService(),
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const AuthPage(),
+          home: AuthPage(),
         ),
       ),
     );
@@ -37,10 +37,10 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider<AuthService>.value(
         value: FakeAuthService(),
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const AuthPage(),
+          home: AuthPage(),
         ),
       ),
     );

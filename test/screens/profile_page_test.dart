@@ -73,10 +73,10 @@ void main() {
           ChangeNotifierProvider<AuthService>.value(value: auth),
           ChangeNotifierProvider<AppointmentService>.value(value: appt),
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const ProfilePage(),
+          home: ProfilePage(),
         ),
       ),
     );
@@ -102,10 +102,10 @@ void main() {
           ChangeNotifierProvider<AuthService>.value(value: auth),
           ChangeNotifierProvider<AppointmentService>.value(value: appt),
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const ProfilePage(),
+          home: ProfilePage(),
         ),
       ),
     );
@@ -141,10 +141,10 @@ void main() {
           ChangeNotifierProvider<AuthService>.value(value: auth),
           ChangeNotifierProvider<AppointmentService>.value(value: appt),
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const ProfilePage(isNewUser: true),
+          home: ProfilePage(isNewUser: true),
         ),
       ),
     );

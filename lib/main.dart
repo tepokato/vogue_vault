@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       seedColor: AppColors.primary,
     ).copyWith(
       primary: AppColors.primary,
-      background: AppColors.background,
+      surface: AppColors.background,
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
     );
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
-      background: AppColors.darkBackground,
+      surface: AppColors.darkBackground,
     );
 
     return MaterialApp(

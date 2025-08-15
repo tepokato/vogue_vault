@@ -38,7 +38,7 @@ class AuthService extends ChangeNotifier {
         if (value is Map) {
           return MapEntry(
             key as String,
-            Map<String, String>.from(value as Map),
+            Map<String, String>.from(value),
           );
         }
         return MapEntry(key as String, <String, String>{});

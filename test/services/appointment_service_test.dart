@@ -39,7 +39,7 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final providerId = uuid.v4();
     final laterId = uuid.v4();
     final earlierId = uuid.v4();
@@ -67,7 +67,7 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final box = Hive.box('appointments');
     final id = uuid.v4();
     final clientId = uuid.v4();
@@ -87,7 +87,7 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final apptsBox = Hive.box('appointments');
     final usersBox = Hive.box('users');
 
@@ -119,7 +119,7 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final id = uuid.v4();
     final appt = Appointment(
       id: id,
@@ -138,7 +138,7 @@ void main() {
     final service = AppointmentService();
     await service.init();
 
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final p1Id = uuid.v4();
     final p2Id = uuid.v4();
     final p3Id = uuid.v4();
@@ -148,7 +148,7 @@ void main() {
       lastName: 'One',
       roles: {UserRole.professional},
       offerings: [
-        ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
+        const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
       ],
     );
     final p2 = UserProfile(
@@ -157,7 +157,7 @@ void main() {
       lastName: 'Two',
       roles: {UserRole.professional},
       offerings: [
-        ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 20),
+        const ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 20),
       ],
     );
     final p3 = UserProfile(
@@ -166,7 +166,7 @@ void main() {
       lastName: 'Three',
       roles: {UserRole.professional},
       offerings: [
-        ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
+        const ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
       ],
     );
 
@@ -187,7 +187,7 @@ void main() {
   test('renameUserId moves profile and updates appointments', () async {
     final service = AppointmentService();
     await service.init();
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final oldId = uuid.v4();
     final newId = uuid.v4();
 

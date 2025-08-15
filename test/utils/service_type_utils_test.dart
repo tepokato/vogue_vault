@@ -6,7 +6,7 @@ import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/utils/service_type_utils.dart';
 
 void main() {
-  Future<BuildContext> _pumpApp(WidgetTester tester, Locale? locale) async {
+  Future<BuildContext> pumpApp(WidgetTester tester, Locale? locale) async {
     late BuildContext ctx;
     await tester.pumpWidget(
       MaterialApp(
@@ -23,7 +23,7 @@ void main() {
   }
 
   testWidgets('returns English labels', (tester) async {
-    final context = await _pumpApp(tester, const Locale('en'));
+    final context = await pumpApp(tester, const Locale('en'));
     expect(serviceTypeLabel(context, ServiceType.barber), 'Barber');
     expect(serviceTypeLabel(context, ServiceType.hairdresser), 'Hairdresser');
     expect(serviceTypeLabel(context, ServiceType.nails), 'Nails');
@@ -31,7 +31,7 @@ void main() {
   });
 
   testWidgets('returns Spanish labels', (tester) async {
-    final context = await _pumpApp(tester, const Locale('es'));
+    final context = await pumpApp(tester, const Locale('es'));
     expect(serviceTypeLabel(context, ServiceType.barber), 'Barbero');
     expect(serviceTypeLabel(context, ServiceType.hairdresser), 'Peluquería');
     expect(serviceTypeLabel(context, ServiceType.nails), 'Uñas');

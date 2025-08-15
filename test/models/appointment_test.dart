@@ -6,7 +6,7 @@ import 'package:vogue_vault/models/service_type.dart';
 void main() {
   group('Appointment serialization', () {
     test('toMap and fromMap produce equivalent objects', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final id = uuid.v4();
       final clientId = uuid.v4();
       final providerId = uuid.v4();
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('supports guest clients', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final appointment = Appointment(
         id: uuid.v4(),
         guestName: 'Walk-in',
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('fromMap validates required data', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final missingFields = {'id': uuid.v4()};
       expect(() => Appointment.fromMap(missingFields), throwsA(isA<TypeError>()));
 
@@ -63,7 +63,7 @@ void main() {
 
   group('Appointment equality', () {
     test('appointments with the same values are equal', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final id = uuid.v4();
       final clientId = uuid.v4();
       final providerId = uuid.v4();
@@ -87,7 +87,7 @@ void main() {
     });
 
     test('appointments with same guest values are equal', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final dt = DateTime(2023, 9, 10, 10, 0);
       final id = uuid.v4();
       final providerId = uuid.v4();
@@ -112,7 +112,7 @@ void main() {
     });
 
     test('appointments with different values are not equal', () {
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final id1 = uuid.v4();
       final id2 = uuid.v4();
       final clientId = uuid.v4();

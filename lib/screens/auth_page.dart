@@ -71,7 +71,7 @@ class _AuthPageState extends State<AuthPage> {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -85,7 +85,7 @@ class _AuthPageState extends State<AuthPage> {
                   'Vogue Vault',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineMedium?.copyWith(
-                    color: colors.onBackground,
+                    color: colors.onSurface,
                     fontFamily: 'LibertinusSans',
                     fontWeight: FontWeight.w400,
                   ),
@@ -94,18 +94,18 @@ class _AuthPageState extends State<AuthPage> {
                   Image.asset(
                     'assets/images/VV_LOGO.webp',
                     height: 200,
-                    color: colors.onBackground,
+                    color: colors.onSurface,
                   ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
-                    style: TextStyle(color: colors.onBackground),
-                    cursorColor: colors.onBackground,
+                    style: TextStyle(color: colors.onSurface),
+                    cursorColor: colors.onSurface,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.emailLabel,
-                      prefixIcon: Icon(Icons.email, color: colors.onBackground),
+                      prefixIcon: Icon(Icons.email, color: colors.onSurface),
                       filled: true,
-                      fillColor: colors.background,
+                      fillColor: colors.surface,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -125,14 +125,14 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    style: TextStyle(color: colors.onBackground),
-                    cursorColor: colors.onBackground,
+                    style: TextStyle(color: colors.onSurface),
+                    cursorColor: colors.onSurface,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
-                      prefixIcon: Icon(Icons.lock, color: colors.onBackground),
+                      prefixIcon: Icon(Icons.lock, color: colors.onSurface),
                       filled: true,
-                      fillColor: colors.background,
+                      fillColor: colors.surface,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -179,7 +179,7 @@ class _AuthPageState extends State<AuthPage> {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: colors.onBackground,
+                      foregroundColor: colors.onSurface,
                       side: BorderSide(
                         color: colors.outline,
                       ),

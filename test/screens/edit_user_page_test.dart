@@ -25,10 +25,10 @@ void main() {
             create: (_) => _FakeAppointmentService(),
           ),
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const EditUserPage(),
+          home: EditUserPage(),
         ),
       ),
     );
