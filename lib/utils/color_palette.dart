@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 /// Centralized application color palette.
 class AppColors {
-  /// Primary brand color.
-  static const Color primary = Color(0xFFBB4F12);
+  /// Primary brand color used for key UI elements.
+  static const Color primary = Color(0xFF283593);
 
-  /// Secondary complementary color.
-  static const Color secondary = Color(0xFF923B0D);
+  /// Secondary complementary color for varied accents.
+  static const Color secondary = Color(0xFF00695C);
 
-  /// Background/base color used throughout the app.
-  static const Color background = Color(0xFF4F250F);
+  /// Light background color ensuring high text contrast.
+  static const Color background = Color(0xFFFDFDFD);
 
   /// Accent color for highlights and interactive elements.
-  static const Color accent = Color(0xFFDF9C61);
+  static const Color accent = Color(0xFFFFA000);
 }
