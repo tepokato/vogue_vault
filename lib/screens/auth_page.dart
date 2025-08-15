@@ -89,7 +89,7 @@ class _AuthPageState extends State<AuthPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Image.asset('assets/images/logonobg.png', height: 120),
+                  Image.asset('assets/images/VV_LOGO.webp', height: 120),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
