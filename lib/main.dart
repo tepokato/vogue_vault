@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       primary: AppColors.primary,
       background: AppColors.background,
       secondary: AppColors.secondary,
-      tertiary: AppColors.accent,
+      tertiary: AppColors.tertiary,
     );
     final darkScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
     ).copyWith(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
-      tertiary: AppColors.accent,
+      tertiary: AppColors.tertiary,
       background: AppColors.darkBackground,
     );
 
