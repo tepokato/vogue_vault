@@ -93,6 +93,8 @@ class _AuthPageState extends State<AuthPage> {
                     'Vogue Vault',
                     style: theme.textTheme.headlineMedium?.copyWith(
                       color: AppColors.background,
+                      fontFamily: 'LibertinusSans',
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   const SizedBox(height: 16),
