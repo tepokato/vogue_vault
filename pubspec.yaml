@@ -72,7 +72,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/logonobg.png
+    - assets/images/VV_LOGO.webp
     - hair-dryer.png
     - nail-polish.png
     - razor.png
