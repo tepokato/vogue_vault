@@ -29,13 +29,13 @@ String serviceTypeLabel(BuildContext context, ServiceType type) {
 String serviceTypeIcon(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
-      return 'razor.png';
+      return 'assets/icons/razor.png';
     case ServiceType.hairdresser:
-      return 'hair-dryer.png';
+      return 'assets/icons/hair-dryer.png';
     case ServiceType.nails:
-      return 'nail-polish.png';
+      return 'assets/icons/nail-polish.png';
     case ServiceType.tattoo:
-      return 'tattoo-machine.png';
+      return 'assets/icons/tattoo-machine.png';
   }
   assert(false, 'Unhandled ServiceType: $type');
   throw ArgumentError('Unhandled ServiceType: $type');

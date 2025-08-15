@@ -73,10 +73,7 @@ flutter:
 
   assets:
     - assets/images/VV_LOGO.webp
-    - hair-dryer.png
-    - nail-polish.png
-    - razor.png
-    - tattoo-machine.png
+    - assets/icons/
 
   fonts:
     - family: Poppins
