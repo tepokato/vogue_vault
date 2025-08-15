@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       tertiary: AppColors.accent,
-      background: AppColors.background,
+      background: AppColors.darkBackground,
     );
 
     return MaterialApp(
@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: darkScheme,
         primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
+        scaffoldBackgroundColor: AppColors.darkBackground,
         fontFamily: 'Poppins',
         inputDecorationTheme: InputDecorationTheme(
           focusedBorder: OutlineInputBorder(

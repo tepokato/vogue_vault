@@ -11,6 +11,9 @@ class AppColors {
   /// Light background color ensuring high text contrast.
   static const Color background = Color(0xFFF5F0E6);
 
+  /// Dark background color for dark theme surfaces.
+  static const Color darkBackground = Color(0xFF121212);
+
   /// Accent color for highlights and interactive elements.
   static const Color accent = Color(0xFF006064);
 
