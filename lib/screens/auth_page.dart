@@ -18,7 +18,6 @@ class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLogin = true;
   String? _error;
 
   @override
@@ -48,18 +47,11 @@ class _AuthPageState extends State<AuthPage> {
     );
 
     bool success = false;
-    bool isRegister = false;
     try {
-      if (_isLogin) {
-        success = await auth.login(email, password);
-        if (!success) {
-          setState(() =>
-              _error = AppLocalizations.of(context)!.invalidCredentials);
-        }
-      } else {
-        await auth.register(email, password);
-        success = true;
-        isRegister = true;
+      success = await auth.login(email, password);
+      if (!success) {
+        setState(() =>
+            _error = AppLocalizations.of(context)!.invalidCredentials);
       }
     } finally {
       if (mounted) {
@@ -68,13 +60,6 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     if (success && mounted) {
-      if (isRegister) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const ProfilePage()),
-        );
-        if (!mounted) return;
-      }
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
@@ -167,17 +152,17 @@ class _AuthPageState extends State<AuthPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(_isLogin
-                        ? AppLocalizations.of(context)!.loginButton
-                        : AppLocalizations.of(context)!.registerButton),
+                    child: Text(AppLocalizations.of(context)!.loginButton),
                   ),
                   const SizedBox(height: 12),
                   OutlinedButton(
                     onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                        _error = null;
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ProfilePage(isNewUser: true),
+                        ),
+                      );
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.background,
@@ -187,9 +172,8 @@ class _AuthPageState extends State<AuthPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(_isLogin
-                        ? AppLocalizations.of(context)!.createAccount
-                        : AppLocalizations.of(context)!.haveAccountSignIn),
+                    child:
+                        Text(AppLocalizations.of(context)!.createAccount),
                   ),
                 ],
               ),
