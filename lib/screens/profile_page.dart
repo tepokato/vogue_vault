@@ -12,9 +12,12 @@ import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import '../widgets/app_scaffold.dart';
+import 'role_selection_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, this.isNewUser = false});
+
+  final bool isNewUser;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -40,15 +43,25 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     final auth = context.read<AuthService>();
     final service = context.read<AppointmentService>();
-    _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
-    _emailController = TextEditingController(text: _userId);
-    final user = service.getUser(_userId);
-    _firstNameController.text = user?.firstName ?? '';
-    _lastNameController.text = user?.lastName ?? '';
-    _nicknameController = TextEditingController(text: user?.nickname ?? '');
-    _photoBytes = user?.photoBytes;
-    _roles = user?.roles ?? {UserRole.customer};
-    _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
+    if (widget.isNewUser) {
+      _userId = '';
+      _emailController = TextEditingController();
+      _nicknameController = TextEditingController(text: '');
+      _photoBytes = null;
+      _roles = {UserRole.customer};
+      _offerings = <ServiceOffering>[];
+    } else {
+      _userId =
+          auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
+      _emailController = TextEditingController(text: _userId);
+      final user = service.getUser(_userId);
+      _firstNameController.text = user?.firstName ?? '';
+      _lastNameController.text = user?.lastName ?? '';
+      _nicknameController = TextEditingController(text: user?.nickname ?? '');
+      _photoBytes = user?.photoBytes;
+      _roles = user?.roles ?? {UserRole.customer};
+      _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
+    }
   }
 
   @override
@@ -92,22 +105,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final service = context.read<AppointmentService>();
     final auth = context.read<AuthService>();
     final email = _emailController.text.trim();
-    if (email != _userId) {
-      try {
-        await auth.changeEmail(_userId, email);
-        await service.renameUserId(_userId, email);
-        _userId = email;
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(e.toString())));
-        }
-        return;
-      }
-    }
-    if (_newPwdController.text.isNotEmpty ||
-        _confirmPwdController.text.isNotEmpty ||
-        _currentPwdController.text.isNotEmpty) {
+
+    if (widget.isNewUser) {
       if (_newPwdController.text != _confirmPwdController.text) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -117,14 +116,50 @@ class _ProfilePageState extends State<ProfilePage> {
         return;
       }
       try {
-        await auth.changePassword(
-            _userId, _currentPwdController.text, _newPwdController.text);
+        await auth.register(email, _newPwdController.text);
+        _userId = email;
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(e.toString())));
         }
         return;
+      }
+    } else {
+      if (email != _userId) {
+        try {
+          await auth.changeEmail(_userId, email);
+          await service.renameUserId(_userId, email);
+          _userId = email;
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
+          return;
+        }
+      }
+      if (_newPwdController.text.isNotEmpty ||
+          _confirmPwdController.text.isNotEmpty ||
+          _currentPwdController.text.isNotEmpty) {
+        if (_newPwdController.text != _confirmPwdController.text) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Passwords do not match')),
+            );
+          }
+          return;
+        }
+        try {
+          await auth.changePassword(
+              _userId, _currentPwdController.text, _newPwdController.text);
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
+          return;
+        }
       }
     }
     final first = _firstNameController.text.trim();
@@ -140,11 +175,22 @@ class _ProfilePageState extends State<ProfilePage> {
       offerings:
           _roles.contains(UserRole.professional) ? _offerings : <ServiceOffering>[],
     );
-    await service.updateUser(user);
+    if (widget.isNewUser) {
+      await service.addUser(user);
+    } else {
+      await service.updateUser(user);
+    }
     if (mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Changes saved')));
-      Navigator.pop(context);
+      if (widget.isNewUser) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Changes saved')));
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -249,14 +295,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             : null,
                       ),
                       const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _currentPwdController,
-                        decoration: const InputDecoration(
-                          labelText: 'Current password',
+                      if (!widget.isNewUser) ...[
+                        TextFormField(
+                          controller: _currentPwdController,
+                          decoration: const InputDecoration(
+                            labelText: 'Current password',
+                          ),
+                          obscureText: true,
                         ),
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 16),
+                        const SizedBox(height: 16),
+                      ],
                       TextFormField(
                         controller: _newPwdController,
                         decoration: const InputDecoration(
