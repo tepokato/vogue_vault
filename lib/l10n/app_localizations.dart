@@ -449,6 +449,12 @@ abstract class AppLocalizations {
   /// **'Please enter your email'**
   String get emailRequired;
 
+  /// No description provided for @invalidEmailFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get invalidEmailFormat;
+
   /// No description provided for @passwordRequired.
   ///
   /// In en, this message translates to:
