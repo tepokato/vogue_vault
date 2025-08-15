@@ -117,7 +117,7 @@ class _AuthPageState extends State<AuthPage> {
                       }
                       final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
                       if (!emailRegex.hasMatch(value)) {
-                        return 'Invalid email format';
+                        return AppLocalizations.of(context)!.invalidEmailFormat;
                       }
                       return null;
                     },

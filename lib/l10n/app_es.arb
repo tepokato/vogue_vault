@@ -59,6 +59,7 @@
   "emailLabel": "Correo electrónico",
   "passwordLabel": "Contraseña",
   "emailRequired": "Por favor ingresa tu correo electrónico",
+  "invalidEmailFormat": "Formato de correo electrónico inválido",
   "passwordRequired": "Por favor ingresa tu contraseña",
   "loginButton": "Ingresar",
   "registerButton": "Registrarse",
