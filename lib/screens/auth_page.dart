@@ -105,7 +105,8 @@ class _AuthPageState extends State<AuthPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.emailLabel,
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon:
+                          const Icon(Icons.email, color: AppColors.primary),
                       filled: true,
                       fillColor: AppColors.background,
                       border: OutlineInputBorder(
@@ -130,7 +131,8 @@ class _AuthPageState extends State<AuthPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon:
+                          const Icon(Icons.lock, color: AppColors.primary),
                       filled: true,
                       fillColor: AppColors.background,
                       border: OutlineInputBorder(
