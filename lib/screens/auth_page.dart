@@ -91,7 +91,11 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                 ),
                   const SizedBox(height: 16),
-                  Image.asset('assets/images/VV_LOGO.webp', height: 200),
+                  Image.asset(
+                    'assets/images/VV_LOGO.webp',
+                    height: 200,
+                    color: colors.onBackground,
+                  ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
