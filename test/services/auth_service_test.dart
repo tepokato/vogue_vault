@@ -130,4 +130,50 @@ void main() {
     await service.register(email, password);
     expect(service.register(email, password), throwsStateError);
   });
+
+  test('changeEmail migrates user and rekeys credentials', () async {
+    final service = AuthService();
+    await service.init();
+
+    const oldEmail = 'old@example.com';
+    const newEmail = 'new@example.com';
+    const password = 'pass123';
+    await service.register(oldEmail, password);
+
+    await service.changeEmail(oldEmail, newEmail);
+    expect(service.currentUser, newEmail);
+
+    final box = Hive.box('auth');
+    final users = box.get('users') as Map;
+    expect(users.containsKey(oldEmail), isFalse);
+    expect(users.containsKey(newEmail), isTrue);
+
+    await service.logout();
+    final success = await service.login(newEmail, password);
+    expect(success, isTrue);
+  });
+
+  test('changeEmail rejects duplicate email', () async {
+    final service = AuthService();
+    await service.init();
+    await service.register('a@example.com', 'p1');
+    await service.register('b@example.com', 'p2');
+    expect(
+        service.changeEmail('a@example.com', 'b@example.com'), throwsStateError);
+  });
+
+  test('changePassword updates hash and validates current password', () async {
+    final service = AuthService();
+    await service.init();
+
+    const email = 'user@example.com';
+    await service.register(email, 'old');
+
+    await service.changePassword(email, 'old', 'new');
+
+    await service.logout();
+    expect(await service.login(email, 'old'), isFalse);
+    expect(await service.login(email, 'new'), isTrue);
+    expect(service.changePassword(email, 'wrong', 'another'), throwsStateError);
+  });
 }

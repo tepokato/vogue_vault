@@ -183,4 +183,32 @@ void main() {
     final tattooArtists = service.providersFor(ServiceType.tattoo);
     expect(tattooArtists.map((p) => p.id), [p3Id]);
   });
+
+  test('renameUserId moves profile and updates appointments', () async {
+    final service = AppointmentService();
+    await service.init();
+    final uuid = const Uuid();
+    final oldId = uuid.v4();
+    final newId = uuid.v4();
+
+    final user = UserProfile(id: oldId, firstName: 'Old', lastName: 'User');
+    await service.addUser(user);
+
+    final appt = Appointment(
+      id: uuid.v4(),
+      clientId: oldId,
+      providerId: oldId,
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-01'),
+    );
+    await service.addAppointment(appt);
+
+    await service.renameUserId(oldId, newId);
+
+    expect(service.getUser(oldId), isNull);
+    expect(service.getUser(newId), isNotNull);
+    final updatedAppt = service.getAppointment(appt.id)!;
+    expect(updatedAppt.clientId, newId);
+    expect(updatedAppt.providerId, newId);
+  });
 }

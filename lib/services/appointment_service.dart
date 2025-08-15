@@ -155,6 +155,30 @@ class AppointmentService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> renameUserId(String oldId, String newId) async {
+    _ensureInitialized();
+    final userMap = _usersBox.get(oldId);
+    if (userMap != null) {
+      await _usersBox.put(newId, userMap);
+      await _usersBox.delete(oldId);
+    }
+    for (final m in _appointmentsBox.values) {
+      final map = Map<String, dynamic>.from(m);
+      final appt = Appointment.fromMap(_withProviderId(map));
+      var updated = appt;
+      if (appt.clientId == oldId) {
+        updated = updated.copyWith(clientId: newId);
+      }
+      if (appt.providerId == oldId) {
+        updated = updated.copyWith(providerId: newId);
+      }
+      if (updated != appt) {
+        await _appointmentsBox.put(updated.id, updated.toMap());
+      }
+    }
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     if (_initialized) {

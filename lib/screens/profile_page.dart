@@ -24,6 +24,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   TextEditingController? _nicknameController;
+  late TextEditingController _emailController;
+  final _currentPwdController = TextEditingController();
+  final _newPwdController = TextEditingController();
+  final _confirmPwdController = TextEditingController();
 
   Uint8List? _photoBytes;
   late String _userId;
@@ -36,6 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final auth = context.read<AuthService>();
     final service = context.read<AppointmentService>();
     _userId = auth.currentUser ?? DateTime.now().millisecondsSinceEpoch.toString();
+    _emailController = TextEditingController(text: _userId);
     final user = service.getUser(_userId);
     _firstNameController.text = user?.firstName ?? '';
     _lastNameController.text = user?.lastName ?? '';
@@ -50,6 +55,10 @@ class _ProfilePageState extends State<ProfilePage> {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _nicknameController?.dispose();
+    _emailController.dispose();
+    _currentPwdController.dispose();
+    _newPwdController.dispose();
+    _confirmPwdController.dispose();
     super.dispose();
   }
 
@@ -80,6 +89,43 @@ class _ProfilePageState extends State<ProfilePage> {
       return;
     }
     final service = context.read<AppointmentService>();
+    final auth = context.read<AuthService>();
+    final email = _emailController.text.trim();
+    if (email != _userId) {
+      try {
+        await auth.changeEmail(_userId, email);
+        await service.renameUserId(_userId, email);
+        _userId = email;
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(e.toString())));
+        }
+        return;
+      }
+    }
+    if (_newPwdController.text.isNotEmpty ||
+        _confirmPwdController.text.isNotEmpty ||
+        _currentPwdController.text.isNotEmpty) {
+      if (_newPwdController.text != _confirmPwdController.text) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Passwords do not match')),
+          );
+        }
+        return;
+      }
+      try {
+        await auth.changePassword(
+            _userId, _currentPwdController.text, _newPwdController.text);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(e.toString())));
+        }
+        return;
+      }
+    }
     final first = _firstNameController.text.trim();
     final last = _lastNameController.text.trim();
     final nicknameText = _nicknameController?.text.trim() ?? '';
@@ -95,6 +141,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
     await service.updateUser(user);
     if (mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Changes saved')));
       Navigator.pop(context);
     }
   }
@@ -186,6 +234,43 @@ class _ProfilePageState extends State<ProfilePage> {
                               AppLocalizations.of(context)!.nicknameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.emailLabel,
+                        ),
+                        validator: (value) => value == null ||
+                                value.trim().isEmpty ||
+                                !value.contains('@')
+                            ? 'Invalid email'
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _currentPwdController,
+                        decoration: const InputDecoration(
+                          labelText: 'Current password',
+                        ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _newPwdController,
+                        decoration: const InputDecoration(
+                          labelText: 'New password',
+                        ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _confirmPwdController,
+                        decoration: const InputDecoration(
+                          labelText: 'Confirm password',
+                        ),
+                        obscureText: true,
                       ),
                     ],
                   ),
