@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
     final lightScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
     ).copyWith(
+      primary: AppColors.primary,
       background: AppColors.background,
       secondary: AppColors.secondary,
       tertiary: AppColors.accent,
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
       seedColor: AppColors.primary,
       brightness: Brightness.dark,
     ).copyWith(
+      primary: AppColors.primary,
       secondary: AppColors.secondary,
       tertiary: AppColors.accent,
       background: AppColors.background,
@@ -67,6 +69,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightScheme,
+        primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
         textTheme: const TextTheme(
@@ -80,6 +83,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: darkScheme,
+        primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
         textTheme: const TextTheme(
