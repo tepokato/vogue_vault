@@ -51,7 +51,7 @@ Color serviceTypeColor(ServiceType type) {
     case ServiceType.hairdresser:
       return AppColors.secondary;
     case ServiceType.nails:
-      return AppColors.accent;
+      return AppColors.tertiary;
     case ServiceType.tattoo:
       return AppColors.highlight;
   }
