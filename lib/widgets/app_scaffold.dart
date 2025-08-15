@@ -23,6 +23,10 @@ class AppScaffold extends StatelessWidget {
   /// disabled on pages like [ProfilePage] itself.
   final bool showProfileButton;
 
+  /// Whether to show the home button. Defaults to true but can be
+  /// disabled on pages like onboarding screens.
+  final bool showHomeButton;
+
   const AppScaffold({
     super.key,
     required this.body,
@@ -30,6 +34,7 @@ class AppScaffold extends StatelessWidget {
     this.actions = const [],
     this.floatingActionButton,
     this.showProfileButton = true,
+    this.showHomeButton = true,
   });
 
   void _navigateHome(BuildContext context) {
@@ -53,11 +58,13 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: title != null ? Text(title!) : null,
-        leading: IconButton(
-          icon: const Icon(Icons.home),
-          tooltip: loc.homeTooltip,
-          onPressed: () => _navigateHome(context),
-        ),
+        leading: showHomeButton
+            ? IconButton(
+                icon: const Icon(Icons.home),
+                tooltip: loc.homeTooltip,
+                onPressed: () => _navigateHome(context),
+              )
+            : null,
         actions: [
           ...actions,
           if (showProfileButton)

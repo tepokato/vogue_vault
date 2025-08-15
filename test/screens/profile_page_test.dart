@@ -130,5 +130,26 @@ void main() {
     expect(appt.renameOld, 'old@example.com');
     expect(appt.renameNew, 'new@example.com');
   });
+
+  testWidgets('new user profile hides home button', (tester) async {
+    final auth = _FakeAuthService();
+    final appt = _FakeAppointmentService();
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthService>.value(value: auth),
+          ChangeNotifierProvider<AppointmentService>.value(value: appt),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const ProfilePage(isNewUser: true),
+        ),
+      ),
+    );
+
+    expect(find.byTooltip('Home'), findsNothing);
+  });
 }
 

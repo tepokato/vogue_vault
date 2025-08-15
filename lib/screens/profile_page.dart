@@ -218,6 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return AppScaffold(
       title: AppLocalizations.of(context)!.profileTitle,
       showProfileButton: false,
+      showHomeButton: !widget.isNewUser,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
