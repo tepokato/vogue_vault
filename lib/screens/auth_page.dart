@@ -71,33 +71,25 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.primary, AppColors.secondary],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Vogue Vault',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.background,
-                      fontFamily: 'LibertinusSans',
-                      fontWeight: FontWeight.w400,
-                    ),
+      backgroundColor: AppColors.background,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Vogue Vault',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: AppColors.primary,
+                    fontFamily: 'LibertinusSans',
+                    fontWeight: FontWeight.w400,
                   ),
+                ),
                   const SizedBox(height: 16),
                   Image.asset('assets/images/VV_LOGO.webp', height: 200),
                   const SizedBox(height: 32),
@@ -183,8 +175,8 @@ class _AuthPageState extends State<AuthPage> {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.background,
-                      side: const BorderSide(color: AppColors.background),
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),

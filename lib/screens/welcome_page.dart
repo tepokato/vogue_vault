@@ -122,12 +122,7 @@ class _ServiceCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              color.withOpacity(0.05),
-              color.withOpacity(0.15),
-            ],
-          ),
+          color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
         ),
         padding: const EdgeInsets.all(16),
