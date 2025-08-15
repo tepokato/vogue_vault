@@ -11,6 +11,7 @@ import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
+import '../widgets/app_scaffold.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -168,10 +169,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.profileTitle),
-      ),
+    return AppScaffold(
+      title: AppLocalizations.of(context)!.profileTitle,
+      showProfileButton: false,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(

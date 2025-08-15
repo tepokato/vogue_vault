@@ -8,9 +8,9 @@ import '../models/user_role.dart';
 import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
+import '../widgets/app_scaffold.dart';
 import 'edit_appointment_page.dart';
 import 'edit_user_page.dart';
-import 'profile_page.dart';
 import 'role_selection_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
@@ -22,45 +22,33 @@ class AppointmentsPage extends StatelessWidget {
     final role = context.watch<RoleProvider>().selectedRole;
     final appointments = service.appointments;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.appointmentsTitle),
-        actions: [
+    return AppScaffold(
+      title: AppLocalizations.of(context)!.appointmentsTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.swap_horiz),
+          tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
+          onPressed: () {
+            context.read<RoleProvider>().clearRole();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
+              (route) => false,
+            );
+          },
+        ),
+        if (role == UserRole.professional)
           IconButton(
-            icon: const Icon(Icons.person),
-            tooltip: AppLocalizations.of(context)!.profileTooltip,
+            icon: const Icon(Icons.group),
+            tooltip: AppLocalizations.of(context)!.usersTooltip,
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const ProfilePage()),
+                MaterialPageRoute(builder: (_) => const EditUserPage()),
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
-            onPressed: () {
-              context.read<RoleProvider>().clearRole();
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
-                (route) => false,
-              );
-            },
-          ),
-          if (role == UserRole.professional)
-            IconButton(
-              icon: const Icon(Icons.group),
-              tooltip: AppLocalizations.of(context)!.usersTooltip,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const EditUserPage()),
-                );
-              },
-            ),
-        ],
-      ),
+      ],
       body: appointments.isEmpty
           ? Center(
               child: Column(

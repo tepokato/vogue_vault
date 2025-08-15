@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appointmentsTitle => 'Appointments';
 
   @override
+  String get homeTooltip => 'Home';
+
+  @override
   String get profileTooltip => 'Profile';
 
   @override

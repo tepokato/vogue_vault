@@ -2,6 +2,7 @@
   "@@locale": "en",
   "appTitle": "Vogue Vault",
   "appointmentsTitle": "Appointments",
+  "homeTooltip": "Home",
   "profileTooltip": "Profile",
   "switchRoleTooltip": "Switch Role",
   "usersTooltip": "Users",

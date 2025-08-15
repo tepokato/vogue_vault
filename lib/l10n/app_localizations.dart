@@ -107,6 +107,12 @@ abstract class AppLocalizations {
   /// **'Appointments'**
   String get appointmentsTitle;
 
+  /// No description provided for @homeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeTooltip;
+
   /// No description provided for @profileTooltip.
   ///
   /// In en, this message translates to:
