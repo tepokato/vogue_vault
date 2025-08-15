@@ -115,6 +115,49 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> changeEmail(String oldEmail, String newEmail) async {
+    _ensureInitialized();
+    final users = _users;
+    if (!users.containsKey(oldEmail)) {
+      throw StateError('User $oldEmail not found.');
+    }
+    if (users.containsKey(newEmail)) {
+      throw StateError('User with email $newEmail already exists.');
+    }
+    final creds = users.remove(oldEmail)!;
+    users[newEmail] = creds;
+    await _box.put(_usersKey, users);
+    if (currentUser == oldEmail) {
+      await _box.put(_currentUserKey, {'email': newEmail});
+    }
+    notifyListeners();
+  }
+
+  Future<void> changePassword(
+      String email, String oldPwd, String newPwd) async {
+    _ensureInitialized();
+    final users = _users;
+    final user = users[email];
+    if (user == null) {
+      throw StateError('User $email not found.');
+    }
+    final salt = user['salt'];
+    final hash = user['hash'];
+    if (salt == null || hash == null) {
+      throw StateError('Invalid credentials for $email.');
+    }
+    final currentHash = await _hashPassword(oldPwd, salt);
+    if (currentHash != hash) {
+      throw StateError('Incorrect current password.');
+    }
+    final newSaltBytes = _generateSalt();
+    final newSalt = base64UrlEncode(newSaltBytes);
+    final newHash = await _hashPassword(newPwd, newSalt);
+    users[email] = {'salt': newSalt, 'hash': newHash};
+    await _box.put(_usersKey, users);
+    notifyListeners();
+  }
+
   Future<void> logout() async {
     _ensureInitialized();
     await _box.delete(_currentUserKey);
