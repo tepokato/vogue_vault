@@ -72,15 +72,15 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
-        inputDecorationTheme: const InputDecorationTheme(
+        inputDecorationTheme: InputDecorationTheme(
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primary),
+            borderSide: BorderSide(color: lightScheme.onSurface),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primary),
+            borderSide: BorderSide(color: lightScheme.onSurface),
           ),
-          labelStyle: TextStyle(color: AppColors.primary),
-          floatingLabelStyle: TextStyle(color: AppColors.primary),
+          labelStyle: TextStyle(color: lightScheme.onSurface),
+          floatingLabelStyle: TextStyle(color: lightScheme.onSurface),
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
@@ -96,15 +96,15 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
-        inputDecorationTheme: const InputDecorationTheme(
+        inputDecorationTheme: InputDecorationTheme(
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primary),
+            borderSide: BorderSide(color: darkScheme.onSurface),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primary),
+            borderSide: BorderSide(color: darkScheme.onSurface),
           ),
-          labelStyle: TextStyle(color: AppColors.primary),
-          floatingLabelStyle: TextStyle(color: AppColors.primary),
+          labelStyle: TextStyle(color: darkScheme.onSurface),
+          floatingLabelStyle: TextStyle(color: darkScheme.onSurface),
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
