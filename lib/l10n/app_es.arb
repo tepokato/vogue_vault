@@ -2,6 +2,7 @@
   "@@locale": "es",
   "appTitle": "Bóveda de la Moda",
   "appointmentsTitle": "Citas",
+  "homeTooltip": "Inicio",
   "profileTooltip": "Perfil",
   "switchRoleTooltip": "Cambiar rol",
   "usersTooltip": "Usuarios",

@@ -5,9 +5,9 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/service_type.dart';
 import '../utils/service_type_utils.dart';
 import '../services/role_provider.dart';
+import '../widgets/app_scaffold.dart';
 import 'appointments_page.dart';
 import 'provider_selection_page.dart';
-import 'profile_page.dart';
 import 'role_selection_page.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -15,38 +15,24 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.welcomeTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            tooltip: AppLocalizations.of(context)!.profileTooltip,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const ProfilePage(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
-            onPressed: () {
-              context.read<RoleProvider>().clearRole();
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const RoleSelectionPage(),
-                ),
-                (route) => false,
-              );
-            },
-          ),
-        ],
-      ),
+    return AppScaffold(
+      title: AppLocalizations.of(context)!.welcomeTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.swap_horiz),
+          tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
+          onPressed: () {
+            context.read<RoleProvider>().clearRole();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const RoleSelectionPage(),
+              ),
+              (route) => false,
+            );
+          },
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

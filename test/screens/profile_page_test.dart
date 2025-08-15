@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
@@ -72,7 +73,11 @@ void main() {
           ChangeNotifierProvider<AuthService>.value(value: auth),
           ChangeNotifierProvider<AppointmentService>.value(value: appt),
         ],
-        child: const MaterialApp(home: ProfilePage()),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const ProfilePage(),
+        ),
       ),
     );
 
@@ -97,7 +102,11 @@ void main() {
           ChangeNotifierProvider<AuthService>.value(value: auth),
           ChangeNotifierProvider<AppointmentService>.value(value: appt),
         ],
-        child: const MaterialApp(home: ProfilePage()),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const ProfilePage(),
+        ),
       ),
     );
 
