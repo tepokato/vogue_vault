@@ -72,6 +72,16 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
+        inputDecorationTheme: const InputDecorationTheme(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.primary),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.primary),
+          ),
+          labelStyle: TextStyle(color: AppColors.primary),
+          floatingLabelStyle: TextStyle(color: AppColors.primary),
+        ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
             fontSize: 32,
@@ -86,6 +96,16 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
+        inputDecorationTheme: const InputDecorationTheme(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.primary),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.primary),
+          ),
+          labelStyle: TextStyle(color: AppColors.primary),
+          floatingLabelStyle: TextStyle(color: AppColors.primary),
+        ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
             fontSize: 32,
