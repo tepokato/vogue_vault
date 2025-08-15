@@ -91,6 +91,7 @@ class _AuthPageState extends State<AuthPage> {
                 children: [
                   Text(
                     'Vogue Vault',
+                    textAlign: TextAlign.center,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       color: AppColors.background,
                       fontFamily: 'LibertinusSans',
