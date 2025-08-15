@@ -103,6 +103,9 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
+                    style:
+                        const TextStyle(color: AppColors.primary),
+                    cursorColor: AppColors.primary,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.emailLabel,
                       prefixIcon:
@@ -128,6 +131,9 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
+                    style:
+                        const TextStyle(color: AppColors.primary),
+                    cursorColor: AppColors.primary,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
