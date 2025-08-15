@@ -183,13 +183,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordLabel => 'Password';
 
   @override
+  String get currentPasswordLabel => 'Current password';
+
+  @override
+  String get newPasswordLabel => 'New password';
+
+  @override
+  String get confirmPasswordLabel => 'Confirm password';
+
+  @override
   String get emailRequired => 'Please enter your email';
+
+  @override
+  String get invalidEmail => 'Invalid email';
 
   @override
   String get invalidEmailFormat => 'Invalid email format';
 
   @override
   String get passwordRequired => 'Please enter your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get changesSaved => 'Changes saved';
 
   @override
   String get loginButton => 'Login';

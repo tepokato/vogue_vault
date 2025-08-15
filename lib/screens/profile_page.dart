@@ -110,7 +110,10 @@ class _ProfilePageState extends State<ProfilePage> {
       if (_newPwdController.text != _confirmPwdController.text) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Passwords do not match')),
+            SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+            ),
           );
         }
         return;
@@ -145,7 +148,10 @@ class _ProfilePageState extends State<ProfilePage> {
         if (_newPwdController.text != _confirmPwdController.text) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Passwords do not match')),
+              SnackBar(
+                content:
+                    Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+              ),
             );
           }
           return;
@@ -187,8 +193,11 @@ class _ProfilePageState extends State<ProfilePage> {
           MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
         );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Changes saved')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.changesSaved),
+          ),
+        );
         Navigator.pop(context);
       }
     }
@@ -292,15 +301,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         validator: (value) => value == null ||
                                 value.trim().isEmpty ||
                                 !value.contains('@')
-                            ? 'Invalid email'
+                            ? AppLocalizations.of(context)!.invalidEmail
                             : null,
                       ),
                       const SizedBox(height: 16),
                       if (!widget.isNewUser) ...[
                         TextFormField(
                           controller: _currentPwdController,
-                          decoration: const InputDecoration(
-                            labelText: 'Current password',
+                          decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.currentPasswordLabel,
                           ),
                           obscureText: true,
                         ),
@@ -308,16 +318,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                       TextFormField(
                         controller: _newPwdController,
-                        decoration: const InputDecoration(
-                          labelText: 'New password',
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.newPasswordLabel,
                         ),
                         obscureText: true,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _confirmPwdController,
-                        decoration: const InputDecoration(
-                          labelText: 'Confirm password',
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.confirmPasswordLabel,
                         ),
                         obscureText: true,
                       ),
