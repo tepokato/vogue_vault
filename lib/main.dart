@@ -81,6 +81,8 @@ class MyApp extends StatelessWidget {
           ),
           labelStyle: TextStyle(color: lightScheme.onSurface),
           floatingLabelStyle: TextStyle(color: lightScheme.onSurface),
+          hintStyle:
+              TextStyle(color: lightScheme.onSurface.withOpacity(0.6)),
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
@@ -105,6 +107,8 @@ class MyApp extends StatelessWidget {
           ),
           labelStyle: TextStyle(color: darkScheme.onSurface),
           floatingLabelStyle: TextStyle(color: darkScheme.onSurface),
+          hintStyle:
+              TextStyle(color: darkScheme.onSurface.withOpacity(0.6)),
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
