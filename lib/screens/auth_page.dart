@@ -85,7 +85,7 @@ class _AuthPageState extends State<AuthPage> {
                   'Vogue Vault',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineMedium?.copyWith(
-                    color: colors.primary,
+                    color: colors.onBackground,
                     fontFamily: 'LibertinusSans',
                     fontWeight: FontWeight.w400,
                   ),
@@ -96,11 +96,10 @@ class _AuthPageState extends State<AuthPage> {
                   TextFormField(
                     controller: _emailController,
                     style: TextStyle(color: colors.onBackground),
-                    cursorColor: colors.primary,
+                    cursorColor: colors.onBackground,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.emailLabel,
-                      prefixIcon:
-                          Icon(Icons.email, color: colors.primary),
+                      prefixIcon: Icon(Icons.email, color: colors.onBackground),
                       filled: true,
                       fillColor: colors.background,
                       border: OutlineInputBorder(
@@ -123,12 +122,11 @@ class _AuthPageState extends State<AuthPage> {
                   TextFormField(
                     controller: _passwordController,
                     style: TextStyle(color: colors.onBackground),
-                    cursorColor: colors.primary,
+                    cursorColor: colors.onBackground,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
-                      prefixIcon:
-                          Icon(Icons.lock, color: colors.primary),
+                      prefixIcon: Icon(Icons.lock, color: colors.onBackground),
                       filled: true,
                       fillColor: colors.background,
                       border: OutlineInputBorder(
@@ -177,9 +175,9 @@ class _AuthPageState extends State<AuthPage> {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: colors.primary,
+                      foregroundColor: colors.onBackground,
                       side: BorderSide(
-                        color: colors.primary,
+                        color: colors.outline,
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
