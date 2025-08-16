@@ -24,6 +24,7 @@
   "priceLabel": "Price",
   "invalidPrice": "Invalid price",
   "deleteUserFailed": "Failed to delete user",
+  "cannotDeleteSelfTooltip": "Cannot delete yourself",
   "welcomeTitle": "Welcome",
   "exploreServices": "Explore our catalog",
   "getStarted": "Get Started",

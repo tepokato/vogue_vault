@@ -58,10 +58,11 @@ class EditUserPage extends StatelessWidget {
             subtitle: Text(roleText),
             onTap: () => _showUserDialog(context, user: user),
             trailing: isSelf
-                ? const IconButton(
-                    icon: Icon(Icons.delete),
+                ? IconButton(
+                    icon: const Icon(Icons.delete),
                     onPressed: null,
-                    tooltip: 'Cannot delete yourself',
+                    tooltip: AppLocalizations.of(context)!
+                        .cannotDeleteSelfTooltip,
                   )
                 : IconButton(
                     icon: const Icon(Icons.delete),

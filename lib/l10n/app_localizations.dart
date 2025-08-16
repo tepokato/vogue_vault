@@ -239,6 +239,12 @@ abstract class AppLocalizations {
   /// **'Failed to delete user'**
   String get deleteUserFailed;
 
+  /// No description provided for @cannotDeleteSelfTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot delete yourself'**
+  String get cannotDeleteSelfTooltip;
+
   /// No description provided for @welcomeTitle.
   ///
   /// In en, this message translates to:

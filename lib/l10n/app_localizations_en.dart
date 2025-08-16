@@ -81,6 +81,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteUserFailed => 'Failed to delete user';
 
   @override
+  String get cannotDeleteSelfTooltip => 'Cannot delete yourself';
+
+  @override
   String get welcomeTitle => 'Welcome';
 
   @override
