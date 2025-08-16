@@ -7,16 +7,29 @@ import 'package:vogue_vault/screens/appointments_page.dart';
 import 'package:vogue_vault/screens/welcome_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/role_provider.dart';
+import 'package:vogue_vault/services/auth_service.dart';
+import 'package:vogue_vault/models/user_profile.dart';
+
+class _FakeAppointmentService extends AppointmentService {
+  @override
+  UserProfile? getUser(String id) => null;
+}
+
+class _FakeAuthService extends AuthService {
+  @override
+  String? get currentUser => null;
+}
 
 void main() {
   Widget wrap(Widget child) {
+    final auth = _FakeAuthService();
+    final service = _FakeAppointmentService();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppointmentService>(
-          create: (_) => AppointmentService(),
-        ),
+        ChangeNotifierProvider<AppointmentService>.value(value: service),
+        ChangeNotifierProvider<AuthService>.value(value: auth),
         ChangeNotifierProvider<RoleProvider>(
-          create: (_) => RoleProvider(),
+          create: (_) => RoleProvider(auth, service),
         ),
       ],
       child: MaterialApp(

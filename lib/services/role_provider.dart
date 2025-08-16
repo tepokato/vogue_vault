@@ -1,44 +1,53 @@
 import 'package:flutter/foundation.dart';
 
 import '../models/user_role.dart';
+import '../services/auth_service.dart';
+import '../services/appointment_service.dart';
 
+/// Provides the currently selected role for the authenticated user and exposes
+/// the set of roles available on that user's [UserProfile].
 class RoleProvider extends ChangeNotifier {
+  RoleProvider(this._auth, this._appointments) {
+    _auth.addListener(_syncRoles);
+    _appointments.addListener(_syncRoles);
+  }
+
+  final AuthService _auth;
+  final AppointmentService _appointments;
+
   UserRole? _selectedRole;
-  final Set<UserRole> _roles = {UserRole.customer};
+
+  /// The set of roles available for the current user. Falls back to
+  /// `[UserRole.customer]` when no user is logged in or found.
+  Set<UserRole> get roles {
+    final userId = _auth.currentUser;
+    if (userId == null) return {UserRole.customer};
+    return _appointments.getUser(userId)?.roles ?? {UserRole.customer};
+  }
 
   UserRole? get selectedRole => _selectedRole;
-  Set<UserRole> get roles => Set.unmodifiable(_roles);
 
   set selectedRole(UserRole? role) {
     _selectedRole = role;
     notifyListeners();
   }
 
-  void setRoles(Set<UserRole> roles) {
-    _roles
-      ..clear()
-      ..addAll(roles);
-    if (_selectedRole != null && !_roles.contains(_selectedRole)) {
-      _selectedRole = null;
-    }
-    notifyListeners();
-  }
-
-  void addRole(UserRole role) {
-    _roles.add(role);
-    notifyListeners();
-  }
-
-  void removeRole(UserRole role) {
-    _roles.remove(role);
-    if (_selectedRole == role) {
-      _selectedRole = null;
-    }
-    notifyListeners();
-  }
-
   void clearRole() {
     _selectedRole = null;
     notifyListeners();
+  }
+
+  void _syncRoles() {
+    if (_selectedRole != null && !roles.contains(_selectedRole)) {
+      _selectedRole = null;
+    }
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _auth.removeListener(_syncRoles);
+    _appointments.removeListener(_syncRoles);
+    super.dispose();
   }
 }
