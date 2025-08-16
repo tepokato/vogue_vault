@@ -18,11 +18,11 @@ class RoleProvider extends ChangeNotifier {
   UserRole? _selectedRole;
 
   /// The set of roles available for the current user. Falls back to
-  /// `[UserRole.customer]` when no user is logged in or found.
+  /// an empty set when no user is logged in or found.
   Set<UserRole> get roles {
     final userId = _auth.currentUser;
-    if (userId == null) return {UserRole.customer};
-    return _appointments.getUser(userId)?.roles ?? {UserRole.customer};
+    if (userId == null) return {};
+    return _appointments.getUser(userId)?.roles ?? {};
   }
 
   UserRole? get selectedRole => _selectedRole;

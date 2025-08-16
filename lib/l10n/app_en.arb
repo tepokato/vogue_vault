@@ -38,6 +38,7 @@
   "professionalRole": "Professional",
   "cancelButton": "Cancel",
   "selectAtLeastOneService": "Please select at least one service",
+  "selectAtLeastOneRole": "Please select at least one role",
   "selectedClientRemoved": "Previously selected client was removed. Please choose another.",
   "selectedProviderRemoved": "Previously selected provider was removed or unavailable. Please choose another.",
   "editAppointmentTitle": "Edit Appointment",

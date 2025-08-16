@@ -38,6 +38,7 @@
   "professionalRole": "Profesional",
   "cancelButton": "Cancelar",
   "selectAtLeastOneService": "Por favor selecciona al menos un servicio",
+  "selectAtLeastOneRole": "Por favor selecciona al menos un rol",
   "selectedClientRemoved": "El cliente seleccionado previamente fue eliminado. Por favor elige otro.",
   "selectedProviderRemoved": "El proveedor seleccionado previamente fue eliminado o no está disponible. Por favor elige otro.",
   "editAppointmentTitle": "Editar cita",

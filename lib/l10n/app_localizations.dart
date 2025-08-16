@@ -323,6 +323,12 @@ abstract class AppLocalizations {
   /// **'Please select at least one service'**
   String get selectAtLeastOneService;
 
+  /// No description provided for @selectAtLeastOneRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one role'**
+  String get selectAtLeastOneRole;
+
   /// No description provided for @selectedClientRemoved.
   ///
   /// In en, this message translates to:

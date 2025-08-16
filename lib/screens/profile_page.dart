@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _emailController = TextEditingController();
       _nicknameController = TextEditingController(text: '');
       _photoBytes = null;
-      _roles = {UserRole.customer};
+      _roles = {};
       _offerings = <ServiceOffering>[];
     } else {
       _userId =
@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _lastNameController.text = user?.lastName ?? '';
       _nicknameController = TextEditingController(text: user?.nickname ?? '');
       _photoBytes = user?.photoBytes;
-      _roles = user?.roles ?? {UserRole.customer};
+      _roles = user?.roles ?? {};
       _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
     }
   }
@@ -97,6 +97,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
+    if (_roles.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.selectAtLeastOneRole),
+        ),
+      );
+      return;
+    }
     if (_roles.contains(UserRole.professional) && _offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
