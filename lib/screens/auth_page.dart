@@ -72,12 +72,13 @@ class _AuthPageState extends State<AuthPage> {
     final colors = theme.colorScheme;
     return Scaffold(
       backgroundColor: colors.surface,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Form(
+              key: _formKey,
+              child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -90,14 +91,17 @@ class _AuthPageState extends State<AuthPage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                  const SizedBox(height: 16),
-                  Image.asset(
+                const SizedBox(height: 16),
+                Semantics(
+                  label: 'Vogue Vault logo',
+                  child: Image.asset(
                     'assets/images/VV_LOGO.webp',
                     height: 200,
                     color: colors.onSurface,
                   ),
-                  const SizedBox(height: 32),
-                  TextFormField(
+                ),
+                const SizedBox(height: 32),
+                TextFormField(
                     controller: _emailController,
                     style: TextStyle(color: colors.onSurface),
                     cursorColor: colors.onSurface,
@@ -196,6 +200,7 @@ class _AuthPageState extends State<AuthPage> {
             ),
           ),
         ),
+      ),
     );
   }
 
