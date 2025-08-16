@@ -18,6 +18,7 @@ class _AuthPageState extends State<AuthPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String? _error;
+  bool _showPassword = false;
 
   @override
   void initState() {
@@ -127,10 +128,20 @@ class _AuthPageState extends State<AuthPage> {
                     controller: _passwordController,
                     style: TextStyle(color: colors.onSurface),
                     cursorColor: colors.onSurface,
-                    obscureText: true,
+                    obscureText: !_showPassword,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
                       prefixIcon: Icon(Icons.lock, color: colors.onSurface),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _showPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: colors.onSurface,
+                        ),
+                        onPressed: () =>
+                            setState(() => _showPassword = !_showPassword),
+                      ),
                       filled: true,
                       fillColor: colors.surface,
                       border: OutlineInputBorder(

@@ -33,6 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final _newPwdController = TextEditingController();
   final _confirmPwdController = TextEditingController();
 
+  bool _showCurrentPassword = false;
+  bool _showNewPassword = false;
+  bool _showConfirmPassword = false;
+
   Uint8List? _photoBytes;
   late String _userId;
   late Set<UserRole> _roles;
@@ -311,8 +315,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: InputDecoration(
                             labelText:
                                 AppLocalizations.of(context)!.currentPasswordLabel,
+                            suffixIcon: IconButton(
+                              icon: Icon(_showCurrentPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                              onPressed: () => setState(
+                                  () => _showCurrentPassword = !_showCurrentPassword),
+                            ),
                           ),
-                          obscureText: true,
+                          obscureText: !_showCurrentPassword,
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -321,8 +332,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.newPasswordLabel,
+                          suffixIcon: IconButton(
+                            icon: Icon(_showNewPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () => setState(
+                                () => _showNewPassword = !_showNewPassword),
+                          ),
                         ),
-                        obscureText: true,
+                        obscureText: !_showNewPassword,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -330,8 +348,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.confirmPasswordLabel,
+                          suffixIcon: IconButton(
+                            icon: Icon(_showConfirmPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () => setState(() =>
+                                _showConfirmPassword = !_showConfirmPassword),
+                          ),
                         ),
-                        obscureText: true,
+                        obscureText: !_showConfirmPassword,
                       ),
                     ],
                   ),
