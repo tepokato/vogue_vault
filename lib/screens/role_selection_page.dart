@@ -4,7 +4,6 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/user_role.dart';
 import '../services/auth_service.dart';
-import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 import 'auth_page.dart';
 import 'appointments_page.dart';
@@ -18,19 +17,6 @@ class RoleSelectionPage extends StatefulWidget {
 }
 
 class _RoleSelectionPageState extends State<RoleSelectionPage> {
-  @override
-  void initState() {
-    super.initState();
-    final auth = context.read<AuthService>();
-    final userId = auth.currentUser;
-    if (userId != null) {
-      final user = context.read<AppointmentService>().getUser(userId);
-      if (user != null) {
-        context.read<RoleProvider>().setRoles(user.roles);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

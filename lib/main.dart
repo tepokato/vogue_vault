@@ -33,7 +33,10 @@ Future<void> main() async {
           value: authService,
         ),
         ChangeNotifierProvider<RoleProvider>(
-          create: (_) => RoleProvider(),
+          create: (context) => RoleProvider(
+            context.read<AuthService>(),
+            context.read<AppointmentService>(),
+          ),
         ),
       ],
       child: const MyApp(),
