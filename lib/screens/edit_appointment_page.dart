@@ -56,6 +56,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     final service = context.watch<AppointmentService>();
     final clients = service.clients;
     final providers = service.providersFor(_service);
+    final locale = Localizations.localeOf(context).toString();
     if (_selectedClientId != null &&
         !clients.any((c) => c.id == _selectedClientId)) {
       _selectedClientId = null;
@@ -206,7 +207,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Text(DateFormat.yMMMd().add_jm().format(_dateTime.toLocal())),
+                  Text(DateFormat.yMMMd(locale).add_jm().format(_dateTime.toLocal())),
                   const SizedBox(width: 8),
                   TextButton(
                     onPressed: () async {
