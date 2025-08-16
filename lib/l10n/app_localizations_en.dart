@@ -123,6 +123,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectAtLeastOneService => 'Please select at least one service';
 
   @override
+  String get selectAtLeastOneRole => 'Please select at least one role';
+
+  @override
   String get selectedClientRemoved => 'Previously selected client was removed. Please choose another.';
 
   @override

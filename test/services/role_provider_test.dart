@@ -36,6 +36,14 @@ class _FakeAppointmentService extends AppointmentService {
 }
 
 void main() {
+  test('returns empty set when no user logged in', () {
+    final auth = _FakeAuthService();
+    final service = _FakeAppointmentService();
+    final provider = RoleProvider(auth, service);
+
+    expect(provider.roles, isEmpty);
+  });
+
   test('role changes in user profile propagate to provider', () async {
     final auth = _FakeAuthService();
     final service = _FakeAppointmentService();

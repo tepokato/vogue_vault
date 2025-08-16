@@ -8,6 +8,7 @@ import '../services/role_provider.dart';
 import 'auth_page.dart';
 import 'appointments_page.dart';
 import 'welcome_page.dart';
+import 'profile_page.dart';
 
 class RoleSelectionPage extends StatefulWidget {
   const RoleSelectionPage({super.key});
@@ -31,6 +32,50 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
         );
       });
       return const SizedBox.shrink();
+    }
+
+    if (roles.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.selectRoleTitle),
+          actions: [
+            IconButton(
+              onPressed: () {
+                context.read<AuthService>().logout();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AuthPage()),
+                );
+              },
+              icon: const Icon(Icons.logout),
+              tooltip: AppLocalizations.of(context)!.logoutTooltip,
+            ),
+          ],
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(AppLocalizations.of(context)!.selectAtLeastOneRole),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ProfilePage(),
+                      ),
+                    );
+                  },
+                  child: Text(AppLocalizations.of(context)!.profileTitle),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
 
     return Scaffold(
