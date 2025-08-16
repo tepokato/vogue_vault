@@ -21,6 +21,7 @@ class AppointmentsPage extends StatelessWidget {
     final service = context.watch<AppointmentService>();
     final role = context.watch<RoleProvider>().selectedRole;
     final appointments = service.appointments;
+    final locale = Localizations.localeOf(context).toString();
 
     return AppScaffold(
       title: AppLocalizations.of(context)!.appointmentsTitle,
@@ -95,7 +96,9 @@ class AppointmentsPage extends StatelessWidget {
                     '$clientName - ${serviceTypeLabel(context, appt.service)}',
                   ),
                   subtitle: Text(
-                    DateFormat.yMMMd().add_jm().format(appt.dateTime.toLocal()),
+                    DateFormat.yMMMd(locale)
+                        .add_jm()
+                        .format(appt.dateTime.toLocal()),
                   ),
                   onTap: role == UserRole.professional
                       ? () {
