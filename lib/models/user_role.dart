@@ -5,4 +5,7 @@ enum UserRole {
 
   /// A professional offering services.
   professional,
+
+  /// An administrator managing the platform.
+  admin,
 }

@@ -10,6 +10,14 @@ import 'appointments_page.dart';
 import 'welcome_page.dart';
 import 'profile_page.dart';
 
+/// Maps each [UserRole] to the page that should be displayed when that role is
+/// selected. Tests may extend this map to verify new roles without modifying
+/// the widget implementation.
+final Map<UserRole, WidgetBuilder> rolePages = {
+  UserRole.customer: (_) => const WelcomePage(),
+  UserRole.professional: (_) => const AppointmentsPage(),
+};
+
 class RoleSelectionPage extends StatefulWidget {
   const RoleSelectionPage({super.key});
 
@@ -18,6 +26,37 @@ class RoleSelectionPage extends StatefulWidget {
 }
 
 class _RoleSelectionPageState extends State<RoleSelectionPage> {
+  List<Widget> _buildRoleButtons(BuildContext context, Set<UserRole> roles) {
+    final loc = AppLocalizations.of(context)!;
+    final labels = {
+      UserRole.customer: loc.customerRole,
+      UserRole.professional: loc.professionalRole,
+    };
+    final available = roles.where(rolePages.containsKey).toList();
+    final widgets = <Widget>[];
+    for (var i = 0; i < available.length; i++) {
+      final role = available[i];
+      widgets.add(
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<RoleProvider>().selectedRole = role;
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: rolePages[role]!),
+              );
+            },
+            child: Text(labels[role] ?? role.name),
+          ),
+        ),
+      );
+      if (i < available.length - 1) {
+        widgets.add(const SizedBox(height: 16));
+      }
+    }
+    return widgets;
+  }
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -106,40 +145,7 @@ class _RoleSelectionPageState extends State<RoleSelectionPage> {
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 24),
-              if (roles.contains(UserRole.customer))
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.read<RoleProvider>().selectedRole = UserRole.customer;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const WelcomePage(),
-                        ),
-                      );
-                    },
-                    child: Text(AppLocalizations.of(context)!.customerRole),
-                  ),
-                ),
-              if (roles.contains(UserRole.customer))
-                const SizedBox(height: 16),
-              if (roles.contains(UserRole.professional))
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.read<RoleProvider>().selectedRole = UserRole.professional;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const AppointmentsPage(),
-                        ),
-                      );
-                    },
-                    child: Text(AppLocalizations.of(context)!.professionalRole),
-                  ),
-                ),
+              ..._buildRoleButtons(context, roles),
             ],
           ),
         ),
