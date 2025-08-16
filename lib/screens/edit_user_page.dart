@@ -7,8 +7,9 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
-import '../models/service_type.dart';
 import '../models/service_offering.dart';
+import '../widgets/role_selector.dart';
+import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
 import '../services/role_provider.dart';
 import '../services/auth_service.dart';
@@ -175,140 +176,26 @@ class EditUserPage extends StatelessWidget {
                             labelText:
                                 AppLocalizations.of(context)!.nicknameLabel),
                       ),
-                      CheckboxListTile(
-                        value: roles.contains(UserRole.customer),
-                        title: Text(AppLocalizations.of(context)!.customerRole),
-                        onChanged: (value) {
+                      RoleSelector(
+                        selected: roles,
+                        onChanged: (selection) {
                           setState(() {
-                            if (value == true) {
-                              roles.add(UserRole.customer);
-                            } else {
-                              roles.remove(UserRole.customer);
-                            }
-                          });
-                        },
-                      ),
-                      CheckboxListTile(
-                        value: roles.contains(UserRole.professional),
-                        title:
-                            Text(AppLocalizations.of(context)!.professionalRole),
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == true) {
-                              roles.add(UserRole.professional);
-                            } else {
-                              roles.remove(UserRole.professional);
-                            }
+                            roles
+                              ..clear()
+                              ..addAll(selection);
                           });
                         },
                       ),
                       if (roles.contains(UserRole.professional))
-                        Column(
-                          children: [
-                            for (int i = 0; i < offerings.length; i++)
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child:
-                                        DropdownButtonFormField<ServiceType>(
-                                      value: offerings[i].type,
-                                      decoration: InputDecoration(
-                                          labelText: AppLocalizations.of(
-                                                  context)!
-                                              .serviceLabel),
-                                      items: ServiceType.values
-                                          .map(
-                                            (s) => DropdownMenuItem<
-                                                ServiceType>(
-                                              value: s,
-                                              child: Text(s.name),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: (value) {
-                                        if (value == null) return;
-                                        setState(() {
-                                          offerings[i] =
-                                              offerings[i].copyWith(
-                                                  type: value);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: TextFormField(
-                                      initialValue: offerings[i].name,
-                                      decoration: InputDecoration(
-                                          labelText: AppLocalizations.of(
-                                                  context)!
-                                              .nameLabel),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          offerings[i] =
-                                              offerings[i].copyWith(
-                                                  name: val);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: TextFormField(
-                                      initialValue:
-                                          offerings[i].price.toString(),
-                                      decoration: InputDecoration(
-                                          labelText:
-                                              AppLocalizations.of(context)!
-                                                  .priceLabel),
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          offerings[i] = offerings[i].copyWith(
-                                              price:
-                                                  double.tryParse(val) ?? 0);
-                                        });
-                                      },
-                                      validator: (val) {
-                                        final parsed =
-                                            double.tryParse(val ?? '');
-                                        if (parsed == null || parsed < 0) {
-                                          return AppLocalizations.of(context)!
-                                              .invalidPrice;
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.remove_circle),
-                                    onPressed: () {
-                                      setState(() {
-                                        offerings.removeAt(i);
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: TextButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    offerings.add(ServiceOffering(
-                                        type: ServiceType.values.first,
-                                        name: '',
-                                        price: 0));
-                                  });
-                                },
-                                icon: const Icon(Icons.add),
-                                label: Text(
-                                    AppLocalizations.of(context)!.addButton),
-                              ),
-                            ),
-                          ],
+                        ServiceOfferingEditor(
+                          offerings: offerings,
+                          onChanged: (list) {
+                            setState(() {
+                              offerings
+                                ..clear()
+                                ..addAll(list);
+                            });
+                          },
                         ),
                     ],
                   ),

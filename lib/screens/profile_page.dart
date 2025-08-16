@@ -6,8 +6,9 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
-import '../models/service_type.dart';
 import '../models/service_offering.dart';
+import '../widgets/role_selector.dart';
+import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
@@ -225,16 +226,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return (firstInitial + lastInitial).toUpperCase();
   }
 
-  String _roleLabel(UserRole role) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (role) {
-      case UserRole.customer:
-        return l10n.customerRole;
-      case UserRole.professional:
-        return l10n.professionalRole;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -375,14 +366,9 @@ class _ProfilePageState extends State<ProfilePage> {
               Text(AppLocalizations.of(context)!.rolesTitle,
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
-              SegmentedButton<UserRole>(
-                segments: UserRole.values
-                    .map((role) => ButtonSegment(
-                        value: role, label: Text(_roleLabel(role))))
-                    .toList(),
-                multiSelectionEnabled: true,
+              RoleSelector(
                 selected: _roles,
-                onSelectionChanged: (selection) {
+                onChanged: (selection) {
                   setState(() => _roles = selection);
                 },
               ),
@@ -391,98 +377,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(AppLocalizations.of(context)!.servicesTitle,
                     style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                Column(
-                  children: [
-                    for (int i = 0; i < _offerings.length; i++)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField<ServiceType>(
-                              value: _offerings[i].type,
-                              decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)!
-                                      .serviceLabel),
-                              items: ServiceType.values
-                                  .map(
-                                    (s) => DropdownMenuItem<ServiceType>(
-                                      value: s,
-                                      child: Text(s.name),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                if (value == null) return;
-                                setState(() {
-                                  _offerings[i] =
-                                      _offerings[i].copyWith(type: value);
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: _offerings[i].name,
-                              decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)!
-                                      .nameLabel),
-                              onChanged: (val) {
-                                setState(() {
-                                  _offerings[i] =
-                                      _offerings[i].copyWith(name: val);
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: _offerings[i].price.toString(),
-                              decoration: InputDecoration(
-                                  labelText:
-                                      AppLocalizations.of(context)!.priceLabel),
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                      decimal: true),
-                              onChanged: (val) {
-                                setState(() {
-                                  _offerings[i] = _offerings[i].copyWith(
-                                      price: double.tryParse(val) ?? 0);
-                                });
-                              },
-                              validator: (val) => val == null ||
-                                      double.tryParse(val) == null
-                                  ? AppLocalizations.of(context)!.invalidPrice
-                                  : null,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.remove_circle),
-                            onPressed: () {
-                              setState(() {
-                                _offerings.removeAt(i);
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            _offerings.add(ServiceOffering(
-                                type: ServiceType.values.first,
-                                name: '',
-                                price: 0));
-                          });
-                        },
-                        icon: const Icon(Icons.add),
-                        label:
-                            Text(AppLocalizations.of(context)!.addButton),
-                      ),
-                    ),
-                  ],
+                ServiceOfferingEditor(
+                  offerings: _offerings,
+                  onChanged: (list) {
+                    setState(() => _offerings = list);
+                  },
                 ),
                 const SizedBox(height: 24),
               ],
