@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
-import 'role_selection_page.dart';
+import 'appointments_page.dart';
 import 'profile_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _AuthPageState extends State<AuthPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
+          MaterialPageRoute(builder: (_) => const AppointmentsPage()),
         );
       });
     }
@@ -62,7 +62,7 @@ class _AuthPageState extends State<AuthPage> {
     if (success && mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
+        MaterialPageRoute(builder: (_) => const AppointmentsPage()),
       );
     }
   }

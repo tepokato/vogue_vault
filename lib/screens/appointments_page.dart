@@ -4,14 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/appointment.dart';
-import '../models/user_role.dart';
 import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
-import '../services/role_provider.dart';
 import '../widgets/app_scaffold.dart';
 import 'edit_appointment_page.dart';
 import 'edit_user_page.dart';
-import 'role_selection_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
@@ -19,7 +16,6 @@ class AppointmentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final role = context.watch<RoleProvider>().selectedRole;
     final appointments = service.appointments;
     final locale = Localizations.localeOf(context).toString();
 
@@ -27,28 +23,15 @@ class AppointmentsPage extends StatelessWidget {
       title: AppLocalizations.of(context)!.appointmentsTitle,
       actions: [
         IconButton(
-          icon: const Icon(Icons.swap_horiz),
-          tooltip: AppLocalizations.of(context)!.switchRoleTooltip,
+          icon: const Icon(Icons.group),
+          tooltip: AppLocalizations.of(context)!.usersTooltip,
           onPressed: () {
-            context.read<RoleProvider>().clearRole();
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
-              (route) => false,
+              MaterialPageRoute(builder: (_) => const EditUserPage()),
             );
           },
         ),
-        if (role == UserRole.professional)
-          IconButton(
-            icon: const Icon(Icons.group),
-            tooltip: AppLocalizations.of(context)!.usersTooltip,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const EditUserPage()),
-              );
-            },
-          ),
       ],
       body: appointments.isEmpty
           ? Center(
@@ -56,22 +39,20 @@ class AppointmentsPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(AppLocalizations.of(context)!.noAppointmentsScheduled),
-                  if (role == UserRole.professional) ...[
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const EditAppointmentPage(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.addFirstAppointment,
-                      ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const EditAppointmentPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.addFirstAppointment,
                     ),
-                  ],
+                  ),
                 ],
               ),
             )
@@ -100,41 +81,35 @@ class AppointmentsPage extends StatelessWidget {
                         .add_jm()
                         .format(appt.dateTime.toLocal()),
                   ),
-                  onTap: role == UserRole.professional
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  EditAppointmentPage(appointment: appt),
-                            ),
-                          );
-                        }
-                      : null,
-                  trailing: role == UserRole.professional
-                      ? IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () async {
-                            await service.deleteAppointment(appt.id);
-                          },
-                        )
-                      : null,
-                );
-              },
-            ),
-      floatingActionButton: role == UserRole.professional
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const EditAppointmentPage(),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            EditAppointmentPage(appointment: appt),
+                      ),
+                    );
+                  },
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      await service.deleteAppointment(appt.id);
+                    },
                   ),
                 );
               },
-              child: const Icon(Icons.add),
-            )
-          : null,
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const EditAppointmentPage(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

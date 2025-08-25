@@ -11,7 +11,6 @@ import '../models/service_offering.dart';
 import '../widgets/role_selector.dart';
 import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
-import '../services/role_provider.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 
@@ -20,19 +19,8 @@ class EditUserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final role = context.watch<RoleProvider>().selectedRole;
     final service = context.watch<AppointmentService>();
     final users = service.users;
-
-    if (role != UserRole.professional) {
-      return Scaffold(
-        body: Center(
-          child: Text(
-            AppLocalizations.of(context)!.professionalsOnlyMessage,
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
