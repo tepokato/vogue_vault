@@ -96,9 +96,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get selectAtLeastOneService => 'Please select at least one service';
   @override
-  String get selectedClientRemoved => 'Previously selected client was removed. Please choose another.';
-
-  @override
   String get selectedProviderRemoved => 'Previously selected provider was removed or unavailable. Please choose another.';
 
   @override
@@ -108,16 +105,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newAppointmentTitle => 'New Appointment';
 
   @override
-  String get noClientsAvailable => 'No clients available. Please add a client first.';
-
-  @override
   String get noProvidersAvailableAdd => 'No providers available. Please add a provider first.';
-
-  @override
-  String get selectClientHint => 'Select Client';
-
-  @override
-  String get selectClientValidation => 'Please select a client';
 
   @override
   String get serviceLabel => 'Service';
@@ -133,20 +121,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectDateButton => 'Select Date';
-  @override
-  String get logoutTooltip => 'Logout';
-
-  @override
-  String get iAmA => 'I am a...';
 
   @override
   String get invalidCredentials => 'Invalid credentials';
-
-  @override
-  String get signInTitle => 'Sign In';
-
-  @override
-  String get registerTitle => 'Register';
 
   @override
   String get emailLabel => 'Email';
@@ -185,13 +162,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginButton => 'Login';
 
   @override
-  String get registerButton => 'Register';
-
-  @override
   String get createAccount => 'Create an account';
-
-  @override
-  String get haveAccountSignIn => 'Have an account? Sign in';
 
   @override
   String get noAppointmentsScheduled => 'No appointments scheduled.';
@@ -204,9 +175,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guestContactLabel => 'Guest Contact (optional)';
-
-  @override
-  String get clientOrGuestValidation => 'Please select a client or enter a guest name';
 
   @override
   String get serviceTypeBarber => 'Barber';

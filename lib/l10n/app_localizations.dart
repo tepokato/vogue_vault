@@ -265,12 +265,6 @@ abstract class AppLocalizations {
   /// **'Please select at least one service'**
   String get selectAtLeastOneService;
 
-  /// No description provided for @selectedClientRemoved.
-  ///
-  /// In en, this message translates to:
-  /// **'Previously selected client was removed. Please choose another.'**
-  String get selectedClientRemoved;
-
   /// No description provided for @selectedProviderRemoved.
   ///
   /// In en, this message translates to:
@@ -289,29 +283,11 @@ abstract class AppLocalizations {
   /// **'New Appointment'**
   String get newAppointmentTitle;
 
-  /// No description provided for @noClientsAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'No clients available. Please add a client first.'**
-  String get noClientsAvailable;
-
   /// No description provided for @noProvidersAvailableAdd.
   ///
   /// In en, this message translates to:
   /// **'No providers available. Please add a provider first.'**
   String get noProvidersAvailableAdd;
-
-  /// No description provided for @selectClientHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Client'**
-  String get selectClientHint;
-
-  /// No description provided for @selectClientValidation.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select a client'**
-  String get selectClientValidation;
 
   /// No description provided for @serviceLabel.
   ///
@@ -343,35 +319,11 @@ abstract class AppLocalizations {
   /// **'Select Date'**
   String get selectDateButton;
 
-  /// No description provided for @logoutTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Logout'**
-  String get logoutTooltip;
-
-  /// No description provided for @iAmA.
-  ///
-  /// In en, this message translates to:
-  /// **'I am a...'**
-  String get iAmA;
-
   /// No description provided for @invalidCredentials.
   ///
   /// In en, this message translates to:
   /// **'Invalid credentials'**
   String get invalidCredentials;
-
-  /// No description provided for @signInTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
-  String get signInTitle;
-
-  /// No description provided for @registerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get registerTitle;
 
   /// No description provided for @emailLabel.
   ///
@@ -445,23 +397,11 @@ abstract class AppLocalizations {
   /// **'Login'**
   String get loginButton;
 
-  /// No description provided for @registerButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get registerButton;
-
   /// No description provided for @createAccount.
   ///
   /// In en, this message translates to:
   /// **'Create an account'**
   String get createAccount;
-
-  /// No description provided for @haveAccountSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Have an account? Sign in'**
-  String get haveAccountSignIn;
 
   /// No description provided for @noAppointmentsScheduled.
   ///
@@ -486,12 +426,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guest Contact (optional)'**
   String get guestContactLabel;
-
-  /// No description provided for @clientOrGuestValidation.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select a client or enter a guest name'**
-  String get clientOrGuestValidation;
 
   /// No description provided for @serviceTypeBarber.
   ///
