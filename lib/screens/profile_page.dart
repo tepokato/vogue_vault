@@ -97,15 +97,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_roles.contains(UserRole.professional) && _offerings.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.selectAtLeastOneService),
-        ),
-      );
-      return;
-    }
     final service = context.read<AppointmentService>();
     final auth = context.read<AuthService>();
     final email = _emailController.text.trim();
@@ -115,8 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+              content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
             ),
           );
         }
@@ -127,8 +117,9 @@ class _ProfilePageState extends State<ProfilePage> {
         _userId = email;
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(e.toString())));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
         }
         return;
       }
@@ -140,8 +131,9 @@ class _ProfilePageState extends State<ProfilePage> {
           _userId = email;
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(e.toString())));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(e.toString())));
           }
           return;
         }
@@ -153,8 +145,9 @@ class _ProfilePageState extends State<ProfilePage> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content:
-                    Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+                content: Text(
+                  AppLocalizations.of(context)!.passwordsDoNotMatch,
+                ),
               ),
             );
           }
@@ -162,11 +155,15 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         try {
           await auth.changePassword(
-              _userId, _currentPwdController.text, _newPwdController.text);
+            _userId,
+            _currentPwdController.text,
+            _newPwdController.text,
+          );
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(e.toString())));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(e.toString())));
           }
           return;
         }
@@ -182,8 +179,9 @@ class _ProfilePageState extends State<ProfilePage> {
       nickname: nicknameText.isEmpty ? null : nicknameText,
       photoBytes: _photoBytes,
       roles: _roles,
-      offerings:
-          _roles.contains(UserRole.professional) ? _offerings : <ServiceOffering>[],
+      offerings: _roles.contains(UserRole.professional)
+          ? _offerings
+          : <ServiceOffering>[],
     );
     if (widget.isNewUser) {
       await service.addUser(user);
@@ -198,9 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.changesSaved),
-          ),
+          SnackBar(content: Text(AppLocalizations.of(context)!.changesSaved)),
         );
         Navigator.pop(context);
       }
@@ -236,8 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       GestureDetector(
                         onTap: _pickImage,
                         child: Semantics(
-                          label:
-                              AppLocalizations.of(context)!.userPhotoLabel,
+                          label: AppLocalizations.of(context)!.userPhotoLabel,
                           image: true,
                           child: CircleAvatar(
                             radius: 40,
@@ -256,11 +251,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         controller: _firstNameController,
                         decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.firstNameLabel,
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.firstNameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
-                        validator: (value) => value == null || value.trim().isEmpty
+                        validator: (value) =>
+                            value == null || value.trim().isEmpty
                             ? AppLocalizations.of(context)!.firstNameRequired
                             : null,
                       ),
@@ -268,11 +265,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         controller: _lastNameController,
                         decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.lastNameLabel,
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.lastNameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
-                        validator: (value) => value == null || value.trim().isEmpty
+                        validator: (value) =>
+                            value == null || value.trim().isEmpty
                             ? AppLocalizations.of(context)!.lastNameRequired
                             : null,
                       ),
@@ -280,8 +279,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         controller: _nicknameController,
                         decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.nicknameLabel,
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.nicknameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
                       ),
@@ -289,10 +289,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.emailLabel,
+                          labelText: AppLocalizations.of(context)!.emailLabel,
                         ),
-                        validator: (value) => value == null ||
+                        validator: (value) =>
+                            value == null ||
                                 value.trim().isEmpty ||
                                 !value.contains('@')
                             ? AppLocalizations.of(context)!.invalidEmail
@@ -303,14 +303,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         TextFormField(
                           controller: _currentPwdController,
                           decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context)!.currentPasswordLabel,
+                            labelText: AppLocalizations.of(
+                              context,
+                            )!.currentPasswordLabel,
                             suffixIcon: IconButton(
-                              icon: Icon(_showCurrentPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
+                              icon: Icon(
+                                _showCurrentPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
                               onPressed: () => setState(
-                                  () => _showCurrentPassword = !_showCurrentPassword),
+                                () => _showCurrentPassword =
+                                    !_showCurrentPassword,
+                              ),
                             ),
                           ),
                           obscureText: !_showCurrentPassword,
@@ -320,14 +325,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         controller: _newPwdController,
                         decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.newPasswordLabel,
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.newPasswordLabel,
                           suffixIcon: IconButton(
-                            icon: Icon(_showNewPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                            icon: Icon(
+                              _showNewPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
                             onPressed: () => setState(
-                                () => _showNewPassword = !_showNewPassword),
+                              () => _showNewPassword = !_showNewPassword,
+                            ),
                           ),
                         ),
                         obscureText: !_showNewPassword,
@@ -336,14 +345,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         controller: _confirmPwdController,
                         decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.confirmPasswordLabel,
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.confirmPasswordLabel,
                           suffixIcon: IconButton(
-                            icon: Icon(_showConfirmPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            onPressed: () => setState(() =>
-                                _showConfirmPassword = !_showConfirmPassword),
+                            icon: Icon(
+                              _showConfirmPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () => setState(
+                              () =>
+                                  _showConfirmPassword = !_showConfirmPassword,
+                            ),
                           ),
                         ),
                         obscureText: !_showConfirmPassword,
@@ -353,16 +367,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(AppLocalizations.of(context)!.servicesTitle,
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              ServiceOfferingEditor(
-                offerings: _offerings,
-                onChanged: (list) {
-                  setState(() => _offerings = list);
-                },
-              ),
-              const SizedBox(height: 24),
+              if (!widget.isNewUser) ...[
+                Text(
+                  AppLocalizations.of(context)!.servicesTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                ServiceOfferingEditor(
+                  offerings: _offerings,
+                  onChanged: (list) {
+                    setState(() => _offerings = list);
+                  },
+                ),
+                const SizedBox(height: 24),
+              ],
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -377,4 +395,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
