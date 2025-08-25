@@ -58,7 +58,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nicknameLabel => 'Nickname (optional)';
 
   @override
-  String get rolesTitle => 'Roles';
 
   @override
   String get servicesTitle => 'Services';
@@ -96,10 +95,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectAtLeastOneService => 'Please select at least one service';
-
-  @override
-  String get selectAtLeastOneRole => 'Please select at least one role';
-
   @override
   String get selectedClientRemoved => 'Previously selected client was removed. Please choose another.';
 
@@ -138,10 +133,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectDateButton => 'Select Date';
-
-  @override
-  String get selectRoleTitle => 'Select Role';
-
   @override
   String get logoutTooltip => 'Logout';
 

@@ -192,12 +192,6 @@ abstract class AppLocalizations {
   /// **'Nickname (optional)'**
   String get nicknameLabel;
 
-  /// No description provided for @rolesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Roles'**
-  String get rolesTitle;
-
   /// No description provided for @servicesTitle.
   ///
   /// In en, this message translates to:
@@ -270,12 +264,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select at least one service'**
   String get selectAtLeastOneService;
-
-  /// No description provided for @selectAtLeastOneRole.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select at least one role'**
-  String get selectAtLeastOneRole;
 
   /// No description provided for @selectedClientRemoved.
   ///
@@ -354,12 +342,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Date'**
   String get selectDateButton;
-
-  /// No description provided for @selectRoleTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Role'**
-  String get selectRoleTitle;
 
   /// No description provided for @logoutTooltip.
   ///

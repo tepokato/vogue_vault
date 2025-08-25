@@ -53,7 +53,7 @@ lib/
   models/        # data classes such as Appointment and Client
   services/      # service layer and persistence
   screens/       # UI pages
-  widgets/       # shared UI components (e.g., RoleSelector, ServiceOfferingEditor)
+  widgets/       # shared UI components (e.g., ServiceOfferingEditor)
   utils/         # helpers and constants
   main.dart      # app entry point
 ```

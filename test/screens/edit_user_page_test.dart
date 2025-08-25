@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/models/user_profile.dart';
-import 'package:vogue_vault/models/user_role.dart';
 import 'package:vogue_vault/screens/edit_user_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
@@ -42,9 +41,6 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Professional'));
-    await tester.pump();
 
     await tester.tap(find.text('Add'));
     await tester.pump();
