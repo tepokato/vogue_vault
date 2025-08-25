@@ -17,7 +17,7 @@ void main() {
         lastName: 'Smith',
         nickname: 'Ally',
         photoBytes: Uint8List.fromList([1, 2, 3]),
-        roles: {UserRole.customer, UserRole.professional},
+        roles: {UserRole.admin, UserRole.professional},
         offerings: [
           const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
           const ServiceOffering(type: ServiceType.nails, name: 'Nail', price: 15),
@@ -60,7 +60,7 @@ void main() {
         firstName: 'Alice',
         lastName: 'Smith',
         nickname: 'Ally',
-        roles: {UserRole.customer, UserRole.professional},
+        roles: {UserRole.admin, UserRole.professional},
         offerings: [
           const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
           const ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),
@@ -71,7 +71,7 @@ void main() {
         firstName: 'Alice',
         lastName: 'Smith',
         nickname: 'Ally',
-        roles: {UserRole.professional, UserRole.customer},
+        roles: {UserRole.professional, UserRole.admin},
         offerings: [
           const ServiceOffering(type: ServiceType.barber, name: 'Cut', price: 10),
           const ServiceOffering(type: ServiceType.tattoo, name: 'Ink', price: 50),

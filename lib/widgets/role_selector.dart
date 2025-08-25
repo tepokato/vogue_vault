@@ -21,8 +21,6 @@ class RoleSelector extends StatelessWidget {
 
   String _label(AppLocalizations l10n, UserRole role) {
     switch (role) {
-      case UserRole.customer:
-        return l10n.customerRole;
       case UserRole.professional:
         return l10n.professionalRole;
       default:

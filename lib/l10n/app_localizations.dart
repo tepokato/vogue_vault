@@ -299,12 +299,6 @@ abstract class AppLocalizations {
   /// **'Edit User'**
   String get editUserTitle;
 
-  /// No description provided for @customerRole.
-  ///
-  /// In en, this message translates to:
-  /// **'Customer'**
-  String get customerRole;
-
   /// No description provided for @professionalRole.
   ///
   /// In en, this message translates to:

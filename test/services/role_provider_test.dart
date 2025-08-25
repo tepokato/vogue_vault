@@ -51,13 +51,13 @@ void main() {
       id: 'u1',
       firstName: 'A',
       lastName: 'B',
-      roles: {UserRole.customer},
+      roles: {UserRole.admin},
     ));
     auth.setUser('u1');
     final provider = RoleProvider(auth, service);
 
-    expect(provider.roles, {UserRole.customer});
-    provider.selectedRole = UserRole.customer;
+    expect(provider.roles, {UserRole.admin});
+    provider.selectedRole = UserRole.admin;
 
     await service.updateUser(UserProfile(
       id: 'u1',

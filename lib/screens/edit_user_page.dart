@@ -262,10 +262,10 @@ class EditUserPage extends StatelessWidget {
   String _roleLabel(BuildContext context, UserRole role) {
     final l10n = AppLocalizations.of(context)!;
     switch (role) {
-      case UserRole.customer:
-        return l10n.customerRole;
       case UserRole.professional:
         return l10n.professionalRole;
+      default:
+        return role.name;
     }
   }
 }
