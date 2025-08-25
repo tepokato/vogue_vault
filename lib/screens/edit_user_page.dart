@@ -7,11 +7,10 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
-import '../models/service_offering.dart';
-import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
+import 'profile_page.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -90,7 +89,6 @@ class EditUserPage extends StatelessWidget {
         TextEditingController(text: user?.nickname ?? '');
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
-    final offerings = <ServiceOffering>[...user?.offerings ?? []];
 
     try {
       await showDialog(
@@ -162,15 +160,20 @@ class EditUserPage extends StatelessWidget {
                             labelText:
                                 AppLocalizations.of(context)!.nicknameLabel),
                       ),
-                      ServiceOfferingEditor(
-                        offerings: offerings,
-                        onChanged: (list) {
-                          setState(() {
-                            offerings
-                              ..clear()
-                              ..addAll(list);
-                          });
-                        },
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const ProfilePage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.servicesTitle,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -186,15 +189,6 @@ class EditUserPage extends StatelessWidget {
                     if (!formKey.currentState!.validate()) {
                       return;
                     }
-                    if (offerings.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(AppLocalizations.of(context)!
-                              .selectAtLeastOneService),
-                        ),
-                      );
-                      return;
-                    }
                     final service = context.read<AppointmentService>();
                     final id =
                         user?.id ?? const Uuid().v4();
@@ -207,7 +201,7 @@ class EditUserPage extends StatelessWidget {
                           : nicknameController.text.trim(),
                       photoBytes: photoBytes,
                       roles: const {UserRole.professional},
-                      offerings: offerings,
+                      offerings: user?.offerings,
                     );
                     if (user == null) {
                       await service.addUser(newUser);
