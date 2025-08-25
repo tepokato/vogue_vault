@@ -43,7 +43,7 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return AppScaffold(
-      title: l10n.servicesTitle,
+      title: l10n.manageServicesTitle,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -66,4 +66,3 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
     );
   }
 }
-

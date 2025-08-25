@@ -20,7 +20,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileTooltip => 'Profile';
 
-
   @override
   String get usersTooltip => 'Users';
 
@@ -34,7 +33,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTitle => 'Profile';
 
   @override
-  String get imageSelectionUnsupported => 'Image selection not supported on this platform';
+  String get imageSelectionUnsupported =>
+      'Image selection not supported on this platform';
 
   @override
   String get nameLabel => 'Name';
@@ -58,9 +58,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nicknameLabel => 'Nickname (optional)';
 
   @override
+  String get servicesTitle => 'Services';
 
   @override
-  String get servicesTitle => 'Services';
+  String get manageServicesTitle => 'Manage Services';
 
   @override
   String get saveButton => 'Save';
@@ -80,7 +81,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cannotDeleteSelfTooltip => 'Cannot delete yourself';
 
-
   @override
   String get newUserTitle => 'New User';
 
@@ -94,9 +94,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelButton => 'Cancel';
 
   @override
-  String get selectAtLeastOneService => 'Please select at least one service';
   @override
-  String get selectedProviderRemoved => 'Previously selected provider was removed or unavailable. Please choose another.';
+  String get selectedProviderRemoved =>
+      'Previously selected provider was removed or unavailable. Please choose another.';
 
   @override
   String get editAppointmentTitle => 'Edit Appointment';
@@ -105,7 +105,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newAppointmentTitle => 'New Appointment';
 
   @override
-  String get noProvidersAvailableAdd => 'No providers available. Please add a provider first.';
+  String get noProvidersAvailableAdd =>
+      'No providers available. Please add a provider first.';
 
   @override
   String get serviceLabel => 'Service';
