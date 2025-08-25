@@ -7,6 +7,7 @@ import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
+import 'package:vogue_vault/widgets/service_offering_editor.dart';
 
 class _FakeAuthService extends AuthService {
   String? _user = 'old@example.com';
@@ -28,7 +29,10 @@ class _FakeAuthService extends AuthService {
 
   @override
   Future<void> changePassword(
-      String email, String oldPwd, String newPwd) async {
+    String email,
+    String oldPwd,
+    String newPwd,
+  ) async {
     pwdEmail = email;
     pwdOld = oldPwd;
     pwdNew = newPwd;
@@ -37,8 +41,11 @@ class _FakeAuthService extends AuthService {
 
 class _FakeAppointmentService extends AppointmentService {
   final Map<String, UserProfile> store = {
-    'old@example.com':
-        UserProfile(id: 'old@example.com', firstName: 'Old', lastName: 'User')
+    'old@example.com': UserProfile(
+      id: 'old@example.com',
+      firstName: 'Old',
+      lastName: 'User',
+    ),
   };
   String? renameOld;
   String? renameNew;
@@ -62,6 +69,29 @@ class _FakeAppointmentService extends AppointmentService {
   }
 }
 
+class _RegisterAuthService extends AuthService {
+  String? registeredEmail;
+  String? registeredPassword;
+
+  @override
+  String? get currentUser => null;
+
+  @override
+  Future<void> register(String email, String password) async {
+    registeredEmail = email;
+    registeredPassword = password;
+  }
+}
+
+class _RegisterAppointmentService extends AppointmentService {
+  UserProfile? addedUser;
+
+  @override
+  Future<void> addUser(UserProfile user) async {
+    addedUser = user;
+  }
+}
+
 void main() {
   testWidgets('mismatched passwords show error', (tester) async {
     final auth = _FakeAuthService();
@@ -82,11 +112,17 @@ void main() {
     );
 
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'Current password'), 'old');
+      find.widgetWithText(TextFormField, 'Current password'),
+      'old',
+    );
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'New password'), 'new1');
+      find.widgetWithText(TextFormField, 'New password'),
+      'new1',
+    );
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'Confirm password'), 'new2');
+      find.widgetWithText(TextFormField, 'Confirm password'),
+      'new2',
+    );
     await tester.tap(find.text('Save'));
     await tester.pump();
     expect(find.text('Passwords do not match'), findsOneWidget);
@@ -111,13 +147,21 @@ void main() {
     );
 
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'Email'), 'new@example.com');
+      find.widgetWithText(TextFormField, 'Email'),
+      'new@example.com',
+    );
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'Current password'), 'old');
+      find.widgetWithText(TextFormField, 'Current password'),
+      'old',
+    );
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'New password'), 'new');
+      find.widgetWithText(TextFormField, 'New password'),
+      'new',
+    );
     await tester.enterText(
-        find.widgetWithText(TextFormField, 'Confirm password'), 'new');
+      find.widgetWithText(TextFormField, 'Confirm password'),
+      'new',
+    );
 
     await tester.tap(find.text('Save'));
     await tester.pump();
@@ -150,6 +194,53 @@ void main() {
     );
 
     expect(find.byTooltip('Home'), findsNothing);
+    expect(find.byType(ServiceOfferingEditor), findsNothing);
+  });
+
+  testWidgets('registration allows empty offerings', (tester) async {
+    final auth = _RegisterAuthService();
+    final appt = _RegisterAppointmentService();
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthService>.value(value: auth),
+          ChangeNotifierProvider<AppointmentService>.value(value: appt),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ProfilePage(isNewUser: true),
+        ),
+      ),
+    );
+
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'First name'),
+      'New',
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Last name'),
+      'User',
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Email'),
+      'new@example.com',
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'New password'),
+      'pass',
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Confirm password'),
+      'pass',
+    );
+
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(auth.registeredEmail, 'new@example.com');
+    expect(appt.addedUser, isNotNull);
+    expect(appt.addedUser!.offerings, isEmpty);
   });
 }
-
