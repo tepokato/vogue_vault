@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// **'Professional'**
   String get professionalRole;
 
+  /// No description provided for @adminRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get adminRole;
+
   /// No description provided for @cancelButton.
   ///
   /// In en, this message translates to:

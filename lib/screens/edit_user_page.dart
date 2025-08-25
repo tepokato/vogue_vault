@@ -29,8 +29,16 @@ class EditUserPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final user = users[index];
           final currentUser = context.watch<AuthService>().currentUser;
-          final roleText =
-              AppLocalizations.of(context)!.professionalRole;
+          final roleText = user.roles
+              .map((role) {
+                switch (role) {
+                  case UserRole.professional:
+                    return AppLocalizations.of(context)!.professionalRole;
+                  case UserRole.admin:
+                    return AppLocalizations.of(context)!.adminRole;
+                }
+              })
+              .join(', ');
           final isSelf = user.id == currentUser;
           return ListTile(
             leading: CircleAvatar(

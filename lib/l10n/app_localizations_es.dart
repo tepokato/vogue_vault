@@ -88,6 +88,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get editUserTitle => 'Editar usuario';
 
   @override
+  String get adminRole => 'Administrador';
+
+  @override
   String get professionalRole => 'Profesional';
 
   @override
