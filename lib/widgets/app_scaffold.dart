@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../screens/profile_page.dart';
-import '../screens/welcome_page.dart';
+import '../screens/appointments_page.dart';
 
 /// A reusable scaffold with a fixed top navigation bar containing
 /// common actions across the app.
@@ -40,7 +40,7 @@ class AppScaffold extends StatelessWidget {
   void _navigateHome(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const WelcomePage()),
+      MaterialPageRoute(builder: (_) => const AppointmentsPage()),
       (route) => false,
     );
   }

@@ -245,42 +245,6 @@ abstract class AppLocalizations {
   /// **'Cannot delete yourself'**
   String get cannotDeleteSelfTooltip;
 
-  /// No description provided for @welcomeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome'**
-  String get welcomeTitle;
-
-  /// No description provided for @exploreServices.
-  ///
-  /// In en, this message translates to:
-  /// **'Explore our catalog'**
-  String get exploreServices;
-
-  /// No description provided for @getStarted.
-  ///
-  /// In en, this message translates to:
-  /// **'Get Started'**
-  String get getStarted;
-
-  /// No description provided for @selectProviderTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Provider'**
-  String get selectProviderTitle;
-
-  /// No description provided for @noProvidersAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'No providers available.'**
-  String get noProvidersAvailable;
-
-  /// No description provided for @providerNoLongerOffersService.
-  ///
-  /// In en, this message translates to:
-  /// **'Selected provider no longer offers this service.'**
-  String get providerNoLongerOffersService;
-
   /// No description provided for @professionalsOnlyMessage.
   ///
   /// In en, this message translates to:

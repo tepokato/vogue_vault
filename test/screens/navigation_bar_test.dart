@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/screens/appointments_page.dart';
-import 'package:vogue_vault/screens/welcome_page.dart';
+import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/role_provider.dart';
 import 'package:vogue_vault/services/auth_service.dart';
@@ -40,8 +40,8 @@ void main() {
     );
   }
 
-  testWidgets('navigation bar shows on welcome and routes to profile', (tester) async {
-    await tester.pumpWidget(wrap(const WelcomePage()));
+  testWidgets('navigation bar shows on appointments and routes to profile', (tester) async {
+    await tester.pumpWidget(wrap(const AppointmentsPage()));
 
     expect(find.byTooltip('Home'), findsOneWidget);
     expect(find.byTooltip('Profile'), findsOneWidget);
@@ -52,16 +52,15 @@ void main() {
     expect(find.text('Profile'), findsOneWidget);
   });
 
-  testWidgets('home button from appointments goes to welcome', (tester) async {
-    await tester.pumpWidget(wrap(const AppointmentsPage()));
+  testWidgets('home button from profile goes to appointments', (tester) async {
+    await tester.pumpWidget(wrap(const ProfilePage()));
 
     expect(find.byTooltip('Home'), findsOneWidget);
-    expect(find.byTooltip('Profile'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Home'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Welcome'), findsOneWidget);
+    expect(find.text('Appointments'), findsOneWidget);
   });
 }
 

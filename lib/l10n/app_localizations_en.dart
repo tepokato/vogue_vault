@@ -84,24 +84,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cannotDeleteSelfTooltip => 'Cannot delete yourself';
 
   @override
-  String get welcomeTitle => 'Welcome';
-
-  @override
-  String get exploreServices => 'Explore our catalog';
-
-  @override
-  String get getStarted => 'Get Started';
-
-  @override
-  String get selectProviderTitle => 'Select Provider';
-
-  @override
-  String get noProvidersAvailable => 'No providers available.';
-
-  @override
-  String get providerNoLongerOffersService => 'Selected provider no longer offers this service.';
-
-  @override
   String get professionalsOnlyMessage => 'Available only for professionals';
 
   @override
