@@ -20,7 +20,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get profileTooltip => 'Perfil';
 
-
   @override
   String get usersTooltip => 'Usuarios';
 
@@ -34,7 +33,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileTitle => 'Perfil';
 
   @override
-  String get imageSelectionUnsupported => 'La selección de imágenes no es compatible con esta plataforma';
+  String get imageSelectionUnsupported =>
+      'La selección de imágenes no es compatible con esta plataforma';
 
   @override
   String get nameLabel => 'Nombre';
@@ -58,9 +58,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nicknameLabel => 'Apodo (opcional)';
 
   @override
+  String get servicesTitle => 'Servicios';
 
   @override
-  String get servicesTitle => 'Servicios';
+  String get manageServicesTitle => 'Administrar servicios';
 
   @override
   String get saveButton => 'Guardar';
@@ -80,7 +81,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get cannotDeleteSelfTooltip => 'No puedes eliminarte a ti mismo';
 
-
   @override
   String get newUserTitle => 'Nuevo usuario';
 
@@ -92,11 +92,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cancelButton => 'Cancelar';
-
   @override
-  String get selectAtLeastOneService => 'Por favor selecciona al menos un servicio';
-  @override
-  String get selectedProviderRemoved => 'El proveedor seleccionado previamente fue eliminado o no está disponible. Por favor elige otro.';
+  String get selectedProviderRemoved =>
+      'El proveedor seleccionado previamente fue eliminado o no está disponible. Por favor elige otro.';
 
   @override
   String get editAppointmentTitle => 'Editar cita';
@@ -105,7 +103,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get newAppointmentTitle => 'Nueva cita';
 
   @override
-  String get noProvidersAvailableAdd => 'No hay proveedores disponibles. Por favor agrega un proveedor primero.';
+  String get noProvidersAvailableAdd =>
+      'No hay proveedores disponibles. Por favor agrega un proveedor primero.';
 
   @override
   String get serviceLabel => 'Servicio';
