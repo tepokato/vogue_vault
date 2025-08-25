@@ -96,9 +96,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get selectAtLeastOneService => 'Por favor selecciona al menos un servicio';
   @override
-  String get selectedClientRemoved => 'El cliente seleccionado previamente fue eliminado. Por favor elige otro.';
-
-  @override
   String get selectedProviderRemoved => 'El proveedor seleccionado previamente fue eliminado o no está disponible. Por favor elige otro.';
 
   @override
@@ -108,16 +105,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get newAppointmentTitle => 'Nueva cita';
 
   @override
-  String get noClientsAvailable => 'No hay clientes disponibles. Por favor agrega un cliente primero.';
-
-  @override
   String get noProvidersAvailableAdd => 'No hay proveedores disponibles. Por favor agrega un proveedor primero.';
-
-  @override
-  String get selectClientHint => 'Seleccionar cliente';
-
-  @override
-  String get selectClientValidation => 'Por favor selecciona un cliente';
 
   @override
   String get serviceLabel => 'Servicio';
@@ -133,20 +121,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get selectDateButton => 'Seleccionar fecha';
-  @override
-  String get logoutTooltip => 'Cerrar sesión';
-
-  @override
-  String get iAmA => 'Soy...';
 
   @override
   String get invalidCredentials => 'Credenciales inválidas';
-
-  @override
-  String get signInTitle => 'Iniciar sesión';
-
-  @override
-  String get registerTitle => 'Registrarse';
 
   @override
   String get emailLabel => 'Correo electrónico';
@@ -185,13 +162,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginButton => 'Ingresar';
 
   @override
-  String get registerButton => 'Registrarse';
-
-  @override
   String get createAccount => 'Crear una cuenta';
-
-  @override
-  String get haveAccountSignIn => '¿Tienes una cuenta? Inicia sesión';
 
   @override
   String get noAppointmentsScheduled => 'No hay citas programadas.';
@@ -204,9 +175,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guestContactLabel => 'Contacto del invitado (opcional)';
-
-  @override
-  String get clientOrGuestValidation => 'Selecciona un cliente o ingresa un nombre de invitado';
 
   @override
   String get serviceTypeBarber => 'Barbero';
