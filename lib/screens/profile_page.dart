@@ -375,7 +375,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const ManageServicesPage(),
+                        builder: (_) => ManageServicesPage(userId: _userId),
                       ),
                     );
                     final service = context.read<AppointmentService>();

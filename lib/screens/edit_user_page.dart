@@ -10,7 +10,7 @@ import '../models/user_role.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
-import 'profile_page.dart';
+import 'manage_services_page.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -163,13 +163,17 @@ class EditUserPage extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const ProfilePage(),
-                              ),
-                            );
-                          },
+                          onPressed: user == null
+                              ? null
+                              : () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => ManageServicesPage(
+                                        userId: user.id,
+                                      ),
+                                    ),
+                                  );
+                                },
                           child: Text(
                             AppLocalizations.of(context)!.servicesTitle,
                           ),
