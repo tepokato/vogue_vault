@@ -35,7 +35,7 @@ void main() {
       id: 'u1',
       firstName: 'A',
       lastName: 'B',
-      roles: {UserRole.customer, UserRole.professional},
+      roles: {UserRole.professional},
     );
     final auth = _FakeAuthService();
     final appointment = _FakeAppointmentService(user);
@@ -56,7 +56,6 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('Customer'), findsOneWidget);
     expect(find.text('Professional'), findsOneWidget);
   });
 
