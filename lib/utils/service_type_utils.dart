@@ -19,8 +19,6 @@ String serviceTypeLabel(BuildContext context, ServiceType type) {
     case ServiceType.tattoo:
       return l10n.serviceTypeTattoo;
   }
-  assert(false, 'Unhandled ServiceType: $type');
-  throw ArgumentError('Unhandled ServiceType: $type');
 }
 
 /// Returns the asset path of an icon representing the given [ServiceType].
@@ -37,8 +35,6 @@ String serviceTypeIcon(ServiceType type) {
     case ServiceType.tattoo:
       return 'assets/icons/tattoo-machine.png';
   }
-  assert(false, 'Unhandled ServiceType: $type');
-  throw ArgumentError('Unhandled ServiceType: $type');
 }
 
 /// Returns a themed [Color] for the given [ServiceType].
@@ -55,6 +51,4 @@ Color serviceTypeColor(ServiceType type) {
     case ServiceType.tattoo:
       return AppColors.highlight;
   }
-  assert(false, 'Unhandled ServiceType: $type');
-  throw ArgumentError('Unhandled ServiceType: $type');
 }
