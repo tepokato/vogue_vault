@@ -26,6 +26,7 @@
   "cannotDeleteSelfTooltip": "Cannot delete yourself",
   "newUserTitle": "New User",
   "editUserTitle": "Edit User",
+  "adminRole": "Admin",
   "professionalRole": "Professional",
   "cancelButton": "Cancel",
   "selectedProviderRemoved": "Previously selected provider was removed or unavailable. Please choose another.",
