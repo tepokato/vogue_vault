@@ -50,8 +50,9 @@ class _AuthPageState extends State<AuthPage> {
     try {
       success = await auth.login(email, password);
       if (!success) {
-        setState(() =>
-            _error = AppLocalizations.of(context)!.invalidCredentials);
+        setState(
+          () => _error = AppLocalizations.of(context)!.invalidCredentials,
+        );
       }
     } finally {
       if (mounted) {
@@ -80,29 +81,29 @@ class _AuthPageState extends State<AuthPage> {
             child: Form(
               key: _formKey,
               child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Vogue Vault',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    color: colors.onSurface,
-                    fontFamily: 'LibertinusSans',
-                    fontWeight: FontWeight.w400,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.appTitle,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: colors.onSurface,
+                      fontFamily: 'LibertinusSans',
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Semantics(
-                  label: 'Vogue Vault logo',
-                  child: Image.asset(
-                    'assets/images/VV_LOGO.webp',
-                    height: 200,
-                    color: colors.onSurface,
+                  const SizedBox(height: 16),
+                  Semantics(
+                    label: AppLocalizations.of(context)!.appTitle,
+                    child: Image.asset(
+                      'assets/images/VV_LOGO.webp',
+                      height: 200,
+                      color: colors.onSurface,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                TextFormField(
+                  const SizedBox(height: 32),
+                  TextFormField(
                     controller: _emailController,
                     style: TextStyle(color: colors.onSurface),
                     cursorColor: colors.onSurface,
@@ -164,8 +165,9 @@ class _AuthPageState extends State<AuthPage> {
                     const SizedBox(height: 16),
                     Text(
                       _error!,
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: theme.colorScheme.error),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
                     ),
                   ],
                   const SizedBox(height: 24),
@@ -195,16 +197,13 @@ class _AuthPageState extends State<AuthPage> {
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: colors.onSurface,
-                      side: BorderSide(
-                        color: colors.outline,
-                      ),
+                      side: BorderSide(color: colors.outline),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child:
-                        Text(AppLocalizations.of(context)!.createAccount),
+                    child: Text(AppLocalizations.of(context)!.createAccount),
                   ),
                 ],
               ),
@@ -222,4 +221,3 @@ class _AuthPageState extends State<AuthPage> {
     super.dispose();
   }
 }
-
