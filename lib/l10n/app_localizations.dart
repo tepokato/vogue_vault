@@ -119,11 +119,6 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profileTooltip;
 
-  /// No description provided for @switchRoleTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch Role'**
-  String get switchRoleTooltip;
 
   /// No description provided for @usersTooltip.
   ///
@@ -245,11 +240,6 @@ abstract class AppLocalizations {
   /// **'Cannot delete yourself'**
   String get cannotDeleteSelfTooltip;
 
-  /// No description provided for @professionalsOnlyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Available only for professionals'**
-  String get professionalsOnlyMessage;
 
   /// No description provided for @newUserTitle.
   ///

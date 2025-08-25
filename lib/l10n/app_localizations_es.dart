@@ -20,8 +20,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get profileTooltip => 'Perfil';
 
-  @override
-  String get switchRoleTooltip => 'Cambiar rol';
 
   @override
   String get usersTooltip => 'Usuarios';
@@ -83,8 +81,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get cannotDeleteSelfTooltip => 'No puedes eliminarte a ti mismo';
 
-  @override
-  String get professionalsOnlyMessage => 'Disponible solo para profesionales';
 
   @override
   String get newUserTitle => 'Nuevo usuario';
