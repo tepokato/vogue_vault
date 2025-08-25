@@ -7,7 +7,6 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_offering.dart';
-import '../widgets/role_selector.dart';
 import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
@@ -53,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _emailController = TextEditingController();
       _nicknameController = TextEditingController(text: '');
       _photoBytes = null;
-      _roles = {};
+      _roles = {UserRole.professional};
       _offerings = <ServiceOffering>[];
     } else {
       _userId =
@@ -64,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _lastNameController.text = user?.lastName ?? '';
       _nicknameController = TextEditingController(text: user?.nickname ?? '');
       _photoBytes = user?.photoBytes;
-      _roles = user?.roles ?? {};
+      _roles = {UserRole.professional};
       _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
     }
   }
@@ -98,15 +97,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_roles.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.selectAtLeastOneRole),
-        ),
-      );
-      return;
-    }
     if (_roles.contains(UserRole.professional) && _offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -363,28 +353,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(AppLocalizations.of(context)!.rolesTitle,
+              Text(AppLocalizations.of(context)!.servicesTitle,
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
-              RoleSelector(
-                selected: _roles,
-                onChanged: (selection) {
-                  setState(() => _roles = selection);
+              ServiceOfferingEditor(
+                offerings: _offerings,
+                onChanged: (list) {
+                  setState(() => _offerings = list);
                 },
               ),
               const SizedBox(height: 24),
-              if (_roles.contains(UserRole.professional)) ...[
-                Text(AppLocalizations.of(context)!.servicesTitle,
-                    style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                ServiceOfferingEditor(
-                  offerings: _offerings,
-                  onChanged: (list) {
-                    setState(() => _offerings = list);
-                  },
-                ),
-                const SizedBox(height: 24),
-              ],
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

@@ -8,7 +8,6 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_offering.dart';
-import '../widgets/role_selector.dart';
 import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
@@ -32,7 +31,7 @@ class EditUserPage extends StatelessWidget {
           final user = users[index];
           final currentUser = context.watch<AuthService>().currentUser;
           final roleText =
-              user.roles.map((r) => _roleLabel(context, r)).join(', ');
+              AppLocalizations.of(context)!.professionalRole;
           final isSelf = user.id == currentUser;
           return ListTile(
             leading: CircleAvatar(
@@ -91,7 +90,6 @@ class EditUserPage extends StatelessWidget {
         TextEditingController(text: user?.nickname ?? '');
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
-    final roles = <UserRole>{...user?.roles ?? {}};
     final offerings = <ServiceOffering>[...user?.offerings ?? []];
 
     try {
@@ -164,27 +162,16 @@ class EditUserPage extends StatelessWidget {
                             labelText:
                                 AppLocalizations.of(context)!.nicknameLabel),
                       ),
-                      RoleSelector(
-                        selected: roles,
-                        onChanged: (selection) {
+                      ServiceOfferingEditor(
+                        offerings: offerings,
+                        onChanged: (list) {
                           setState(() {
-                            roles
+                            offerings
                               ..clear()
-                              ..addAll(selection);
+                              ..addAll(list);
                           });
                         },
                       ),
-                      if (roles.contains(UserRole.professional))
-                        ServiceOfferingEditor(
-                          offerings: offerings,
-                          onChanged: (list) {
-                            setState(() {
-                              offerings
-                                ..clear()
-                                ..addAll(list);
-                            });
-                          },
-                        ),
                     ],
                   ),
                 ),
@@ -196,11 +183,10 @@ class EditUserPage extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
-                    if (!formKey.currentState!.validate() || roles.isEmpty) {
+                    if (!formKey.currentState!.validate()) {
                       return;
                     }
-                    if (roles.contains(UserRole.professional) &&
-                        offerings.isEmpty) {
+                    if (offerings.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppLocalizations.of(context)!
@@ -220,10 +206,8 @@ class EditUserPage extends StatelessWidget {
                           ? null
                           : nicknameController.text.trim(),
                       photoBytes: photoBytes,
-                      roles: roles,
-                      offerings: roles.contains(UserRole.professional)
-                          ? offerings
-                          : <ServiceOffering>[],
+                      roles: const {UserRole.professional},
+                      offerings: offerings,
                     );
                     if (user == null) {
                       await service.addUser(newUser);
@@ -247,13 +231,4 @@ class EditUserPage extends StatelessWidget {
     }
   }
 
-  String _roleLabel(BuildContext context, UserRole role) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (role) {
-      case UserRole.professional:
-        return l10n.professionalRole;
-      default:
-        return role.name;
-    }
-  }
 }
