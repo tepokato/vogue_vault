@@ -7,12 +7,12 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_offering.dart';
-import '../widgets/service_offering_editor.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import '../widgets/app_scaffold.dart';
 import 'appointments_page.dart';
+import 'manage_services_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, this.isNewUser = false});
@@ -368,15 +368,21 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 24),
               if (!widget.isNewUser) ...[
-                Text(
-                  AppLocalizations.of(context)!.servicesTitle,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-                ServiceOfferingEditor(
-                  offerings: _offerings,
-                  onChanged: (list) {
-                    setState(() => _offerings = list);
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.servicesTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ManageServicesPage(),
+                      ),
+                    );
+                    final service = context.read<AppointmentService>();
+                    setState(() {
+                      _offerings =
+                          [...?service.getUser(_userId)?.offerings];
+                    });
                   },
                 ),
                 const SizedBox(height: 24),
