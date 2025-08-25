@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
-import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/screens/edit_user_page.dart';
+import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
+import 'package:vogue_vault/models/user_profile.dart';
 
 class _FakeAppointmentService extends AppointmentService {
   @override
@@ -21,7 +22,7 @@ class _FakeAuthService extends AuthService {
 }
 
 void main() {
-  testWidgets('negative price shows error', (tester) async {
+  testWidgets('services link navigates to profile page', (tester) async {
     final auth = _FakeAuthService();
     final service = _FakeAppointmentService();
 
@@ -42,16 +43,11 @@ void main() {
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Add'));
-    await tester.pump();
+    expect(find.text('Services'), findsOneWidget);
 
-    final priceField = find.widgetWithText(TextFormField, 'Price');
-    await tester.enterText(priceField, '-5');
+    await tester.tap(find.text('Services'));
+    await tester.pumpAndSettle();
 
-    final formFinder = find.byType(Form);
-    final formState = tester.state<FormState>(formFinder);
-    expect(formState.validate(), isFalse);
-    await tester.pump();
-    expect(find.text('Invalid price'), findsOneWidget);
+    expect(find.byType(ProfilePage), findsOneWidget);
   });
 }
