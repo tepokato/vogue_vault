@@ -51,3 +51,6 @@ macos/Runner/Assets.xcassets/AppIcon.appiconset/*.png
 web/icons/*.png
 web/favicon.png
 windows/runner/resources/app_icon.ico
+
+# Local draft images
+draftlogin.png
