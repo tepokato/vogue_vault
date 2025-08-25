@@ -110,6 +110,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.enterText(
       find.widgetWithText(TextFormField, 'Current password'),
@@ -123,7 +124,10 @@ void main() {
       find.widgetWithText(TextFormField, 'Confirm password'),
       'new2',
     );
-    await tester.tap(find.text('Save'));
+    await tester.drag(find.byType(ListView), const Offset(0, -1000));
+    await tester.pumpAndSettle();
+    final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+    await tester.tap(saveButton);
     await tester.pump();
     expect(find.text('Passwords do not match'), findsOneWidget);
   });
@@ -145,6 +149,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.enterText(
       find.widgetWithText(TextFormField, 'Email'),
@@ -163,7 +168,10 @@ void main() {
       'new',
     );
 
-    await tester.tap(find.text('Save'));
+    await tester.drag(find.byType(ListView), const Offset(0, -1000));
+    await tester.pumpAndSettle();
+    final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+    await tester.tap(saveButton);
     await tester.pump();
 
     expect(auth.changedOld, 'old@example.com');
@@ -192,6 +200,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     expect(find.byTooltip('Home'), findsNothing);
     expect(find.byType(ServiceOfferingEditor), findsNothing);
@@ -214,6 +223,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.enterText(
       find.widgetWithText(TextFormField, 'First name'),
@@ -236,11 +246,15 @@ void main() {
       'pass',
     );
 
-    await tester.tap(find.text('Save'));
+    await tester.drag(find.byType(ListView), const Offset(0, -1000));
+    await tester.pumpAndSettle();
+    final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+    await tester.tap(saveButton);
     await tester.pumpAndSettle();
 
     expect(auth.registeredEmail, 'new@example.com');
     expect(appt.addedUser, isNotNull);
     expect(appt.addedUser!.offerings, isEmpty);
+    expect(find.text('Please select at least one service'), findsNothing);
   });
 }

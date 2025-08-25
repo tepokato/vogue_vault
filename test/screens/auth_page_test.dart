@@ -47,8 +47,10 @@ void main() {
 
     final formFinder = find.byType(Form);
     final emailField = find.byType(TextFormField).first;
+    final passwordField = find.byType(TextFormField).at(1);
 
     await tester.enterText(emailField, 'user@example.com');
+    await tester.enterText(passwordField, 'password');
     final formState = tester.state<FormState>(formFinder);
     expect(formState.validate(), isTrue);
   });

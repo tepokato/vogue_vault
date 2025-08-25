@@ -16,10 +16,12 @@ void main() {
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: Form(
-          child: ServiceOfferingEditor(
-            offerings: offerings,
-            onChanged: (list) => offerings = list,
+        home: Scaffold(
+          body: Form(
+            child: ServiceOfferingEditor(
+              offerings: offerings,
+              onChanged: (list) => offerings = list,
+            ),
           ),
         ),
       ),
@@ -41,9 +43,11 @@ void main() {
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: ServiceOfferingEditor(
-          offerings: offerings,
-          onChanged: (list) => offerings = list,
+        home: Scaffold(
+          body: ServiceOfferingEditor(
+            offerings: offerings,
+            onChanged: (list) => offerings = list,
+          ),
         ),
       ),
     );
