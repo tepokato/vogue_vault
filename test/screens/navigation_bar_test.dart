@@ -6,7 +6,6 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/screens/appointments_page.dart';
 import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
-import 'package:vogue_vault/services/role_provider.dart';
 import 'package:vogue_vault/services/auth_service.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 
@@ -28,9 +27,6 @@ void main() {
       providers: [
         ChangeNotifierProvider<AppointmentService>.value(value: service),
         ChangeNotifierProvider<AuthService>.value(value: auth),
-        ChangeNotifierProvider<RoleProvider>(
-          create: (_) => RoleProvider(auth, service),
-        ),
       ],
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,

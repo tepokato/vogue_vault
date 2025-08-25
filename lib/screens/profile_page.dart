@@ -13,7 +13,7 @@ import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import '../widgets/app_scaffold.dart';
-import 'role_selection_page.dart';
+import 'appointments_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, this.isNewUser = false});
@@ -204,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (widget.isNewUser) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const RoleSelectionPage()),
+          MaterialPageRoute(builder: (_) => const AppointmentsPage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

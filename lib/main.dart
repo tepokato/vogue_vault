@@ -11,7 +11,6 @@ import 'utils/color_palette.dart';
 import 'screens/auth_page.dart';
 import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
-import 'services/role_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,12 +30,6 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<AuthService>.value(
           value: authService,
-        ),
-        ChangeNotifierProvider<RoleProvider>(
-          create: (context) => RoleProvider(
-            context.read<AuthService>(),
-            context.read<AppointmentService>(),
-          ),
         ),
       ],
       child: const MyApp(),
