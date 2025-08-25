@@ -25,7 +25,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   final _formKey = GlobalKey<FormState>();
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
-  String? _selectedClientId;
   String? _selectedProviderId;
   late final TextEditingController _guestNameController;
   late final TextEditingController _guestContactController;
@@ -36,7 +35,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _service =
         widget.appointment?.service ?? widget.initialService ?? ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
-    _selectedClientId = widget.appointment?.clientId;
     _selectedProviderId = widget.appointment?.providerId ?? widget.initialProviderId;
     _guestNameController =
         TextEditingController(text: widget.appointment?.guestName ?? '');
@@ -54,22 +52,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final clients = service.clients;
     final providers = service.providersFor(_service);
     final locale = Localizations.localeOf(context).toString();
-    if (_selectedClientId != null &&
-        !clients.any((c) => c.id == _selectedClientId)) {
-      _selectedClientId = null;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                AppLocalizations.of(context)!.selectedClientRemoved),
-          ),
-        );
-      });
-    }
     if (_selectedProviderId != null &&
         !providers.any((p) => p.id == _selectedProviderId)) {
       _selectedProviderId = null;
@@ -116,41 +100,14 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
           key: _formKey,
           child: Column(
             children: [
-              if (clients.isNotEmpty)
-                DropdownButtonFormField<String>(
-                  value: _selectedClientId,
-                  hint: Text(AppLocalizations.of(context)!.selectClientHint),
-                  items: clients
-                      .map(
-                        (c) => DropdownMenuItem<String>(
-                          value: c.id,
-                          child: Text(c.name),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) => setState(() => _selectedClientId = value),
-                  validator: (_) {
-                    if ((_selectedClientId == null || _selectedClientId!.isEmpty) &&
-                        _guestNameController.text.isEmpty) {
-                      return AppLocalizations.of(context)!
-                          .clientOrGuestValidation;
-                    }
-                    return null;
-                  },
-                ),
               TextFormField(
                 controller: _guestNameController,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.guestNameLabel,
                 ),
-                validator: (value) {
-                  if ((_selectedClientId == null || _selectedClientId!.isEmpty) &&
-                      (value == null || value.isEmpty)) {
-                    return AppLocalizations.of(context)!
-                        .clientOrGuestValidation;
-                  }
-                  return null;
-                },
+                validator: (value) => value == null || value.isEmpty
+                    ? AppLocalizations.of(context)!.nameRequired
+                    : null,
               ),
               TextFormField(
                 controller: _guestContactController,
@@ -241,15 +198,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       widget.appointment?.id ?? const Uuid().v4();
                   final newAppt = Appointment(
                     id: id,
-                    clientId: _selectedClientId,
-                    guestName:
-                        _selectedClientId == null || _selectedClientId!.isEmpty
-                            ? _guestNameController.text
-                            : null,
-                    guestContact:
-                        _selectedClientId == null || _selectedClientId!.isEmpty
-                            ? _guestContactController.text
-                            : null,
+                    clientId: widget.appointment?.clientId,
+                    guestName: _guestNameController.text,
+                    guestContact: _guestContactController.text,
                     providerId: _selectedProviderId!,
                     service: _service,
                     dateTime: _dateTime,

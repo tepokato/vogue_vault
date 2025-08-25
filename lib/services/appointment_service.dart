@@ -61,10 +61,6 @@ class AppointmentService extends ChangeNotifier {
       });
     }).toList();
   }
-
-  List<UserProfile> get clients =>
-      users.where((u) => !u.roles.contains(UserRole.professional)).toList();
-
   List<UserProfile> get providers =>
       users.where((u) => u.roles.contains(UserRole.professional)).toList();
 
