@@ -4,13 +4,14 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
-import '../services/auth_service.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/service_offering_editor.dart';
 
 /// Page allowing professionals to manage their service offerings.
 class ManageServicesPage extends StatefulWidget {
-  const ManageServicesPage({super.key});
+  const ManageServicesPage({super.key, required this.userId});
+
+  final String userId;
 
   @override
   State<ManageServicesPage> createState() => _ManageServicesPageState();
@@ -23,9 +24,8 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
   @override
   void initState() {
     super.initState();
-    final auth = context.read<AuthService>();
     final service = context.read<AppointmentService>();
-    _userId = auth.currentUser ?? '';
+    _userId = widget.userId;
     final user = service.getUser(_userId);
     _offerings = [...(user?.offerings ?? <ServiceOffering>[])];
   }

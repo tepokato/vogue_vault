@@ -48,7 +48,7 @@ void main() {
         child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: ManageServicesPage(),
+          home: ManageServicesPage(userId: 'test@example.com'),
         ),
       ),
     );
@@ -84,7 +84,7 @@ void main() {
         child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: ManageServicesPage(),
+          home: ManageServicesPage(userId: 'test@example.com'),
         ),
       ),
     );
