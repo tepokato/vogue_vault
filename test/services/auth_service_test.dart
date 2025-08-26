@@ -176,4 +176,20 @@ void main() {
     expect(await service.login(email, 'new'), isTrue);
     expect(service.changePassword(email, 'wrong', 'another'), throwsStateError);
   });
+
+  test('deleteUser throws when deleting current user', () async {
+    final service = AuthService();
+    await service.init();
+
+    const email = 'me@example.com';
+    const password = 'secret';
+    await service.register(email, password);
+
+    expect(service.deleteUser(email), throwsStateError);
+
+    final box = Hive.box('auth');
+    final users = box.get('users') as Map;
+    expect(users.containsKey(email), isTrue);
+    expect(service.currentUser, email);
+  });
 }

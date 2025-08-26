@@ -7,13 +7,24 @@ import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
 import 'package:vogue_vault/models/user_profile.dart';
+import 'package:vogue_vault/models/user_role.dart';
 
 class _FakeAppointmentService extends AppointmentService {
-  @override
-  List<UserProfile> get users => [];
+  _FakeAppointmentService([this._users = const []]);
+
+  final List<UserProfile> _users;
 
   @override
-  UserProfile? getUser(String id) => null;
+  List<UserProfile> get users => _users;
+
+  @override
+  UserProfile? getUser(String id) {
+    try {
+      return _users.firstWhere((u) => u.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 class _FakeAuthService extends AuthService {
@@ -49,5 +60,35 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ProfilePage), findsOneWidget);
+  });
+
+  testWidgets('delete button disabled for current user', (tester) async {
+    final auth = _FakeAuthService();
+    final user = UserProfile(
+      id: 'test',
+      firstName: 'Test',
+      lastName: 'User',
+      roles: {UserRole.admin},
+    );
+    final service = _FakeAppointmentService([user]);
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppointmentService>.value(value: service),
+          ChangeNotifierProvider<AuthService>.value(value: auth),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: EditUserPage(),
+        ),
+      ),
+    );
+
+    final deleteFinder = find.byIcon(Icons.delete);
+    expect(deleteFinder, findsOneWidget);
+    final button = tester.widget<IconButton>(deleteFinder);
+    expect(button.onPressed, isNull);
   });
 }
