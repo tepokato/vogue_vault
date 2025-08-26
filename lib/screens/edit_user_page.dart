@@ -19,7 +19,9 @@ class EditUserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final users = service.users;
+    final auth = context.watch<AuthService>();
+    final users =
+        service.users.where((u) => u.id != auth.currentUser).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +31,6 @@ class EditUserPage extends StatelessWidget {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final auth = context.watch<AuthService>();
           final roleText = user.roles.map((role) {
             switch (role) {
               case UserRole.professional:
@@ -38,8 +39,6 @@ class EditUserPage extends StatelessWidget {
                 return AppLocalizations.of(context)!.adminRole;
             }
           }).join(', ');
-          final isSelf =
-              auth.currentUser != null && user.id == auth.currentUser;
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: user.photoBytes != null
@@ -54,27 +53,22 @@ class EditUserPage extends StatelessWidget {
             onTap: () => _showUserDialog(context, user: user),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: isSelf
-                  ? null
-                  : () async {
-                      try {
-                        await auth.deleteUser(user.id);
-                        await service.deleteUser(user.id);
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        final message = e is StateError
-                            ? e.message
-                            : AppLocalizations.of(context)!.deleteUserFailed;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message),
-                          ),
-                        );
-                      }
-                    },
-              tooltip: isSelf
-                  ? AppLocalizations.of(context)!.cannotDeleteSelfTooltip
-                  : null,
+              onPressed: () async {
+                try {
+                  await auth.deleteUser(user.id);
+                  await service.deleteUser(user.id);
+                } catch (e) {
+                  if (!context.mounted) return;
+                  final message = e is StateError
+                      ? e.message
+                      : AppLocalizations.of(context)!.deleteUserFailed;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
+                }
+              },
             ),
           );
         },
