@@ -435,6 +435,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tattoo Artist'**
   String get serviceTypeTattoo;
+
+  /// No description provided for @appointmentConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment conflicts with existing booking'**
+  String get appointmentConflict;
 }
 
 class _AppLocalizationsDelegate

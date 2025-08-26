@@ -55,5 +55,6 @@
   "serviceTypeBarber": "Barbero",
   "serviceTypeHairdresser": "Peluquería",
   "serviceTypeNails": "Uñas",
-  "serviceTypeTattoo": "Tatuador"
+  "serviceTypeTattoo": "Tatuador",
+  "appointmentConflict": "La cita entra en conflicto con una reserva existente"
 }

@@ -131,8 +131,26 @@ class AppointmentService extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _hasConflict(Appointment appointment) {
+    final providerId = appointment.providerId;
+    if (providerId == null) return false;
+    final newStart = appointment.dateTime;
+    final newEnd = newStart.add(appointment.duration);
+    return appointments.any((existing) {
+      if (existing.providerId != providerId) return false;
+      if (existing.id == appointment.id) return false;
+      final existingStart = existing.dateTime;
+      final existingEnd = existingStart.add(existing.duration);
+      return newStart.isBefore(existingEnd) &&
+          existingStart.isBefore(newEnd);
+    });
+  }
+
   Future<void> addAppointment(Appointment appointment) async {
     _ensureInitialized();
+    if (_hasConflict(appointment)) {
+      throw StateError('Appointment conflicts with existing booking.');
+    }
     // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
     notifyListeners();
@@ -140,6 +158,9 @@ class AppointmentService extends ChangeNotifier {
 
   Future<void> updateAppointment(Appointment appointment) async {
     _ensureInitialized();
+    if (_hasConflict(appointment)) {
+      throw StateError('Appointment conflicts with existing booking.');
+    }
     // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
     notifyListeners();

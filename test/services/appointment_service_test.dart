@@ -247,4 +247,56 @@ void main() {
     expect(updatedAppt.clientId, newId);
     expect(updatedAppt.providerId, newId);
   });
+
+  test('addAppointment throws on provider time conflict', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final providerId = uuid.v4();
+    final appt1 = Appointment(
+      id: uuid.v4(),
+      providerId: providerId,
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 1, 1, 10),
+      duration: const Duration(hours: 1),
+    );
+    final appt2 = Appointment(
+      id: uuid.v4(),
+      providerId: providerId,
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 1, 1, 10, 30),
+      duration: const Duration(hours: 1),
+    );
+    await service.addAppointment(appt1);
+    expect(() => service.addAppointment(appt2),
+        throwsA(isA<StateError>()));
+  });
+
+  test('updateAppointment throws on provider time conflict', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final providerId = uuid.v4();
+    final appt1 = Appointment(
+      id: uuid.v4(),
+      providerId: providerId,
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 1, 1, 10),
+      duration: const Duration(hours: 1),
+    );
+    final appt2 = Appointment(
+      id: uuid.v4(),
+      providerId: providerId,
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 1, 1, 12),
+      duration: const Duration(hours: 1),
+    );
+    await service.addAppointment(appt1);
+    await service.addAppointment(appt2);
+    final moved = appt2.copyWith(dateTime: DateTime(2023, 1, 1, 10, 30));
+    expect(() => service.updateAppointment(moved),
+        throwsA(isA<StateError>()));
+  });
 }

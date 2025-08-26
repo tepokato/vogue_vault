@@ -176,4 +176,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get serviceTypeTattoo => 'Tattoo Artist';
+
+  @override
+  String get appointmentConflict =>
+      'Appointment conflicts with existing booking';
 }

@@ -55,5 +55,6 @@
   "serviceTypeBarber": "Barber",
   "serviceTypeHairdresser": "Hairdresser",
   "serviceTypeNails": "Nails",
-  "serviceTypeTattoo": "Tattoo Artist"
+  "serviceTypeTattoo": "Tattoo Artist",
+  "appointmentConflict": "Appointment conflicts with existing booking"
 }
