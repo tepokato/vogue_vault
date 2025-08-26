@@ -46,11 +46,13 @@ void main() {
       id: laterId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-02'),
+      duration: const Duration(hours: 1),
     );
     final earlier = Appointment(
       id: earlierId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
+      duration: const Duration(hours: 1),
     );
 
     await service.addAppointment(later);
@@ -123,11 +125,48 @@ void main() {
       guestName: 'Walk-in',
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
+      duration: const Duration(hours: 1),
     );
     await service.addAppointment(appt);
     final stored = service.getAppointment(id);
     expect(stored?.guestName, 'Walk-in');
     expect(stored?.clientId, isNull);
+  });
+
+  test('addAppointment persists duration', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final id = uuid.v4();
+    final appt = Appointment(
+      id: id,
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-01'),
+      duration: const Duration(minutes: 90),
+    );
+    await service.addAppointment(appt);
+    final stored = service.getAppointment(id);
+    expect(stored?.duration, const Duration(minutes: 90));
+  });
+
+  test('legacy appointments default duration and are updated', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final box = Hive.box('appointments');
+    final id = uuid.v4();
+    await box.put(id, {
+      'id': id,
+      'service': ServiceType.barber.name,
+      'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
+    });
+
+    final appt = service.getAppointment(id);
+    expect(appt?.duration, const Duration(hours: 1));
+    final stored = Map<String, dynamic>.from(box.get(id));
+    expect(stored['duration'], 60);
   });
 
   test('providersFor filters by offerings', () async {
@@ -196,6 +235,7 @@ void main() {
       providerId: oldId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
+      duration: const Duration(hours: 1),
     );
     await service.addAppointment(appt);
 

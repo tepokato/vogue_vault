@@ -22,6 +22,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   final _formKey = GlobalKey<FormState>();
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
+  late Duration _duration;
   late final TextEditingController _guestNameController;
   late final TextEditingController _guestContactController;
 
@@ -31,6 +32,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _service =
         widget.appointment?.service ?? widget.initialService ?? ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
+    _duration = widget.appointment?.duration ?? const Duration(hours: 1);
     _guestNameController =
         TextEditingController(text: widget.appointment?.guestName ?? '');
     _guestContactController =
@@ -105,6 +107,22 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     ? AppLocalizations.of(context)!.selectServiceValidation
                     : null,
               ),
+              DropdownButtonFormField<int>(
+                value: _duration.inMinutes,
+                decoration: const InputDecoration(labelText: 'Duration (minutes)'),
+                items: List.generate(8, (i) => (i + 1) * 15)
+                    .map((m) => DropdownMenuItem<int>(
+                          value: m,
+                          child: Text('$m'),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() {
+                    _duration = Duration(minutes: value);
+                  });
+                },
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -148,6 +166,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     providerId: widget.appointment?.providerId,
                     service: _service,
                     dateTime: _dateTime,
+                    duration: _duration,
                   );
                   if (isEditing) {
                     await service.updateAppointment(newAppt);

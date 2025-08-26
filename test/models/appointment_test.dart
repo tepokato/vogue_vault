@@ -16,6 +16,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
+        duration: const Duration(minutes: 45),
       );
       final map = appointment.toMap();
       final from = Appointment.fromMap(map);
@@ -25,6 +26,7 @@ void main() {
       expect(from.providerId, appointment.providerId);
       expect(from.service, appointment.service);
       expect(from.dateTime, appointment.dateTime);
+      expect(from.duration, appointment.duration);
     });
 
     test('supports guest clients', () {
@@ -35,6 +37,7 @@ void main() {
         guestContact: '555-1234',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 11, 0),
+        duration: const Duration(minutes: 30),
       );
       final map = appointment.toMap();
       final from = Appointment.fromMap(map);
@@ -72,6 +75,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
+        duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id,
@@ -79,6 +83,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
+        duration: const Duration(hours: 1),
       );
 
       expect(a1, equals(a2));
@@ -97,6 +102,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: dt,
+        duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id,
@@ -105,6 +111,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: dt,
+        duration: const Duration(hours: 1),
       );
       expect(a1, equals(a2));
       expect(a1.hashCode, equals(a2.hashCode));
@@ -122,6 +129,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
+        duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id2,
@@ -129,6 +137,7 @@ void main() {
         providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
+        duration: const Duration(hours: 1),
       );
 
       expect(a1, isNot(equals(a2)));

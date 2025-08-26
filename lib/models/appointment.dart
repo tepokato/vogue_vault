@@ -27,6 +27,9 @@ class Appointment {
   /// The date and time when the appointment takes place.
   final DateTime dateTime;
 
+  /// Length of the appointment.
+  final Duration duration;
+
   /// Creates a new [Appointment].
   Appointment({
     required this.id,
@@ -36,6 +39,7 @@ class Appointment {
     this.providerId,
     required this.service,
     required this.dateTime,
+    this.duration = const Duration(hours: 1),
   });
 
   /// Returns a copy of this appointment with the given fields replaced.
@@ -47,6 +51,7 @@ class Appointment {
     String? providerId,
     ServiceType? service,
     DateTime? dateTime,
+    Duration? duration,
   }) {
     return Appointment(
       id: id ?? this.id,
@@ -56,6 +61,7 @@ class Appointment {
       providerId: providerId ?? this.providerId,
       service: service ?? this.service,
       dateTime: dateTime ?? this.dateTime,
+      duration: duration ?? this.duration,
     );
   }
 
@@ -69,6 +75,7 @@ class Appointment {
       providerId: map['providerId'] as String?,
       service: ServiceType.values.byName(map['service'] as String),
       dateTime: DateTime.parse(map['dateTime'] as String),
+      duration: Duration(minutes: (map['duration'] as int?) ?? 60),
     );
   }
 
@@ -82,6 +89,7 @@ class Appointment {
       'providerId': providerId,
       'service': service.name,
       'dateTime': dateTime.toIso8601String(),
+      'duration': duration.inMinutes,
     };
   }
 
@@ -96,7 +104,8 @@ class Appointment {
           guestContact == other.guestContact &&
           providerId == other.providerId &&
           service == other.service &&
-          dateTime == other.dateTime;
+          dateTime == other.dateTime &&
+          duration == other.duration;
 
   @override
   int get hashCode => id.hashCode ^
@@ -105,5 +114,6 @@ class Appointment {
       guestContact.hashCode ^
       providerId.hashCode ^
       service.hashCode ^
-      dateTime.hashCode;
+      dateTime.hashCode ^
+      duration.hashCode;
 }
