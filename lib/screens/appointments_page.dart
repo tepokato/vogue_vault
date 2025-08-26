@@ -9,6 +9,7 @@ import '../services/appointment_service.dart';
 import '../widgets/app_scaffold.dart';
 import 'edit_appointment_page.dart';
 import 'edit_user_page.dart';
+import 'calendar_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
@@ -22,6 +23,16 @@ class AppointmentsPage extends StatelessWidget {
     return AppScaffold(
       title: AppLocalizations.of(context)!.appointmentsTitle,
       actions: [
+        IconButton(
+          icon: const Icon(Icons.calendar_today),
+          tooltip: AppLocalizations.of(context)!.calendarTooltip,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CalendarPage()),
+            );
+          },
+        ),
         IconButton(
           icon: const Icon(Icons.group),
           tooltip: AppLocalizations.of(context)!.usersTooltip,

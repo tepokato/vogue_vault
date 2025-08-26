@@ -11,6 +11,7 @@ import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import 'manage_services_page.dart';
+import 'profile_page.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -171,17 +172,17 @@ class EditUserPage extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
-                          onPressed: user == null
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => ManageServicesPage(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => user == null
+                                    ? const ProfilePage(isNewUser: true)
+                                    : ManageServicesPage(
                                         userId: user.id,
                                       ),
-                                    ),
-                                  );
-                                },
+                              ),
+                            );
+                          },
                           child: Text(
                             AppLocalizations.of(context)!.servicesTitle,
                           ),
