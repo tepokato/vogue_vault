@@ -16,7 +16,10 @@ class Appointment {
   final String? guestContact;
 
   /// Identifier of the user acting as the service provider.
-  final String providerId;
+  ///
+  /// This field is optional as appointments can now be created without
+  /// assigning a specific provider.
+  final String? providerId;
 
   /// The type of service being scheduled.
   final ServiceType service;
@@ -30,7 +33,7 @@ class Appointment {
     this.clientId,
     this.guestName,
     this.guestContact,
-    required this.providerId,
+    this.providerId,
     required this.service,
     required this.dateTime,
   });
@@ -63,7 +66,7 @@ class Appointment {
       clientId: map['clientId'] as String?,
       guestName: map['guestName'] as String?,
       guestContact: map['guestContact'] as String?,
-      providerId: map['providerId'] as String,
+      providerId: map['providerId'] as String?,
       service: ServiceType.values.byName(map['service'] as String),
       dateTime: DateTime.parse(map['dateTime'] as String),
     );

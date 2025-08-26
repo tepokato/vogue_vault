@@ -12,10 +12,7 @@ import '../utils/service_type_utils.dart';
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
   final ServiceType? initialService;
-  final String? initialProviderId;
-
-  const EditAppointmentPage(
-      {super.key, this.appointment, this.initialService, this.initialProviderId});
+  const EditAppointmentPage({super.key, this.appointment, this.initialService});
 
   @override
   State<EditAppointmentPage> createState() => _EditAppointmentPageState();
@@ -25,7 +22,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   final _formKey = GlobalKey<FormState>();
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
-  String? _selectedProviderId;
   late final TextEditingController _guestNameController;
   late final TextEditingController _guestContactController;
 
@@ -35,7 +31,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _service =
         widget.appointment?.service ?? widget.initialService ?? ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
-    _selectedProviderId = widget.appointment?.providerId ?? widget.initialProviderId;
     _guestNameController =
         TextEditingController(text: widget.appointment?.guestName ?? '');
     _guestContactController =
@@ -52,35 +47,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final providers = service.providersFor(_service);
     final locale = Localizations.localeOf(context).toString();
-    if (_selectedProviderId != null &&
-        !providers.any((p) => p.id == _selectedProviderId)) {
-      _selectedProviderId = null;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                AppLocalizations.of(context)!.selectedProviderRemoved),
-          ),
-        );
-      });
-    }
     final isEditing = widget.appointment != null;
-
-    if (providers.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(isEditing
-              ? AppLocalizations.of(context)!.editAppointmentTitle
-              : AppLocalizations.of(context)!.newAppointmentTitle),
-        ),
-        body: Center(
-          child: Text(AppLocalizations.of(context)!.noProvidersAvailableAdd),
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -129,36 +97,12 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     .toList(),
                 onChanged: (value) {
                   if (value == null) return;
-                  final availableProviders =
-                      context.read<AppointmentService>().providersFor(value);
                   setState(() {
                     _service = value;
-                    if (_selectedProviderId != null &&
-                        !availableProviders
-                            .any((p) => p.id == _selectedProviderId)) {
-                      _selectedProviderId = null;
-                    }
                   });
                 },
                 validator: (value) => value == null
                     ? AppLocalizations.of(context)!.selectServiceValidation
-                    : null,
-              ),
-              DropdownButtonFormField<String>(
-                value: _selectedProviderId,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.providerLabel),
-                items: providers
-                    .map(
-                      (p) => DropdownMenuItem<String>(
-                        value: p.id,
-                        child: Text(p.name),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) => setState(() => _selectedProviderId = value),
-                validator: (value) => value == null
-                    ? AppLocalizations.of(context)!.selectProviderValidation
                     : null,
               ),
               const SizedBox(height: 12),
@@ -201,7 +145,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     clientId: widget.appointment?.clientId,
                     guestName: _guestNameController.text,
                     guestContact: _guestContactController.text,
-                    providerId: _selectedProviderId!,
+                    providerId: widget.appointment?.providerId,
                     service: _service,
                     dateTime: _dateTime,
                   );

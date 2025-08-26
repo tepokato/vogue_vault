@@ -40,18 +40,15 @@ void main() {
     await service.init();
 
     const uuid = Uuid();
-    final providerId = uuid.v4();
     final laterId = uuid.v4();
     final earlierId = uuid.v4();
     final later = Appointment(
       id: laterId,
-      providerId: providerId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-02'),
     );
     final earlier = Appointment(
       id: earlierId,
-      providerId: providerId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
     );
@@ -63,7 +60,7 @@ void main() {
     expect(appts.map((a) => a.id), [earlierId, laterId]);
   });
 
-  test('legacy appointments load with default providerId', () async {
+  test('legacy appointments load with null providerId', () async {
     final service = AppointmentService();
     await service.init();
 
@@ -80,7 +77,7 @@ void main() {
 
     final appts = service.appointments;
     expect(appts, hasLength(1));
-    expect(appts.first.providerId, '');
+    expect(appts.first.providerId, isNull);
   });
 
   test('deleteUser handles legacy appointments', () async {
@@ -124,7 +121,6 @@ void main() {
     final appt = Appointment(
       id: id,
       guestName: 'Walk-in',
-      providerId: uuid.v4(),
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
     );

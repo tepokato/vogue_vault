@@ -31,18 +31,11 @@ class AppointmentService extends ChangeNotifier {
     }
   }
 
-  Map<String, dynamic> _withProviderId(Map<String, dynamic> map) {
-    return {
-      ...map,
-      'providerId': map['providerId'] ?? '',
-    };
-  }
-
   List<Appointment> get appointments {
     if (!_initialized) return [];
     final appts = _appointmentsBox.values
-        .map((m) => Appointment.fromMap(
-            _withProviderId(Map<String, dynamic>.from(m))))
+        .map((m) =>
+            Appointment.fromMap(Map<String, dynamic>.from(m)))
         .toList();
     appts.sort((a, b) => a.dateTime.compareTo(b.dateTime));
     return appts;
@@ -88,8 +81,7 @@ class AppointmentService extends ChangeNotifier {
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
     final appointmentMap = Map<String, dynamic>.from(map);
-    // Ensure providerId is available for older stored appointments.
-    return Appointment.fromMap(_withProviderId(appointmentMap));
+    return Appointment.fromMap(appointmentMap);
   }
 
   Future<void> addUser(UserProfile user) async {
@@ -108,8 +100,8 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
 
     final affected = _appointmentsBox.values
-        .map((m) => Appointment.fromMap(
-            _withProviderId(Map<String, dynamic>.from(m))))
+        .map((m) =>
+            Appointment.fromMap(Map<String, dynamic>.from(m)))
         .where((a) => a.clientId == id || a.providerId == id)
         .toList();
 
@@ -160,7 +152,7 @@ class AppointmentService extends ChangeNotifier {
     }
     for (final m in _appointmentsBox.values) {
       final map = Map<String, dynamic>.from(m);
-      final appt = Appointment.fromMap(_withProviderId(map));
+      final appt = Appointment.fromMap(map);
       var updated = appt;
       if (appt.clientId == oldId) {
         updated = updated.copyWith(clientId: newId);

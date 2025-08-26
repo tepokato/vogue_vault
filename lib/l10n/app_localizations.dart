@@ -272,12 +272,6 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancelButton;
 
-  /// No description provided for @selectedProviderRemoved.
-  ///
-  /// In en, this message translates to:
-  /// **'Previously selected provider was removed or unavailable. Please choose another.'**
-  String get selectedProviderRemoved;
-
   /// No description provided for @editAppointmentTitle.
   ///
   /// In en, this message translates to:
@@ -290,11 +284,6 @@ abstract class AppLocalizations {
   /// **'New Appointment'**
   String get newAppointmentTitle;
 
-  /// No description provided for @noProvidersAvailableAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'No providers available. Please add a provider first.'**
-  String get noProvidersAvailableAdd;
 
   /// No description provided for @serviceLabel.
   ///
@@ -308,17 +297,6 @@ abstract class AppLocalizations {
   /// **'Please select a service'**
   String get selectServiceValidation;
 
-  /// No description provided for @providerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Provider'**
-  String get providerLabel;
-
-  /// No description provided for @selectProviderValidation.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select a provider'**
-  String get selectProviderValidation;
 
   /// No description provided for @selectDateButton.
   ///

@@ -97,31 +97,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelButton => 'Cancel';
 
   @override
-  @override
-  String get selectedProviderRemoved =>
-      'Previously selected provider was removed or unavailable. Please choose another.';
-
-  @override
   String get editAppointmentTitle => 'Edit Appointment';
 
   @override
   String get newAppointmentTitle => 'New Appointment';
 
   @override
-  String get noProvidersAvailableAdd =>
-      'No providers available. Please add a provider first.';
-
-  @override
   String get serviceLabel => 'Service';
 
   @override
   String get selectServiceValidation => 'Please select a service';
-
-  @override
-  String get providerLabel => 'Provider';
-
-  @override
-  String get selectProviderValidation => 'Please select a provider';
 
   @override
   String get selectDateButton => 'Select Date';
