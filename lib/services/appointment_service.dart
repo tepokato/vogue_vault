@@ -33,10 +33,14 @@ class AppointmentService extends ChangeNotifier {
 
   List<Appointment> get appointments {
     if (!_initialized) return [];
-    final appts = _appointmentsBox.values
-        .map((m) =>
-            Appointment.fromMap(Map<String, dynamic>.from(m)))
-        .toList();
+    final appts = _appointmentsBox.values.map((m) {
+      final map = Map<String, dynamic>.from(m);
+      final appt = Appointment.fromMap(map);
+      if (!map.containsKey('duration')) {
+        _appointmentsBox.put(appt.id, appt.toMap());
+      }
+      return appt;
+    }).toList();
     appts.sort((a, b) => a.dateTime.compareTo(b.dateTime));
     return appts;
   }
@@ -81,7 +85,11 @@ class AppointmentService extends ChangeNotifier {
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
     final appointmentMap = Map<String, dynamic>.from(map);
-    return Appointment.fromMap(appointmentMap);
+    final appt = Appointment.fromMap(appointmentMap);
+    if (!appointmentMap.containsKey('duration')) {
+      _appointmentsBox.put(appt.id, appt.toMap());
+    }
+    return appt;
   }
 
   Future<void> addUser(UserProfile user) async {

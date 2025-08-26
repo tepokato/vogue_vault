@@ -77,9 +77,9 @@ class AppointmentsPage extends StatelessWidget {
                     '$clientName - ${serviceTypeLabel(context, appt.service)}',
                   ),
                   subtitle: Text(
-                    DateFormat.yMMMd(locale)
-                        .add_jm()
-                        .format(appt.dateTime.toLocal()),
+                    '${DateFormat.yMMMd(locale).format(appt.dateTime.toLocal())} '
+                    '${DateFormat.jm(locale).format(appt.dateTime.toLocal())} - '
+                    '${DateFormat.jm(locale).format(appt.dateTime.toLocal().add(appt.duration))}',
                   ),
                   onTap: () {
                     Navigator.push(
