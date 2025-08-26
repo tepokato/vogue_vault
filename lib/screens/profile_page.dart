@@ -7,9 +7,11 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_offering.dart';
+import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
+import '../utils/service_type_utils.dart';
 import '../widgets/app_scaffold.dart';
 import 'appointments_page.dart';
 import 'manage_services_page.dart';
@@ -212,6 +214,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return (firstInitial + lastInitial).toUpperCase();
   }
 
+  ServiceType? get _serviceType =>
+      _offerings.isNotEmpty ? _offerings.first.type : null;
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -234,14 +239,40 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Semantics(
                           label: AppLocalizations.of(context)!.userPhotoLabel,
                           image: true,
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundImage: _photoBytes != null
-                                ? MemoryImage(_photoBytes!)
-                                : null,
-                            child: _photoBytes == null || _photoBytes!.isEmpty
-                                ? Text(_initials)
-                                : null,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundImage: _photoBytes != null
+                                    ? MemoryImage(_photoBytes!)
+                                    : null,
+                                child:
+                                    _photoBytes == null || _photoBytes!.isEmpty
+                                        ? Text(_initials)
+                                        : null,
+                              ),
+                              if (_serviceType != null)
+                                Positioned(
+                                  bottom: -4,
+                                  right: -4,
+                                  child: CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: serviceTypeColor(
+                                      _serviceType!,
+                                    ),
+                                    child: ImageIcon(
+                                      AssetImage(
+                                        serviceTypeIcon(_serviceType!),
+                                      ),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimary,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ),
@@ -253,11 +284,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(
                             context,
-                          )!.firstNameLabel,
+                          )!
+                              .firstNameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
-                        validator: (value) =>
-                            value == null || value.trim().isEmpty
+                        validator: (value) => value == null ||
+                                value.trim().isEmpty
                             ? AppLocalizations.of(context)!.firstNameRequired
                             : null,
                       ),
@@ -267,13 +299,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(
                             context,
-                          )!.lastNameLabel,
+                          )!
+                              .lastNameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
                         validator: (value) =>
                             value == null || value.trim().isEmpty
-                            ? AppLocalizations.of(context)!.lastNameRequired
-                            : null,
+                                ? AppLocalizations.of(context)!.lastNameRequired
+                                : null,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -281,7 +314,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(
                             context,
-                          )!.nicknameLabel,
+                          )!
+                              .nicknameLabel,
                         ),
                         onChanged: (_) => setState(() {}),
                       ),
@@ -291,8 +325,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.emailLabel,
                         ),
-                        validator: (value) =>
-                            value == null ||
+                        validator: (value) => value == null ||
                                 value.trim().isEmpty ||
                                 !value.contains('@')
                             ? AppLocalizations.of(context)!.invalidEmail
@@ -305,7 +338,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(
                               context,
-                            )!.currentPasswordLabel,
+                            )!
+                                .currentPasswordLabel,
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _showCurrentPassword
@@ -327,7 +361,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(
                             context,
-                          )!.newPasswordLabel,
+                          )!
+                              .newPasswordLabel,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _showNewPassword
@@ -347,7 +382,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(
                             context,
-                          )!.confirmPasswordLabel,
+                          )!
+                              .confirmPasswordLabel,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _showConfirmPassword
@@ -380,8 +416,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                     final service = context.read<AppointmentService>();
                     setState(() {
-                      _offerings =
-                          [...?service.getUser(_userId)?.offerings];
+                      _offerings = [...?service.getUser(_userId)?.offerings];
                     });
                   },
                 ),
