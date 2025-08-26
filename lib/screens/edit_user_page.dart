@@ -23,24 +23,23 @@ class EditUserPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.usersTooltip),
+        title: Text(AppLocalizations.of(context)!.customersTooltip),
       ),
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
           final auth = context.watch<AuthService>();
-          final roleText = user.roles
-              .map((role) {
-                switch (role) {
-                  case UserRole.professional:
-                    return AppLocalizations.of(context)!.professionalRole;
-                  case UserRole.admin:
-                    return AppLocalizations.of(context)!.adminRole;
-                }
-              })
-              .join(', ');
-          final isSelf = auth.currentUser != null && user.id == auth.currentUser;
+          final roleText = user.roles.map((role) {
+            switch (role) {
+              case UserRole.professional:
+                return AppLocalizations.of(context)!.professionalRole;
+              case UserRole.admin:
+                return AppLocalizations.of(context)!.adminRole;
+            }
+          }).join(', ');
+          final isSelf =
+              auth.currentUser != null && user.id == auth.currentUser;
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: user.photoBytes != null
@@ -87,7 +86,8 @@ class EditUserPage extends StatelessWidget {
     );
   }
 
-  Future<void> _showUserDialog(BuildContext context, {UserProfile? user}) async {
+  Future<void> _showUserDialog(BuildContext context,
+      {UserProfile? user}) async {
     final firstNameController =
         TextEditingController(text: user?.firstName ?? '');
     final lastNameController =
@@ -117,9 +117,8 @@ class EditUserPage extends StatelessWidget {
                           if (!isImagePickerSupported) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(
-                                    AppLocalizations.of(context)!
-                                        .imageSelectionUnsupported),
+                                content: Text(AppLocalizations.of(context)!
+                                    .imageSelectionUnsupported),
                               ),
                             );
                             return;
@@ -144,11 +143,10 @@ class EditUserPage extends StatelessWidget {
                         decoration: InputDecoration(
                             labelText:
                                 AppLocalizations.of(context)!.firstNameLabel),
-                        validator: (value) =>
-                            value == null || value.trim().isEmpty
-                                ? AppLocalizations.of(context)!
-                                    .firstNameRequired
-                                : null,
+                        validator: (value) => value == null ||
+                                value.trim().isEmpty
+                            ? AppLocalizations.of(context)!.firstNameRequired
+                            : null,
                       ),
                       TextFormField(
                         controller: lastNameController,
@@ -157,8 +155,7 @@ class EditUserPage extends StatelessWidget {
                                 AppLocalizations.of(context)!.lastNameLabel),
                         validator: (value) =>
                             value == null || value.trim().isEmpty
-                                ? AppLocalizations.of(context)!
-                                    .lastNameRequired
+                                ? AppLocalizations.of(context)!.lastNameRequired
                                 : null,
                       ),
                       TextFormField(
@@ -201,8 +198,7 @@ class EditUserPage extends StatelessWidget {
                       return;
                     }
                     final service = context.read<AppointmentService>();
-                    final id =
-                        user?.id ?? const Uuid().v4();
+                    final id = user?.id ?? const Uuid().v4();
                     final newUser = UserProfile(
                       id: id,
                       firstName: firstNameController.text.trim(),
@@ -235,5 +231,4 @@ class EditUserPage extends StatelessWidget {
       nicknameController.dispose();
     }
   }
-
 }

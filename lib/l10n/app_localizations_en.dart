@@ -24,7 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTooltip => 'Profile';
 
   @override
-  String get usersTooltip => 'Users';
+  String get customersTooltip => 'Customers';
 
   @override
   String get calendarTooltip => 'Calendar';
@@ -39,7 +39,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTitle => 'Profile';
 
   @override
-  String get imageSelectionUnsupported => 'Image selection not supported on this platform';
+  String get imageSelectionUnsupported =>
+      'Image selection not supported on this platform';
 
   @override
   String get nameLabel => 'Name';
@@ -183,5 +184,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get serviceTypeTattoo => 'Tattoo Artist';
 
   @override
-  String get appointmentConflict => 'Appointment conflicts with existing booking';
+  String get appointmentConflict =>
+      'Appointment conflicts with existing booking';
 }

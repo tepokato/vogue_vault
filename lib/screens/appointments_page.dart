@@ -35,7 +35,7 @@ class AppointmentsPage extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.group),
-          tooltip: AppLocalizations.of(context)!.usersTooltip,
+          tooltip: AppLocalizations.of(context)!.customersTooltip,
           onPressed: () {
             Navigator.push(
               context,
@@ -96,8 +96,7 @@ class AppointmentsPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            EditAppointmentPage(appointment: appt),
+                        builder: (_) => EditAppointmentPage(appointment: appt),
                       ),
                     );
                   },
