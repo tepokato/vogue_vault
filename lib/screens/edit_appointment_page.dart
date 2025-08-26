@@ -168,13 +168,24 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     dateTime: _dateTime,
                     duration: _duration,
                   );
-                  if (isEditing) {
-                    await service.updateAppointment(newAppt);
-                  } else {
-                    await service.addAppointment(newAppt);
+                  try {
+                    if (isEditing) {
+                      await service.updateAppointment(newAppt);
+                    } else {
+                      await service.addAppointment(newAppt);
+                    }
+                    if (!mounted) return;
+                    Navigator.pop(context);
+                  } catch (e) {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(context)!.appointmentConflict,
+                        ),
+                      ),
+                    );
                   }
-                  if (!mounted) return;
-                  Navigator.pop(context);
                 },
                 child: Text(AppLocalizations.of(context)!.saveButton),
               ),
