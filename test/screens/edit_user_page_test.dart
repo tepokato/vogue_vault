@@ -86,7 +86,7 @@ void main() {
       ),
     );
 
-    final deleteFinder = find.byIcon(Icons.delete);
+    final deleteFinder = find.widgetWithIcon(IconButton, Icons.delete);
     expect(deleteFinder, findsOneWidget);
     final button = tester.widget<IconButton>(deleteFinder);
     expect(button.onPressed, isNull);

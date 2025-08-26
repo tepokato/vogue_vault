@@ -4,9 +4,12 @@ import 'package:provider/provider.dart';
 
 import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/models/user_profile.dart';
+import 'package:vogue_vault/models/service_offering.dart';
+import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
+import 'package:vogue_vault/utils/service_type_utils.dart';
 import 'package:vogue_vault/widgets/service_offering_editor.dart';
 
 class _FakeAuthService extends AuthService {
@@ -257,4 +260,37 @@ void main() {
     expect(appt.addedUser!.offerings, isEmpty);
     expect(find.text('Please select at least one service'), findsNothing);
   });
+
+  for (final type in ServiceType.values)
+    testWidgets('displays service type icon for ${type.name}', (tester) async {
+      final auth = _FakeAuthService();
+      final appt = _FakeAppointmentService();
+      appt.store['old@example.com'] = UserProfile(
+        id: 'old@example.com',
+        firstName: 'Old',
+        lastName: 'User',
+        offerings: [ServiceOffering(type: type, name: 'Test', price: 0)],
+      );
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<AuthService>.value(value: auth),
+            ChangeNotifierProvider<AppointmentService>.value(value: appt),
+          ],
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: ProfilePage(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byWidgetPredicate(
+          (w) =>
+              w is CircleAvatar && w.backgroundColor == serviceTypeColor(type),
+        ),
+        findsOneWidget,
+      );
+    });
 }
