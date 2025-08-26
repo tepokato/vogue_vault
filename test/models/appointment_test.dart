@@ -33,7 +33,6 @@ void main() {
         id: uuid.v4(),
         guestName: 'Walk-in',
         guestContact: '555-1234',
-        providerId: uuid.v4(),
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 11, 0),
       );
