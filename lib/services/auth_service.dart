@@ -169,7 +169,7 @@ class AuthService extends ChangeNotifier {
     final users = _users;
 
     if (currentUser == email) {
-      await logout();
+      throw StateError('Cannot delete the current user');
     }
 
     users.remove(email);
