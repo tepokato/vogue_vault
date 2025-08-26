@@ -15,6 +15,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appointmentsTitle => 'Citas';
 
   @override
+  String get calendarTitle => 'Calendario';
+
+  @override
   String get homeTooltip => 'Inicio';
 
   @override
@@ -22,6 +25,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get usersTooltip => 'Usuarios';
+
+  @override
+  String get calendarTooltip => 'Calendario';
 
   @override
   String get unknownUser => 'Desconocido';
@@ -33,8 +39,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileTitle => 'Perfil';
 
   @override
-  String get imageSelectionUnsupported =>
-      'La selección de imágenes no es compatible con esta plataforma';
+  String get imageSelectionUnsupported => 'La selección de imágenes no es compatible con esta plataforma';
 
   @override
   String get nameLabel => 'Nombre';
@@ -95,6 +100,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cancelButton => 'Cancelar';
+
   @override
   String get editAppointmentTitle => 'Editar cita';
 
@@ -177,6 +183,5 @@ class AppLocalizationsEs extends AppLocalizations {
   String get serviceTypeTattoo => 'Tatuador';
 
   @override
-  String get appointmentConflict =>
-      'La cita entra en conflicto con una reserva existente';
+  String get appointmentConflict => 'La cita entra en conflicto con una reserva existente';
 }
