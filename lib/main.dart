@@ -11,7 +11,6 @@ import 'utils/color_palette.dart';
 import 'screens/auth_page.dart';
 import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
-import 'services/client_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +19,6 @@ Future<void> main() async {
 
   final appointmentService = AppointmentService();
   await appointmentService.init();
-  final clientService = ClientService(appointmentService);
-  await clientService.init();
   final authService = AuthService();
   await authService.init();
 
@@ -30,9 +27,6 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider<AppointmentService>.value(
           value: appointmentService,
-        ),
-        ChangeNotifierProvider<ClientService>.value(
-          value: clientService,
         ),
         ChangeNotifierProvider<AuthService>.value(
           value: authService,

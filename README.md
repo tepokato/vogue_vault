@@ -50,7 +50,7 @@ flutter build <platform>
 
 ```
 lib/
-  models/        # data classes such as Appointment and Client
+  models/        # data classes such as Appointment
   services/      # service layer and persistence
   screens/       # UI pages
   widgets/       # shared UI components (e.g., ServiceOfferingEditor)

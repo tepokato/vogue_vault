@@ -7,8 +7,6 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import '../models/appointment.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
-import '../services/client_service.dart';
-import '../models/client.dart';
 import '../utils/service_type_utils.dart';
 
 class EditAppointmentPage extends StatefulWidget {
@@ -27,7 +25,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   late Duration _duration;
   late final TextEditingController _guestNameController;
   late final TextEditingController _guestContactController;
-  String? _selectedClientId;
 
   @override
   void initState() {
@@ -40,7 +37,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
         TextEditingController(text: widget.appointment?.guestName ?? '');
     _guestContactController =
         TextEditingController(text: widget.appointment?.guestContact ?? '');
-    _selectedClientId = widget.appointment?.clientId;
   }
 
   @override
@@ -53,7 +49,6 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final clientService = context.watch<ClientService>();
     final locale = Localizations.localeOf(context).toString();
     final isEditing = widget.appointment != null;
 
@@ -75,118 +70,21 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
           key: _formKey,
           child: Column(
             children: [
-              DropdownButtonFormField<String?>(
-                value: _selectedClientId,
-                decoration: const InputDecoration(labelText: 'Client'),
-                items: [
-                  const DropdownMenuItem<String?>(
-                    value: null,
-                    child: Text('Guest'),
-                  ),
-                  ...clientService.clients.map(
-                    (c) => DropdownMenuItem<String?>(
-                      value: c.id,
-                      child: Text(c.name),
-                    ),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedClientId = value;
-                    if (value != null) {
-                      final client = clientService.getClient(value);
-                      _guestContactController.text = client?.contact ?? '';
-                    }
-                  });
-                },
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () async {
-                    final nameController = TextEditingController();
-                    final contactController = TextEditingController();
-                    final notesController = TextEditingController();
-                    final newClient = await showDialog<Client>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('New Client'),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                TextField(
-                                  controller: nameController,
-                                  decoration:
-                                      const InputDecoration(labelText: 'Name'),
-                                ),
-                                const SizedBox(height: 8),
-                                TextField(
-                                  controller: contactController,
-                                  decoration:
-                                      const InputDecoration(labelText: 'Contact'),
-                                ),
-                                const SizedBox(height: 8),
-                                TextField(
-                                  controller: notesController,
-                                  decoration:
-                                      const InputDecoration(labelText: 'Notes'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                final client = Client(
-                                  id: const Uuid().v4(),
-                                  name: nameController.text,
-                                  contact: contactController.text,
-                                  notes: notesController.text.isEmpty
-                                      ? null
-                                      : notesController.text,
-                                );
-                                Navigator.of(context).pop(client);
-                              },
-                              child: const Text('Save'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    if (newClient != null) {
-                      await clientService.addClient(newClient);
-                      setState(() {
-                        _selectedClientId = newClient.id;
-                        _guestContactController.text = newClient.contact;
-                      });
-                    }
-                  },
-                  child: const Text('Add Client'),
-                ),
-              ),
               TextFormField(
                 controller: _guestNameController,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.guestNameLabel,
                 ),
                 validator: (value) =>
-                    _selectedClientId == null && (value == null || value.isEmpty)
+                    value == null || value.isEmpty
                         ? AppLocalizations.of(context)!.nameRequired
                         : null,
-                enabled: _selectedClientId == null,
               ),
               TextFormField(
                 controller: _guestContactController,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.guestContactLabel,
                 ),
-                enabled: _selectedClientId == null,
               ),
               DropdownButtonFormField<ServiceType>(
                 value: _service,
@@ -263,13 +161,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       widget.appointment?.id ?? const Uuid().v4();
                   final newAppt = Appointment(
                     id: id,
-                    clientId: _selectedClientId,
-                    guestName: _selectedClientId == null
-                        ? _guestNameController.text
-                        : null,
-                    guestContact: _selectedClientId == null
-                        ? _guestContactController.text
-                        : null,
+                    clientId: null,
+                    guestName: _guestNameController.text,
+                    guestContact: _guestContactController.text,
                     providerId: widget.appointment?.providerId,
                     service: _service,
                     dateTime: _dateTime,
