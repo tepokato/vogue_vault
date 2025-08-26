@@ -62,7 +62,7 @@ void main() {
     expect(find.byType(ProfilePage), findsOneWidget);
   });
 
-  testWidgets('delete button disabled for current user', (tester) async {
+  testWidgets('current user does not appear in list', (tester) async {
     final auth = _FakeAuthService();
     final user = UserProfile(
       id: 'test',
@@ -86,9 +86,7 @@ void main() {
       ),
     );
 
-    final deleteFinder = find.widgetWithIcon(IconButton, Icons.delete);
-    expect(deleteFinder, findsOneWidget);
-    final button = tester.widget<IconButton>(deleteFinder);
-    expect(button.onPressed, isNull);
+    expect(find.text('Test User'), findsNothing);
+    expect(find.widgetWithIcon(IconButton, Icons.delete), findsNothing);
   });
 }
