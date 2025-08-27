@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/models/address.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
+import 'package:vogue_vault/services/auth_service.dart';
 import 'package:vogue_vault/screens/edit_appointment_page.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -18,6 +19,11 @@ class _FakePathProviderPlatform extends PathProviderPlatform {
   Future<String?> getApplicationSupportPath() async => Directory.systemTemp.path;
   @override
   Future<String?> getTemporaryPath() async => Directory.systemTemp.path;
+}
+
+class _FakeAuthService extends AuthService {
+  @override
+  String? get currentUser => 'test@example.com';
 }
 
 void main() {
@@ -39,8 +45,11 @@ void main() {
     await service.addAddress(address);
 
     await tester.pumpWidget(
-      ChangeNotifierProvider.value(
-        value: service,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthService>.value(value: _FakeAuthService()),
+          ChangeNotifierProvider<AppointmentService>.value(value: service),
+        ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

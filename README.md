@@ -32,7 +32,7 @@ Choose how far in advance reminders arrive from My Business > Notification Setti
 
 Service Catalog
 
-Save your frequently offered services for faster appointment creation.
+Save your frequently offered services for faster appointment creation. Selecting an entry from this catalog during scheduling automatically fills in the service type and price, reducing manual data entry.
 
 ---
 
