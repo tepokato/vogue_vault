@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTooltip => 'Profile';
 
   @override
+  String get logoutTooltip => 'Logout';
+
+  @override
   String get professionalsTooltip => 'Professionals';
 
   @override

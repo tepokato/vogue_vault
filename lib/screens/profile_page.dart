@@ -14,6 +14,7 @@ import '../utils/image_picking.dart';
 import '../utils/service_type_utils.dart';
 import '../widgets/app_scaffold.dart';
 import 'appointments_page.dart';
+import 'auth_page.dart';
 import 'manage_services_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -223,6 +224,20 @@ class _ProfilePageState extends State<ProfilePage> {
       title: AppLocalizations.of(context)!.profileTitle,
       showProfileButton: false,
       showHomeButton: !widget.isNewUser,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.logout),
+          tooltip: AppLocalizations.of(context)!.logoutTooltip,
+          onPressed: () {
+            context.read<AuthService>().logout();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const AuthPage()),
+              (route) => false,
+            );
+          },
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
