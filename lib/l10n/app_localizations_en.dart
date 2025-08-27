@@ -205,4 +205,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appointmentConflict =>
       'Appointment conflicts with existing booking';
+
+  @override
+  String get deleteAppointmentTooltip => 'Delete appointment';
 }

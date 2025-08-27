@@ -205,4 +205,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get appointmentConflict =>
       'La cita entra en conflicto con una reserva existente';
+
+  @override
+  String get deleteAppointmentTooltip => 'Eliminar cita';
 }
