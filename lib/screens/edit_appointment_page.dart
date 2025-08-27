@@ -23,26 +23,20 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
   late Duration _duration;
-  late final TextEditingController _guestNameController;
-  late final TextEditingController _guestContactController;
 
   @override
   void initState() {
     super.initState();
     _service =
-        widget.appointment?.service ?? widget.initialService ?? ServiceType.barber;
+        widget.appointment?.service ??
+        widget.initialService ??
+        ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
     _duration = widget.appointment?.duration ?? const Duration(hours: 1);
-    _guestNameController =
-        TextEditingController(text: widget.appointment?.guestName ?? '');
-    _guestContactController =
-        TextEditingController(text: widget.appointment?.guestContact ?? '');
   }
 
   @override
   void dispose() {
-    _guestNameController.dispose();
-    _guestContactController.dispose();
     super.dispose();
   }
 
@@ -54,9 +48,11 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing
-            ? AppLocalizations.of(context)!.editAppointmentTitle
-            : AppLocalizations.of(context)!.newAppointmentTitle),
+        title: Text(
+          isEditing
+              ? AppLocalizations.of(context)!.editAppointmentTitle
+              : AppLocalizations.of(context)!.newAppointmentTitle,
+        ),
       ),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -70,26 +66,11 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                controller: _guestNameController,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.guestNameLabel,
-                ),
-                validator: (value) =>
-                    value == null || value.isEmpty
-                        ? AppLocalizations.of(context)!.nameRequired
-                        : null,
-              ),
-              TextFormField(
-                controller: _guestContactController,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.guestContactLabel,
-                ),
-              ),
               DropdownButtonFormField<ServiceType>(
                 value: _service,
                 decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.serviceLabel),
+                  labelText: AppLocalizations.of(context)!.serviceLabel,
+                ),
                 items: ServiceType.values
                     .map(
                       (s) => DropdownMenuItem<ServiceType>(
@@ -110,12 +91,13 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               DropdownButtonFormField<int>(
                 value: _duration.inMinutes,
-                decoration: const InputDecoration(labelText: 'Duration (minutes)'),
+                decoration: const InputDecoration(
+                  labelText: 'Duration (minutes)',
+                ),
                 items: List.generate(8, (i) => (i + 1) * 15)
-                    .map((m) => DropdownMenuItem<int>(
-                          value: m,
-                          child: Text('$m'),
-                        ))
+                    .map(
+                      (m) => DropdownMenuItem<int>(value: m, child: Text('$m')),
+                    )
                     .toList(),
                 onChanged: (value) {
                   if (value == null) return;
@@ -127,7 +109,11 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Text(DateFormat.yMMMd(locale).add_jm().format(_dateTime.toLocal())),
+                  Text(
+                    DateFormat.yMMMd(
+                      locale,
+                    ).add_jm().format(_dateTime.toLocal()),
+                  ),
                   const SizedBox(width: 8),
                   TextButton(
                     onPressed: () async {
@@ -145,11 +131,15 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       if (time == null) return;
                       setState(() {
                         _dateTime = DateTime(
-                            date.year, date.month, date.day, time.hour, time.minute);
+                          date.year,
+                          date.month,
+                          date.day,
+                          time.hour,
+                          time.minute,
+                        );
                       });
                     },
-                    child: Text(
-                        AppLocalizations.of(context)!.selectDateButton),
+                    child: Text(AppLocalizations.of(context)!.selectDateButton),
                   ),
                 ],
               ),
@@ -157,13 +147,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ElevatedButton(
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
-                  final id =
-                      widget.appointment?.id ?? const Uuid().v4();
+                  final id = widget.appointment?.id ?? const Uuid().v4();
                   final newAppt = Appointment(
                     id: id,
-                    clientId: null,
-                    guestName: _guestNameController.text,
-                    guestContact: _guestContactController.text,
                     providerId: widget.appointment?.providerId,
                     service: _service,
                     dateTime: _dateTime,

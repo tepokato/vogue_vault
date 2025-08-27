@@ -19,24 +19,16 @@ class _FakeAppointmentService extends AppointmentService {
 }
 
 void main() {
-  testWidgets('selecting a date shows appointments for that day', (tester) async {
+  testWidgets('selecting a date shows appointments for that day', (
+    tester,
+  ) async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day, 10);
     final tomorrow = today.add(const Duration(days: 1));
 
     final service = _FakeAppointmentService([
-      Appointment(
-        id: '1',
-        service: ServiceType.barber,
-        dateTime: today,
-        guestName: 'Alice',
-      ),
-      Appointment(
-        id: '2',
-        service: ServiceType.nails,
-        dateTime: tomorrow,
-        guestName: 'Bob',
-      ),
+      Appointment(id: '1', service: ServiceType.barber, dateTime: today),
+      Appointment(id: '2', service: ServiceType.nails, dateTime: tomorrow),
     ]);
 
     await tester.pumpWidget(
@@ -52,20 +44,21 @@ void main() {
     await tester.pumpAndSettle();
 
     // Initially shows today's appointment
-    expect(find.text('Alice - Barber'), findsOneWidget);
-    expect(find.text('Bob - Nails'), findsNothing);
+    expect(find.text('Barber - Unknown'), findsOneWidget);
+    expect(find.text('Nails - Unknown'), findsNothing);
 
     // Select tomorrow
     final calendarFinder = find.byType(TableCalendar<Appointment>);
-    final calendarWidget = tester.widget<TableCalendar<Appointment>>(calendarFinder);
+    final calendarWidget = tester.widget<TableCalendar<Appointment>>(
+      calendarFinder,
+    );
     calendarWidget.onDaySelected!(
       DateTime(tomorrow.year, tomorrow.month, tomorrow.day),
       DateTime(tomorrow.year, tomorrow.month, tomorrow.day),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Bob - Nails'), findsOneWidget);
-    expect(find.text('Alice - Barber'), findsNothing);
+    expect(find.text('Nails - Unknown'), findsOneWidget);
+    expect(find.text('Barber - Unknown'), findsNothing);
   });
 }
-

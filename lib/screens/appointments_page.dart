@@ -71,11 +71,10 @@ class AppointmentsPage extends StatelessWidget {
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 final Appointment appt = appointments[index];
-                final clientName = appt.clientId != null
-                    ? service.getUser(appt.clientId!)?.name ??
-                        AppLocalizations.of(context)!.unknownUser
-                    : appt.guestName ??
-                        AppLocalizations.of(context)!.unknownUser;
+                final providerName = appt.providerId != null
+                    ? service.getUser(appt.providerId!)?.name ??
+                          AppLocalizations.of(context)!.unknownUser
+                    : AppLocalizations.of(context)!.unknownUser;
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: serviceTypeColor(appt.service),
@@ -85,7 +84,7 @@ class AppointmentsPage extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    '$clientName - ${serviceTypeLabel(context, appt.service)}',
+                    '${serviceTypeLabel(context, appt.service)} - $providerName',
                   ),
                   subtitle: Text(
                     '${DateFormat.yMMMd(locale).format(appt.dateTime.toLocal())} '
@@ -113,9 +112,7 @@ class AppointmentsPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const EditAppointmentPage(),
-            ),
+            MaterialPageRoute(builder: (_) => const EditAppointmentPage()),
           );
         },
         child: const Icon(Icons.add),

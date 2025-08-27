@@ -51,20 +51,20 @@ class AppointmentService extends ChangeNotifier {
       final userMap = Map<String, dynamic>.from(m);
       return UserProfile.fromMap({
         ...userMap,
-        'offerings': (userMap['offerings'] as List?)
+        'offerings':
+            (userMap['offerings'] as List?)
                 ?.map((e) => Map<String, dynamic>.from(e as Map))
                 .toList() ??
             <Map<String, dynamic>>[],
       });
     }).toList();
   }
+
   List<UserProfile> get providers =>
       users.where((u) => u.roles.contains(UserRole.professional)).toList();
 
   List<UserProfile> providersFor(ServiceType type) =>
-      providers
-          .where((p) => p.offerings.any((o) => o.type == type))
-          .toList();
+      providers.where((p) => p.offerings.any((o) => o.type == type)).toList();
 
   UserProfile? getUser(String id) {
     _ensureInitialized();
@@ -73,7 +73,8 @@ class AppointmentService extends ChangeNotifier {
     final userMap = Map<String, dynamic>.from(map);
     return UserProfile.fromMap({
       ...userMap,
-      'offerings': (userMap['offerings'] as List?)
+      'offerings':
+          (userMap['offerings'] as List?)
               ?.map((e) => Map<String, dynamic>.from(e as Map))
               .toList() ??
           <Map<String, dynamic>>[],
@@ -108,17 +109,13 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
 
     final affected = _appointmentsBox.values
-        .map((m) =>
-            Appointment.fromMap(Map<String, dynamic>.from(m)))
-        .where((a) => a.clientId == id || a.providerId == id)
+        .map((m) => Appointment.fromMap(Map<String, dynamic>.from(m)))
+        .where((a) => a.providerId == id)
         .toList();
 
     if (reassignedUserId != null) {
       for (final appt in affected) {
-        final updated = appt.copyWith(
-          clientId: appt.clientId == id ? reassignedUserId : appt.clientId,
-          providerId: appt.providerId == id ? reassignedUserId : appt.providerId,
-        );
+        final updated = appt.copyWith(providerId: reassignedUserId);
         await _appointmentsBox.put(updated.id, updated.toMap());
       }
     } else {
@@ -141,8 +138,7 @@ class AppointmentService extends ChangeNotifier {
       if (existing.id == appointment.id) return false;
       final existingStart = existing.dateTime;
       final existingEnd = existingStart.add(existing.duration);
-      return newStart.isBefore(existingEnd) &&
-          existingStart.isBefore(newEnd);
+      return newStart.isBefore(existingEnd) && existingStart.isBefore(newEnd);
     });
   }
 
@@ -182,14 +178,8 @@ class AppointmentService extends ChangeNotifier {
     for (final m in _appointmentsBox.values) {
       final map = Map<String, dynamic>.from(m);
       final appt = Appointment.fromMap(map);
-      var updated = appt;
-      if (appt.clientId == oldId) {
-        updated = updated.copyWith(clientId: newId);
-      }
       if (appt.providerId == oldId) {
-        updated = updated.copyWith(providerId: newId);
-      }
-      if (updated != appt) {
+        final updated = appt.copyWith(providerId: newId);
         await _appointmentsBox.put(updated.id, updated.toMap());
       }
     }

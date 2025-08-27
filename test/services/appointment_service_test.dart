@@ -14,10 +14,12 @@ import 'package:vogue_vault/models/user_role.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
-  Future<String?> getApplicationDocumentsPath() async => Directory.systemTemp.path;
+  Future<String?> getApplicationDocumentsPath() async =>
+      Directory.systemTemp.path;
 
   @override
-  Future<String?> getApplicationSupportPath() async => Directory.systemTemp.path;
+  Future<String?> getApplicationSupportPath() async =>
+      Directory.systemTemp.path;
 
   @override
   Future<String?> getTemporaryPath() async => Directory.systemTemp.path;
@@ -69,10 +71,8 @@ void main() {
     const uuid = Uuid();
     final box = Hive.box('appointments');
     final id = uuid.v4();
-    final clientId = uuid.v4();
     await box.put(id, {
       'id': id,
-      'clientId': clientId,
       'service': ServiceType.hairdresser.name,
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
@@ -82,7 +82,7 @@ void main() {
     expect(appts.first.providerId, isNull);
   });
 
-  test('deleteUser handles legacy appointments', () async {
+  test('deleteUser removes appointments for provider', () async {
     final service = AppointmentService();
     await service.init();
 
@@ -90,47 +90,29 @@ void main() {
     final apptsBox = Hive.box('appointments');
     final usersBox = Hive.box('users');
 
-    final clientId = uuid.v4();
+    final providerId = uuid.v4();
     final apptId = uuid.v4();
 
     await usersBox.put(
-        clientId,
-        UserProfile(
-          id: clientId,
-          firstName: 'Client',
-          lastName: 'User',
-        ).toMap());
+      providerId,
+      UserProfile(
+        id: providerId,
+        firstName: 'Provider',
+        lastName: 'User',
+      ).toMap(),
+    );
 
     await apptsBox.put(apptId, {
       'id': apptId,
-      'clientId': clientId,
+      'providerId': providerId,
       'service': ServiceType.hairdresser.name,
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
 
-    await service.deleteUser(clientId);
+    await service.deleteUser(providerId);
 
     expect(apptsBox.isEmpty, isTrue);
-    expect(usersBox.get(clientId), isNull);
-  });
-
-  test('addAppointment supports guest clients', () async {
-    final service = AppointmentService();
-    await service.init();
-
-    const uuid = Uuid();
-    final id = uuid.v4();
-    final appt = Appointment(
-      id: id,
-      guestName: 'Walk-in',
-      service: ServiceType.barber,
-      dateTime: DateTime.parse('2023-01-01'),
-      duration: const Duration(hours: 1),
-    );
-    await service.addAppointment(appt);
-    final stored = service.getAppointment(id);
-    expect(stored?.guestName, 'Walk-in');
-    expect(stored?.clientId, isNull);
+    expect(usersBox.get(providerId), isNull);
   });
 
   test('addAppointment persists duration', () async {
@@ -231,7 +213,6 @@ void main() {
 
     final appt = Appointment(
       id: uuid.v4(),
-      clientId: oldId,
       providerId: oldId,
       service: ServiceType.barber,
       dateTime: DateTime.parse('2023-01-01'),
@@ -244,7 +225,6 @@ void main() {
     expect(service.getUser(oldId), isNull);
     expect(service.getUser(newId), isNotNull);
     final updatedAppt = service.getAppointment(appt.id)!;
-    expect(updatedAppt.clientId, newId);
     expect(updatedAppt.providerId, newId);
   });
 
@@ -269,8 +249,7 @@ void main() {
       duration: const Duration(hours: 1),
     );
     await service.addAppointment(appt1);
-    expect(() => service.addAppointment(appt2),
-        throwsA(isA<StateError>()));
+    expect(() => service.addAppointment(appt2), throwsA(isA<StateError>()));
   });
 
   test('updateAppointment throws on provider time conflict', () async {
@@ -296,7 +275,6 @@ void main() {
     await service.addAppointment(appt1);
     await service.addAppointment(appt2);
     final moved = appt2.copyWith(dateTime: DateTime(2023, 1, 1, 10, 30));
-    expect(() => service.updateAppointment(moved),
-        throwsA(isA<StateError>()));
+    expect(() => service.updateAppointment(moved), throwsA(isA<StateError>()));
   });
 }
