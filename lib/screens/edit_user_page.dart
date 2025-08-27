@@ -53,7 +53,34 @@ class EditUserPage extends StatelessWidget {
             onTap: () => _showUserDialog(context, user: user),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
+              tooltip: AppLocalizations.of(context)!.deleteUserTooltip,
               onPressed: () async {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                          AppLocalizations.of(context)!.professionalsTooltip),
+                      content: Text(
+                          AppLocalizations.of(context)!.deleteUserTooltip),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(
+                              AppLocalizations.of(context)!.cancelButton),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text(AppLocalizations.of(context)!
+                              .deleteUserTooltip),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (confirm != true) return;
+
                 try {
                   await auth.deleteUser(user.id);
                   await service.deleteUser(user.id);
