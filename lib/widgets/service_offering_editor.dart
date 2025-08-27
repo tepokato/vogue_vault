@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/service_offering.dart';
 import '../models/service_type.dart';
+import '../utils/service_type_utils.dart';
 
 /// Editor widget for managing a list of [ServiceOffering] items.
 ///
@@ -61,7 +62,7 @@ class _ServiceOfferingEditorState extends State<ServiceOfferingEditor> {
                       .map(
                         (s) => DropdownMenuItem<ServiceType>(
                           value: s,
-                          child: Text(s.name),
+                          child: Text(serviceTypeLabel(context, s)),
                         ),
                       )
                       .toList(),

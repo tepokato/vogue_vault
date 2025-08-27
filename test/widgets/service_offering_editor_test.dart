@@ -57,4 +57,27 @@ void main() {
 
     expect(offerings.length, 1);
   });
+
+  testWidgets('displays localized service type labels', (tester) async {
+    var offerings = [
+      ServiceOffering(type: ServiceType.barber, name: '', price: 0),
+    ];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: ServiceOfferingEditor(
+            offerings: offerings,
+            onChanged: (list) => offerings = list,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Barbero'), findsOneWidget);
+    expect(find.text('barber'), findsNothing);
+  });
 }
