@@ -128,11 +128,11 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profileTooltip;
 
-  /// No description provided for @customersTooltip.
+  /// No description provided for @professionalsTooltip.
   ///
   /// In en, this message translates to:
-  /// **'Customers'**
-  String get customersTooltip;
+  /// **'Professionals'**
+  String get professionalsTooltip;
 
   /// No description provided for @calendarTooltip.
   ///
@@ -410,17 +410,6 @@ abstract class AppLocalizations {
   /// **'Add your first appointment'**
   String get addFirstAppointment;
 
-  /// No description provided for @guestNameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Guest Name'**
-  String get guestNameLabel;
-
-  /// No description provided for @guestContactLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Guest Contact (optional)'**
-  String get guestContactLabel;
 
   /// No description provided for @serviceTypeBarber.
   ///

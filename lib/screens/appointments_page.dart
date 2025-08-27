@@ -35,7 +35,7 @@ class AppointmentsPage extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.group),
-          tooltip: AppLocalizations.of(context)!.customersTooltip,
+          tooltip: AppLocalizations.of(context)!.professionalsTooltip,
           onPressed: () {
             Navigator.push(
               context,

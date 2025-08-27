@@ -1,6 +1,6 @@
 import 'service_type.dart';
 
-/// Represents a scheduled appointment for a client.
+/// Represents a scheduled appointment.
 class Appointment {
   /// Unique identifier for the appointment.
   final String id;
