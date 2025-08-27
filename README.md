@@ -1,74 +1,69 @@
-# Vogue Vault
+Vogue Vault
 
-Vogue Vault is an open-source Flutter application for scheduling appointments between beauty professionals and their clients. Barbers, hairdressers, nail technicians, tattoo artists and others can showcase their skills, manage availability and coordinate bookings in one place.
+Vogue Vault is a productivity app designed for mobile and freelance beauty professionals such as hairdressers, barbers, tattoo artists, and nail technicians. The app helps professionals organize and manage their work on the go — keeping appointments, customer info, and service details all in one place.
 
-> This repository contains software only; it does not provide or broker any professional services.
+This app is not for customers; it is built exclusively for professionals to simplify their day-to-day workflow.
 
-## Requirements
 
-- Flutter 3.19.x
+---
 
-Check your environment:
+Features
 
-```bash
-flutter --version
-```
+Appointments Management
 
-Install dependencies:
+Register new appointments quickly.
 
-```bash
-flutter pub get
-```
+Save important details like customer name, service type, and location.
 
-## Run
+Support for one-time addresses or saved favorites like "Home" or "Salon".
 
-Launch the app on your target platform:
 
-```bash
-flutter run -d <platform>
-```
+Customer Handling
 
-Supported platforms include Android, iOS, Web, Windows, macOS and Linux.
+Add regular customers by name.
 
-## Build
+Offer guest checkout for one-time or occasional clients.
 
-Create release binaries:
 
-```bash
-flutter build <platform>
-```
+Calendar & Notifications
 
-## Features
+View all scheduled appointments in a calendar format.
 
-- Browse professional profiles and their offerings
-- Book, reschedule and cancel appointments
-- Manage calendars and availability
-- Local persistence with Hive
-- State management with Provider
+Receive notifications and reminders for upcoming services.
 
-## Project Layout
+Fully customizable notification settings.
 
-```
-lib/
-  models/        # data classes such as Appointment
-  services/      # service layer and persistence
-  screens/       # UI pages
-  widgets/       # shared UI components (e.g., ServiceOfferingEditor)
-  utils/         # helpers and constants
-  main.dart      # app entry point
-```
 
-## Testing
+Service Catalog
 
-Run unit and widget tests with:
+Save your frequently offered services for faster appointment creation.
 
-```bash
-flutter test
-```
 
-## Contributing
 
-1. Format code: `dart format .`
-2. Lint and analyze: `flutter analyze`
-3. Run tests: `flutter test`
-4. Commit changes and open a pull request.
+
+---
+
+Tech Stack
+
+(Fill this in depending on what you’re building with, e.g. Flutter, React Native, Firebase, etc.)
+
+
+---
+
+Who This App Is Not For
+
+Vogue Vault is not meant for customers. Clients cannot browse, book, or interact with the app directly — it’s built specifically as a tool for professionals only.
+
+
+---
+
+Installation
+
+(Add instructions here for running the app locally, installing from app stores, or building from source.)
+
+
+---
+
+License
+
+tbd
