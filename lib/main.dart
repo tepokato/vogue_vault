@@ -11,13 +11,17 @@ import 'utils/color_palette.dart';
 import 'screens/auth_page.dart';
 import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
+import 'services/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
 
-  final appointmentService = AppointmentService();
+  final notificationService = NotificationService();
+  await notificationService.init();
+  final appointmentService =
+      AppointmentService(notificationService: notificationService);
   await appointmentService.init();
   final authService = AuthService();
   await authService.init();
@@ -30,6 +34,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<AuthService>.value(
           value: authService,
+        ),
+        Provider<NotificationService>.value(
+          value: notificationService,
         ),
       ],
       child: const MyApp(),
