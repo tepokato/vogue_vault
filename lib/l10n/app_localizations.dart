@@ -487,6 +487,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Appointment conflicts with existing booking'**
   String get appointmentConflict;
+
+  /// No description provided for @deleteAppointmentTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete appointment'**
+  String get deleteAppointmentTooltip;
 }
 
 class _AppLocalizationsDelegate

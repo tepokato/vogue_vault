@@ -101,8 +101,39 @@ class AppointmentsPage extends StatelessWidget {
                   },
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
+                    tooltip:
+                        AppLocalizations.of(context)!.deleteAppointmentTooltip,
                     onPressed: () async {
-                      await service.deleteAppointment(appt.id);
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(
+                                AppLocalizations.of(context)!
+                                    .appointmentsTitle),
+                            content: Text(AppLocalizations.of(context)!
+                                .deleteAppointmentTooltip),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, false),
+                                child: Text(AppLocalizations.of(context)!
+                                    .cancelButton),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, true),
+                                child: Text(AppLocalizations.of(context)!
+                                    .deleteAppointmentTooltip),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (confirm == true) {
+                        await service.deleteAppointment(appt.id);
+                      }
                     },
                   ),
                 );

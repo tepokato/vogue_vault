@@ -64,5 +64,6 @@
   "serviceTypeHairdresser": "Hairdresser",
   "serviceTypeNails": "Nails",
   "serviceTypeTattoo": "Tattoo Artist",
-  "appointmentConflict": "Appointment conflicts with existing booking"
+  "appointmentConflict": "Appointment conflicts with existing booking",
+  "deleteAppointmentTooltip": "Delete appointment"
 }
