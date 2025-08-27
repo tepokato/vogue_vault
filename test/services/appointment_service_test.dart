@@ -155,6 +155,27 @@ void main() {
     expect(stored.location, 'Studio');
   });
 
+  test('guest appointments do not create customers', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final id = uuid.v4();
+    final appt = Appointment(
+      id: id,
+      guestName: 'Walk-in',
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-01'),
+      duration: const Duration(hours: 1),
+    );
+    await service.addAppointment(appt);
+
+    final stored = service.getAppointment(id)!;
+    expect(stored.guestName, 'Walk-in');
+    expect(stored.customerId, isNull);
+    expect(service.customers, isEmpty);
+  });
+
   test('address CRUD operations', () async {
     final service = AppointmentService();
     await service.init();

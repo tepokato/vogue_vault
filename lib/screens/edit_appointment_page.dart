@@ -176,6 +176,13 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               TextFormField(
                 controller: _guestController,
                 decoration: const InputDecoration(labelText: 'Guest name'),
+                validator: (_) {
+                  if ((_customerId == null || _customerId!.isEmpty) &&
+                      _guestController.text.isEmpty) {
+                    return 'Please select a customer or enter a guest name';
+                  }
+                  return null;
+                },
                 onChanged: (_) {
                   setState(() {
                     _customerId = null;
