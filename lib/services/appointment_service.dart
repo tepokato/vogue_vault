@@ -6,11 +6,13 @@ import '../models/service_type.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/customer.dart';
+import '../models/address.dart';
 
 class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
   static const _usersBoxName = 'users';
   static const _customersBoxName = 'customers';
+  static const _addressesBoxName = 'addresses';
 
   /// Underlying storage boxes. Hive may return values as
   /// `Map<dynamic, dynamic>` regardless of the generics provided. Using
@@ -18,6 +20,7 @@ class AppointmentService extends ChangeNotifier {
   late Box _appointmentsBox;
   late Box _usersBox;
   late Box _customersBox;
+  late Box _addressesBox;
 
   bool _initialized = false;
   bool get isInitialized => _initialized;
@@ -26,6 +29,7 @@ class AppointmentService extends ChangeNotifier {
     _appointmentsBox = await Hive.openBox(_appointmentsBoxName);
     _usersBox = await Hive.openBox(_usersBoxName);
     _customersBox = await Hive.openBox(_customersBoxName);
+    _addressesBox = await Hive.openBox(_addressesBoxName);
     _initialized = true;
   }
 
@@ -74,6 +78,13 @@ class AppointmentService extends ChangeNotifier {
         .toList();
   }
 
+  List<Address> get addresses {
+    if (!_initialized) return [];
+    return _addressesBox.values
+        .map((m) => Address.fromMap(Map<String, dynamic>.from(m)))
+        .toList();
+  }
+
   List<UserProfile> get providers =>
       users.where((u) => u.roles.contains(UserRole.professional)).toList();
 
@@ -115,6 +126,13 @@ class AppointmentService extends ChangeNotifier {
     final map = _customersBox.get(id);
     if (map == null) return null;
     return Customer.fromMap(Map<String, dynamic>.from(map));
+  }
+
+  Address? getAddress(String id) {
+    _ensureInitialized();
+    final map = _addressesBox.get(id);
+    if (map == null) return null;
+    return Address.fromMap(Map<String, dynamic>.from(map));
   }
 
   Future<void> addUser(UserProfile user) async {
@@ -167,6 +185,24 @@ class AppointmentService extends ChangeNotifier {
   Future<void> deleteCustomer(String id) async {
     _ensureInitialized();
     await _customersBox.delete(id);
+    notifyListeners();
+  }
+
+  Future<void> addAddress(Address address) async {
+    _ensureInitialized();
+    await _addressesBox.put(address.id, address.toMap());
+    notifyListeners();
+  }
+
+  Future<void> updateAddress(Address address) async {
+    _ensureInitialized();
+    await _addressesBox.put(address.id, address.toMap());
+    notifyListeners();
+  }
+
+  Future<void> deleteAddress(String id) async {
+    _ensureInitialized();
+    await _addressesBox.delete(id);
     notifyListeners();
   }
 
@@ -234,6 +270,7 @@ class AppointmentService extends ChangeNotifier {
       _appointmentsBox.close();
       _usersBox.close();
       _customersBox.close();
+      _addressesBox.close();
     }
     super.dispose();
   }

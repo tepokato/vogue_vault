@@ -11,6 +11,7 @@ import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/service_offering.dart';
 import 'package:vogue_vault/models/user_role.dart';
+import 'package:vogue_vault/models/address.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -152,6 +153,25 @@ void main() {
     final stored = service.getAppointment(id)!;
     expect(stored.customerId, customerId);
     expect(stored.location, 'Studio');
+  });
+
+  test('address CRUD operations', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final id = uuid.v4();
+    final address = Address(id: id, label: 'Studio', details: '123 Main');
+
+    await service.addAddress(address);
+    expect(service.addresses.map((a) => a.id), [id]);
+
+    final updated = address.copyWith(details: '456 Side');
+    await service.updateAddress(updated);
+    expect(service.getAddress(id)!.details, '456 Side');
+
+    await service.deleteAddress(id);
+    expect(service.addresses, isEmpty);
   });
 
   test('appointments default duration and are updated', () async {
