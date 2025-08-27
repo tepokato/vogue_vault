@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profileTooltip;
 
+  /// No description provided for @logoutTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logoutTooltip;
+
   /// No description provided for @professionalsTooltip.
   ///
   /// In en, this message translates to:

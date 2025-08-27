@@ -6,6 +6,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/service_offering.dart';
 import 'package:vogue_vault/models/service_type.dart';
+import 'package:vogue_vault/screens/auth_page.dart';
 import 'package:vogue_vault/screens/profile_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
@@ -19,6 +20,7 @@ class _FakeAuthService extends AuthService {
   String? pwdEmail;
   String? pwdOld;
   String? pwdNew;
+  bool loggedOut = false;
 
   @override
   String? get currentUser => _user;
@@ -39,6 +41,12 @@ class _FakeAuthService extends AuthService {
     pwdEmail = email;
     pwdOld = oldPwd;
     pwdNew = newPwd;
+  }
+
+  @override
+  Future<void> logout() async {
+    loggedOut = true;
+    _user = null;
   }
 }
 
@@ -259,6 +267,35 @@ void main() {
     expect(appt.addedUser, isNotNull);
     expect(appt.addedUser!.offerings, isEmpty);
     expect(find.text('Please select at least one service'), findsNothing);
+  });
+
+  testWidgets('logout button signs out and returns to AuthPage', (tester) async {
+    final auth = _FakeAuthService();
+    final appt = _FakeAppointmentService();
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthService>.value(value: auth),
+          ChangeNotifierProvider<AppointmentService>.value(value: appt),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ProfilePage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final logoutButton = find.byTooltip('Logout');
+    expect(logoutButton, findsOneWidget);
+
+    await tester.tap(logoutButton);
+    await tester.pumpAndSettle();
+
+    expect(auth.loggedOut, isTrue);
+    expect(find.byType(AuthPage), findsOneWidget);
   });
 
   for (final type in ServiceType.values)
