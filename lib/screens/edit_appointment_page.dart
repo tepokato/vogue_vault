@@ -27,8 +27,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   @override
   void initState() {
     super.initState();
-    _service =
-        widget.appointment?.service ??
+    _service = widget.appointment?.service ??
         widget.initialService ??
         ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
@@ -91,8 +90,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               DropdownButtonFormField<int>(
                 value: _duration.inMinutes,
-                decoration: const InputDecoration(
-                  labelText: 'Duration (minutes)',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.durationMinutesLabel,
                 ),
                 items: List.generate(8, (i) => (i + 1) * 15)
                     .map(

@@ -42,6 +42,7 @@
   "serviceLabel": "Servicio",
   "selectServiceValidation": "Por favor selecciona un servicio",
   "selectDateButton": "Seleccionar fecha",
+  "durationMinutesLabel": "Duración (minutos)",
   "invalidCredentials": "Credenciales inválidas",
   "emailLabel": "Correo electrónico",
   "passwordLabel": "Contraseña",

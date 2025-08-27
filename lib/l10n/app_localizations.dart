@@ -350,6 +350,12 @@ abstract class AppLocalizations {
   /// **'Select Date'**
   String get selectDateButton;
 
+  /// No description provided for @durationMinutesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration (minutes)'**
+  String get durationMinutesLabel;
+
   /// No description provided for @invalidCredentials.
   ///
   /// In en, this message translates to:
@@ -445,7 +451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add your first appointment'**
   String get addFirstAppointment;
-
 
   /// No description provided for @serviceTypeBarber.
   ///
