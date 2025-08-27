@@ -8,7 +8,7 @@ import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
 import '../widgets/app_scaffold.dart';
 import 'edit_appointment_page.dart';
-import 'edit_user_page.dart';
+import 'my_business_page.dart';
 import 'calendar_page.dart';
 
 class AppointmentsPage extends StatelessWidget {
@@ -34,12 +34,12 @@ class AppointmentsPage extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: const Icon(Icons.group),
-          tooltip: AppLocalizations.of(context)!.professionalsTooltip,
+          icon: const Icon(Icons.person),
+          tooltip: AppLocalizations.of(context)!.myBusinessTooltip,
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const EditUserPage()),
+              MaterialPageRoute(builder: (_) => const MyBusinessPage()),
             );
           },
         ),
