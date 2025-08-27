@@ -184,8 +184,8 @@ class _AuthPageState extends State<AuthPage> {
                     child: Text(AppLocalizations.of(context)!.loginButton),
                   ),
                   const SizedBox(height: 12),
-                  // Use the primary brand color so the button stands out on
-                  // the cream background.
+                  // Style the button with the theme's primary color for
+                  // contrast against the cream background.
                   OutlinedButton(
                     onPressed: () {
                       Navigator.push(
@@ -196,8 +196,11 @@ class _AuthPageState extends State<AuthPage> {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: colors.onSurface,
-                      side: BorderSide(color: colors.outline),
+                      foregroundColor:
+                          Theme.of(context).colorScheme.primary,
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
