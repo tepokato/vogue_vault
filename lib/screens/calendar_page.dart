@@ -69,11 +69,10 @@ class _CalendarPageState extends State<CalendarPage> {
                     itemCount: selectedAppointments.length,
                     itemBuilder: (context, index) {
                       final appt = selectedAppointments[index];
-                      final clientName = appt.clientId != null
-                          ? service.getUser(appt.clientId!)?.name ??
-                              AppLocalizations.of(context)!.unknownUser
-                          : appt.guestName ??
-                              AppLocalizations.of(context)!.unknownUser;
+                      final providerName = appt.providerId != null
+                          ? service.getUser(appt.providerId!)?.name ??
+                                AppLocalizations.of(context)!.unknownUser
+                          : AppLocalizations.of(context)!.unknownUser;
                       return ListTile(
                         leading: CircleAvatar(
                           backgroundColor: serviceTypeColor(appt.service),
@@ -83,8 +82,8 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                         ),
                         title: Text(
-                          '$clientName - '
-                          '${serviceTypeLabel(context, appt.service)}',
+                          '${serviceTypeLabel(context, appt.service)} - '
+                          '$providerName',
                         ),
                         subtitle: Text(
                           '${DateFormat.jm(locale).format(appt.dateTime.toLocal())} - '
@@ -99,4 +98,3 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 }
-
