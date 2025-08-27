@@ -136,6 +136,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selectDateButton => 'Seleccionar fecha';
 
   @override
+  String get durationMinutesLabel => 'Duración (minutos)';
+
+  @override
   String get invalidCredentials => 'Credenciales inválidas';
 
   @override
@@ -184,7 +187,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addFirstAppointment => 'Agrega tu primera cita';
 
   @override
-
   @override
   String get serviceTypeBarber => 'Barbero';
 
