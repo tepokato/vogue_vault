@@ -23,6 +23,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
   late Duration _duration;
+  String? _customerId;
+  final _guestController = TextEditingController();
+  final _locationController = TextEditingController();
 
   @override
   void initState() {
@@ -32,10 +35,15 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
         ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
     _duration = widget.appointment?.duration ?? const Duration(hours: 1);
+    _customerId = widget.appointment?.customerId;
+    _guestController.text = widget.appointment?.guestName ?? '';
+    _locationController.text = widget.appointment?.location ?? '';
   }
 
   @override
   void dispose() {
+    _guestController.dispose();
+    _locationController.dispose();
     super.dispose();
   }
 
@@ -142,6 +150,40 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: _customerId,
+                decoration: const InputDecoration(labelText: 'Customer'),
+                items: service.customers
+                    .map(
+                      (c) => DropdownMenuItem<String>(
+                        value: c.id,
+                        child: Text(c.fullName),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _customerId = value;
+                    if (value != null) {
+                      _guestController.clear();
+                    }
+                  });
+                },
+              ),
+              TextFormField(
+                controller: _guestController,
+                decoration: const InputDecoration(labelText: 'Guest name'),
+                onChanged: (_) {
+                  setState(() {
+                    _customerId = null;
+                  });
+                },
+              ),
+              TextFormField(
+                controller: _locationController,
+                decoration: const InputDecoration(labelText: 'Location'),
+              ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
@@ -150,6 +192,12 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   final newAppt = Appointment(
                     id: id,
                     providerId: widget.appointment?.providerId,
+                    customerId: _customerId,
+                    guestName:
+                        _guestController.text.isEmpty ? null : _guestController.text,
+                    location: _locationController.text.isEmpty
+                        ? null
+                        : _locationController.text,
                     service: _service,
                     dateTime: _dateTime,
                     duration: _duration,

@@ -133,6 +133,27 @@ void main() {
     expect(stored?.duration, const Duration(minutes: 90));
   });
 
+  test('addAppointment persists customer and location', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final id = uuid.v4();
+    final customerId = uuid.v4();
+    final appt = Appointment(
+      id: id,
+      customerId: customerId,
+      location: 'Studio',
+      service: ServiceType.barber,
+      dateTime: DateTime.parse('2023-01-01'),
+      duration: const Duration(hours: 1),
+    );
+    await service.addAppointment(appt);
+    final stored = service.getAppointment(id)!;
+    expect(stored.customerId, customerId);
+    expect(stored.location, 'Studio');
+  });
+
   test('appointments default duration and are updated', () async {
     final service = AppointmentService();
     await service.init();

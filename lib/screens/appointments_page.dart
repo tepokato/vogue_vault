@@ -75,6 +75,11 @@ class AppointmentsPage extends StatelessWidget {
                     ? service.getUser(appt.providerId!)?.name ??
                           AppLocalizations.of(context)!.unknownUser
                     : AppLocalizations.of(context)!.unknownUser;
+                final customerName = appt.customerId != null
+                    ? service.getCustomer(appt.customerId!)?.fullName ??
+                        AppLocalizations.of(context)!.unknownUser
+                    : appt.guestName ??
+                        AppLocalizations.of(context)!.unknownUser;
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: serviceTypeColor(appt.service),
@@ -89,8 +94,10 @@ class AppointmentsPage extends StatelessWidget {
                   subtitle: Text(
                     '${DateFormat.yMMMd(locale).format(appt.dateTime.toLocal())} '
                     '${DateFormat.jm(locale).format(appt.dateTime.toLocal())} - '
-                    '${DateFormat.jm(locale).format(appt.dateTime.toLocal().add(appt.duration))}',
+                    '${DateFormat.jm(locale).format(appt.dateTime.toLocal().add(appt.duration))}\n'
+                    '$customerName${appt.location != null ? ' @ ${appt.location}' : ''}',
                   ),
+                  isThreeLine: true,
                   onTap: () {
                     Navigator.push(
                       context,
