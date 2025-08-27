@@ -214,4 +214,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get deleteAppointmentTooltip => 'Eliminar cita';
+
+  @override
+  String get notificationSettingsTitle => 'Configuración de notificaciones';
+
+  @override
+  String minutesBefore(int minutes) {
+    return minutes.toString() + ' minutos antes';
+  }
 }

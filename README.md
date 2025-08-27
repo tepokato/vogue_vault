@@ -28,7 +28,7 @@ View all scheduled appointments in a calendar format.
 
 Receive notifications and reminders for upcoming services.
 
-Fully customizable notification settings.
+Choose how far in advance reminders arrive from My Business > Notification Settings.
 
 Service Catalog
 

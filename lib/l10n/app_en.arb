@@ -68,4 +68,14 @@
   "appointmentConflict": "Appointment conflicts with existing booking",
   "deleteUserTooltip": "Delete user",
   "deleteAppointmentTooltip": "Delete appointment"
+  ,"notificationSettingsTitle": "Notification Settings",
+  "minutesBefore": "{minutes} minutes before",
+  "@minutesBefore": {
+    "description": "Label for reminder offset",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }
