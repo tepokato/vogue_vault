@@ -134,6 +134,42 @@ abstract class AppLocalizations {
   /// **'Professionals'**
   String get professionalsTooltip;
 
+  /// No description provided for @myBusinessTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'My Business'**
+  String get myBusinessTooltip;
+
+  /// No description provided for @myBusinessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Business'**
+  String get myBusinessTitle;
+
+  /// No description provided for @customersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers'**
+  String get customersTitle;
+
+  /// No description provided for @newCustomerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Customer'**
+  String get newCustomerTitle;
+
+  /// No description provided for @editCustomerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Customer'**
+  String get editCustomerTitle;
+
+  /// No description provided for @contactInfoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact info'**
+  String get contactInfoLabel;
+
   /// No description provided for @calendarTooltip.
   ///
   /// In en, this message translates to:

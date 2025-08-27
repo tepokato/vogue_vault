@@ -27,6 +27,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get professionalsTooltip => 'Professionals';
 
   @override
+  String get myBusinessTooltip => 'My Business';
+
+  @override
+  String get myBusinessTitle => 'My Business';
+
+  @override
+  String get customersTitle => 'Customers';
+
+  @override
+  String get newCustomerTitle => 'New Customer';
+
+  @override
+  String get editCustomerTitle => 'Edit Customer';
+
+  @override
+  String get contactInfoLabel => 'Contact info';
+
+  @override
   String get calendarTooltip => 'Calendar';
 
   @override
