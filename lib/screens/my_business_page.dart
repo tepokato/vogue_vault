@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import 'customers_page.dart';
-import 'profile_page.dart';
 
 class MyBusinessPage extends StatelessWidget {
   const MyBusinessPage({super.key});
@@ -15,16 +14,6 @@ class MyBusinessPage extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: Text(AppLocalizations.of(context)!.profileTitle),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfilePage()),
-              );
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.group),
             title: Text(AppLocalizations.of(context)!.customersTitle),
