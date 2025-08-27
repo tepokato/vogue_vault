@@ -106,6 +106,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cannotDeleteSelfTooltip => 'No puedes eliminarte a ti mismo';
 
   @override
+  String get addUserTooltip => 'Agregar usuario';
+
+  @override
   String get newUserTitle => 'Nuevo usuario';
 
   @override

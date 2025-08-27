@@ -74,6 +74,7 @@ class EditUserPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: AppLocalizations.of(context)!.addUserTooltip,
         onPressed: () => _showUserDialog(context),
         child: const Icon(Icons.add),
       ),
