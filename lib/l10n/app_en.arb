@@ -65,5 +65,6 @@
   "serviceTypeNails": "Nails",
   "serviceTypeTattoo": "Tattoo Artist",
   "appointmentConflict": "Appointment conflicts with existing booking",
+  "deleteUserTooltip": "Delete user",
   "deleteAppointmentTooltip": "Delete appointment"
 }
