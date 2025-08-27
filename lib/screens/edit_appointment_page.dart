@@ -26,6 +26,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   String? _customerId;
   final _guestController = TextEditingController();
   final _locationController = TextEditingController();
+  String? _addressId;
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _customerId = widget.appointment?.customerId;
     _guestController.text = widget.appointment?.guestName ?? '';
     _locationController.text = widget.appointment?.location ?? '';
+    _addressId = null;
   }
 
   @override
@@ -180,9 +182,36 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   });
                 },
               ),
+              DropdownButtonFormField<String>(
+                value: _addressId,
+                decoration: const InputDecoration(labelText: 'Saved address'),
+                items: service.addresses
+                    .map(
+                      (a) => DropdownMenuItem<String>(
+                        value: a.id,
+                        child: Text(a.label),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _addressId = value;
+                    if (value != null) {
+                      final addr =
+                          service.addresses.firstWhere((a) => a.id == value);
+                      _locationController.text = addr.details;
+                    }
+                  });
+                },
+              ),
               TextFormField(
                 controller: _locationController,
                 decoration: const InputDecoration(labelText: 'Location'),
+                onChanged: (_) {
+                  setState(() {
+                    _addressId = null;
+                  });
+                },
               ),
               const SizedBox(height: 24),
               ElevatedButton(

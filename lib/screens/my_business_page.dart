@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import 'customers_page.dart';
+import 'addresses_page.dart';
 
 class MyBusinessPage extends StatelessWidget {
   const MyBusinessPage({super.key});
@@ -21,6 +22,16 @@ class MyBusinessPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const CustomersPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.location_on),
+            title: const Text('Addresses'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AddressesPage()),
               );
             },
           ),
