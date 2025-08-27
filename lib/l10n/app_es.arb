@@ -32,6 +32,7 @@
   "invalidPrice": "Precio inválido",
   "deleteUserFailed": "No se pudo eliminar el usuario",
   "cannotDeleteSelfTooltip": "No puedes eliminarte a ti mismo",
+  "addUserTooltip": "Agregar usuario",
   "newUserTitle": "Nuevo usuario",
   "editUserTitle": "Editar usuario",
   "adminRole": "Administrador",

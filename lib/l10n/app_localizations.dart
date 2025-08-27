@@ -290,6 +290,12 @@ abstract class AppLocalizations {
   /// **'Cannot delete yourself'**
   String get cannotDeleteSelfTooltip;
 
+  /// No description provided for @addUserTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add user'**
+  String get addUserTooltip;
+
   /// No description provided for @newUserTitle.
   ///
   /// In en, this message translates to:
