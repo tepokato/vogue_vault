@@ -11,6 +11,15 @@ class Appointment {
   /// assigning a specific provider.
   final String? providerId;
 
+  /// Identifier of the customer for this appointment.
+  final String? customerId;
+
+  /// Guest name if the customer is not registered.
+  final String? guestName;
+
+  /// Location where the appointment takes place.
+  final String? location;
+
   /// The type of service being scheduled.
   final ServiceType service;
 
@@ -24,6 +33,9 @@ class Appointment {
   Appointment({
     required this.id,
     this.providerId,
+    this.customerId,
+    this.guestName,
+    this.location,
     required this.service,
     required this.dateTime,
     this.duration = const Duration(hours: 1),
@@ -33,6 +45,9 @@ class Appointment {
   Appointment copyWith({
     String? id,
     String? providerId,
+    String? customerId,
+    String? guestName,
+    String? location,
     ServiceType? service,
     DateTime? dateTime,
     Duration? duration,
@@ -40,6 +55,9 @@ class Appointment {
     return Appointment(
       id: id ?? this.id,
       providerId: providerId ?? this.providerId,
+      customerId: customerId ?? this.customerId,
+      guestName: guestName ?? this.guestName,
+      location: location ?? this.location,
       service: service ?? this.service,
       dateTime: dateTime ?? this.dateTime,
       duration: duration ?? this.duration,
@@ -51,6 +69,9 @@ class Appointment {
     return Appointment(
       id: map['id'] as String,
       providerId: map['providerId'] as String?,
+      customerId: map['customerId'] as String?,
+      guestName: map['guestName'] as String?,
+      location: map['location'] as String?,
       service: ServiceType.values.byName(map['service'] as String),
       dateTime: DateTime.parse(map['dateTime'] as String),
       duration: Duration(minutes: (map['duration'] as int?) ?? 60),
@@ -62,6 +83,9 @@ class Appointment {
     return {
       'id': id,
       'providerId': providerId,
+      'customerId': customerId,
+      'guestName': guestName,
+      'location': location,
       'service': service.name,
       'dateTime': dateTime.toIso8601String(),
       'duration': duration.inMinutes,
@@ -75,6 +99,9 @@ class Appointment {
           runtimeType == other.runtimeType &&
           id == other.id &&
           providerId == other.providerId &&
+          customerId == other.customerId &&
+          guestName == other.guestName &&
+          location == other.location &&
           service == other.service &&
           dateTime == other.dateTime &&
           duration == other.duration;
@@ -83,6 +110,9 @@ class Appointment {
   int get hashCode =>
       id.hashCode ^
       providerId.hashCode ^
+      customerId.hashCode ^
+      guestName.hashCode ^
+      location.hashCode ^
       service.hashCode ^
       dateTime.hashCode ^
       duration.hashCode;

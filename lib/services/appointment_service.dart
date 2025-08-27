@@ -40,7 +40,10 @@ class AppointmentService extends ChangeNotifier {
     final appts = _appointmentsBox.values.map((m) {
       final map = Map<String, dynamic>.from(m);
       final appt = Appointment.fromMap(map);
-      if (!map.containsKey('duration')) {
+      if (!map.containsKey('duration') ||
+          !map.containsKey('customerId') ||
+          !map.containsKey('guestName') ||
+          !map.containsKey('location')) {
         _appointmentsBox.put(appt.id, appt.toMap());
       }
       return appt;
@@ -98,7 +101,10 @@ class AppointmentService extends ChangeNotifier {
     if (map == null) return null;
     final appointmentMap = Map<String, dynamic>.from(map);
     final appt = Appointment.fromMap(appointmentMap);
-    if (!appointmentMap.containsKey('duration')) {
+    if (!appointmentMap.containsKey('duration') ||
+        !appointmentMap.containsKey('customerId') ||
+        !appointmentMap.containsKey('guestName') ||
+        !appointmentMap.containsKey('location')) {
       _appointmentsBox.put(appt.id, appt.toMap());
     }
     return appt;

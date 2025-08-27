@@ -10,6 +10,9 @@ void main() {
       final id = uuid.v4();
       final appointment = Appointment(
         id: id,
+        customerId: 'c1',
+        guestName: 'Guest',
+        location: 'Shop',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(minutes: 45),
@@ -19,6 +22,9 @@ void main() {
 
       expect(from.id, appointment.id);
       expect(from.providerId, isNull);
+      expect(from.customerId, appointment.customerId);
+      expect(from.guestName, appointment.guestName);
+      expect(from.location, appointment.location);
       expect(from.service, appointment.service);
       expect(from.dateTime, appointment.dateTime);
       expect(from.duration, appointment.duration);
@@ -50,12 +56,18 @@ void main() {
       final id = uuid.v4();
       final a1 = Appointment(
         id: id,
+        customerId: 'c1',
+        guestName: 'Guest',
+        location: 'Shop',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id,
+        customerId: 'c1',
+        guestName: 'Guest',
+        location: 'Shop',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
@@ -71,12 +83,14 @@ void main() {
       final id2 = uuid.v4();
       final a1 = Appointment(
         id: id1,
+        customerId: 'c1',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id2,
+        customerId: 'c2',
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
