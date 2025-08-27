@@ -68,4 +68,14 @@
   "appointmentConflict": "La cita entra en conflicto con una reserva existente",
   "deleteUserTooltip": "Eliminar usuario",
   "deleteAppointmentTooltip": "Eliminar cita"
+  ,"notificationSettingsTitle": "Configuración de notificaciones",
+  "minutesBefore": "{minutes} minutos antes",
+  "@minutesBefore": {
+    "description": "Etiqueta para el tiempo de recordatorio",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

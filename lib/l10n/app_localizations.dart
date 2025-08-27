@@ -505,6 +505,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete appointment'**
   String get deleteAppointmentTooltip;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @minutesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes before'**
+  String minutesBefore(int minutes);
 }
 
 class _AppLocalizationsDelegate
