@@ -12,6 +12,7 @@ import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/service_offering.dart';
 import 'package:vogue_vault/models/user_role.dart';
 import 'package:vogue_vault/models/address.dart';
+import 'package:vogue_vault/models/customer.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -174,6 +175,23 @@ void main() {
     expect(stored.guestName, 'Walk-in');
     expect(stored.customerId, isNull);
     expect(service.customers, isEmpty);
+  });
+
+  test('customer addresses are stored globally', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final address = Address(id: uuid.v4(), label: 'Home', details: '123 Main');
+    final customer = Customer(
+      id: uuid.v4(),
+      firstName: 'John',
+      lastName: 'Doe',
+      addresses: [address],
+    );
+
+    await service.addCustomer(customer);
+    expect(service.addresses, contains(address));
   });
 
   test('address CRUD operations', () async {

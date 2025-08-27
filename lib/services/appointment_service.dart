@@ -178,12 +178,20 @@ class AppointmentService extends ChangeNotifier {
   Future<void> addCustomer(Customer customer) async {
     _ensureInitialized();
     await _customersBox.put(customer.id, customer.toMap());
+    // Ensure customer addresses are also available in the global addresses box
+    for (final address in customer.addresses) {
+      await _addressesBox.put(address.id, address.toMap());
+    }
     notifyListeners();
   }
 
   Future<void> updateCustomer(Customer customer) async {
     _ensureInitialized();
     await _customersBox.put(customer.id, customer.toMap());
+    // Keep global addresses in sync with any updates to the customer's addresses
+    for (final address in customer.addresses) {
+      await _addressesBox.put(address.id, address.toMap());
+    }
     notifyListeners();
   }
 
