@@ -62,9 +62,10 @@ void main() {
 
     final appts = service.appointments;
     expect(appts.map((a) => a.id), [earlierId, laterId]);
+    expect(appts.first.providerId, isNull);
   });
 
-  test('legacy appointments load with null providerId', () async {
+  test('appointments load with null providerId', () async {
     final service = AppointmentService();
     await service.init();
 
@@ -132,7 +133,7 @@ void main() {
     expect(stored?.duration, const Duration(minutes: 90));
   });
 
-  test('legacy appointments default duration and are updated', () async {
+  test('appointments default duration and are updated', () async {
     final service = AppointmentService();
     await service.init();
 

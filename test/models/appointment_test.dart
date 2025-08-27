@@ -8,10 +8,8 @@ void main() {
     test('toMap and fromMap produce equivalent objects', () {
       const uuid = Uuid();
       final id = uuid.v4();
-      final providerId = uuid.v4();
       final appointment = Appointment(
         id: id,
-        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(minutes: 45),
@@ -20,7 +18,7 @@ void main() {
       final from = Appointment.fromMap(map);
 
       expect(from.id, appointment.id);
-      expect(from.providerId, appointment.providerId);
+      expect(from.providerId, isNull);
       expect(from.service, appointment.service);
       expect(from.dateTime, appointment.dateTime);
       expect(from.duration, appointment.duration);
@@ -50,17 +48,14 @@ void main() {
     test('appointments with the same values are equal', () {
       const uuid = Uuid();
       final id = uuid.v4();
-      final providerId = uuid.v4();
       final a1 = Appointment(
         id: id,
-        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id,
-        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
@@ -74,17 +69,14 @@ void main() {
       const uuid = Uuid();
       final id1 = uuid.v4();
       final id2 = uuid.v4();
-      final providerId = uuid.v4();
       final a1 = Appointment(
         id: id1,
-        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
       );
       final a2 = Appointment(
         id: id2,
-        providerId: providerId,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
