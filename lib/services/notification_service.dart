@@ -1,5 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../models/appointment.dart';
 
@@ -15,6 +17,7 @@ class NotificationService {
       : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
+    tz.initializeTimeZones();
     _settingsBox = await Hive.openBox(_settingsBoxName);
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -45,16 +48,18 @@ class NotificationService {
     _ensureInitialized();
     final scheduled = appointment.dateTime.subtract(reminderOffset);
     if (scheduled.isBefore(DateTime.now())) return;
-    await _plugin.schedule(
+    await _plugin.zonedSchedule(
       appointment.id.hashCode,
       'Appointment Reminder',
       'Upcoming ${appointment.service.name} appointment',
-      scheduled,
+      tz.TZDateTime.from(scheduled, tz.local),
       const NotificationDetails(
         android: AndroidNotificationDetails('appointments', 'Appointments'),
         iOS: DarwinNotificationDetails(),
       ),
       androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }
