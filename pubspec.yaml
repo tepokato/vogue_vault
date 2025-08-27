@@ -46,6 +46,7 @@ dependencies:
   flutter_gen: ^5.9.0
   uuid: ^4.5.1
   table_calendar: ^3.0.9
+  flutter_local_notifications: ^16.3.2
 
 dev_dependencies:
   flutter_test:

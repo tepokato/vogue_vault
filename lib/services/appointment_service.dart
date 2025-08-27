@@ -7,6 +7,7 @@ import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/customer.dart';
 import '../models/address.dart';
+import 'notification_service.dart';
 
 class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
@@ -21,9 +22,13 @@ class AppointmentService extends ChangeNotifier {
   late Box _usersBox;
   late Box _customersBox;
   late Box _addressesBox;
+  final NotificationService? _notificationService;
 
   bool _initialized = false;
   bool get isInitialized => _initialized;
+
+  AppointmentService({NotificationService? notificationService})
+      : _notificationService = notificationService;
 
   Future<void> init() async {
     _appointmentsBox = await Hive.openBox(_appointmentsBoxName);
@@ -227,6 +232,7 @@ class AppointmentService extends ChangeNotifier {
     }
     // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
+    await _notificationService?.scheduleAppointmentReminder(appointment);
     notifyListeners();
   }
 
