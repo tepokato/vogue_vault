@@ -5,8 +5,10 @@ import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/appointment.dart';
+import '../models/service_offering.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
+import '../services/auth_service.dart';
 import '../utils/service_type_utils.dart';
 
 class EditAppointmentPage extends StatefulWidget {
@@ -26,6 +28,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   String? _customerId;
   final _guestController = TextEditingController();
   final _locationController = TextEditingController();
+  final _priceController = TextEditingController();
   String? _addressId;
 
   @override
@@ -39,6 +42,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _customerId = widget.appointment?.customerId;
     _guestController.text = widget.appointment?.guestName ?? '';
     _locationController.text = widget.appointment?.location ?? '';
+    _priceController.text = '';
     _addressId = null;
   }
 
@@ -46,14 +50,20 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   void dispose() {
     _guestController.dispose();
     _locationController.dispose();
+    _priceController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
+    final auth = context.watch<AuthService>();
     final locale = Localizations.localeOf(context).toString();
     final isEditing = widget.appointment != null;
+    final offerings = auth.currentUser != null
+        ? service.getUser(auth.currentUser!)?.offerings ??
+            <ServiceOffering>[]
+        : <ServiceOffering>[];
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +85,30 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
           key: _formKey,
           child: Column(
             children: [
+              DropdownButtonFormField<ServiceOffering>(
+                key: const ValueKey('offeringDropdown'),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.serviceLabel,
+                ),
+                items: offerings
+                    .map(
+                      (o) => DropdownMenuItem<ServiceOffering>(
+                        value: o,
+                        child: Text(
+                            '${serviceTypeLabel(context, o.type)} - ${o.name} (\$${o.price.toStringAsFixed(2)})'),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() {
+                    _service = value.type;
+                    _priceController.text = value.price.toStringAsFixed(2);
+                  });
+                },
+              ),
               DropdownButtonFormField<ServiceType>(
+                key: const ValueKey('serviceDropdown'),
                 value: _service,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.serviceLabel,
@@ -97,6 +130,19 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                 validator: (value) => value == null
                     ? AppLocalizations.of(context)!.selectServiceValidation
                     : null,
+              ),
+              TextFormField(
+                key: const ValueKey('priceField'),
+                controller: _priceController,
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.priceLabel),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return null;
+                  return double.tryParse(value) == null
+                      ? AppLocalizations.of(context)!.invalidPrice
+                      : null;
+                },
               ),
               DropdownButtonFormField<int>(
                 value: _duration.inMinutes,
