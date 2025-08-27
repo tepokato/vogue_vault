@@ -24,7 +24,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileTooltip => 'Perfil';
 
   @override
-  String get customersTooltip => 'Clientes';
+  String get professionalsTooltip => 'Profesionales';
 
   @override
   String get calendarTooltip => 'Calendario';
@@ -166,10 +166,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addFirstAppointment => 'Agrega tu primera cita';
 
   @override
-  String get guestNameLabel => 'Nombre del invitado';
-
-  @override
-  String get guestContactLabel => 'Contacto del invitado (opcional)';
 
   @override
   String get serviceTypeBarber => 'Barbero';

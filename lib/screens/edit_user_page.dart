@@ -25,7 +25,7 @@ class EditUserPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.customersTooltip),
+        title: Text(AppLocalizations.of(context)!.professionalsTooltip),
       ),
       body: ListView.builder(
         itemCount: users.length,
