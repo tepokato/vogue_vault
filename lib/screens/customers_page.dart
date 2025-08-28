@@ -47,6 +47,7 @@ class CustomersPage extends StatelessWidget {
 
   Future<void> _showCustomerDialog(BuildContext context,
       {Customer? customer}) async {
+    final service = context.read<AppointmentService>();
     final firstNameController =
         TextEditingController(text: customer?.firstName ?? '');
     final lastNameController =
@@ -59,6 +60,8 @@ class CustomersPage extends StatelessWidget {
               'id': a.id,
               'label': TextEditingController(text: a.label),
               'details': TextEditingController(text: a.details),
+              'selectedId':
+                  service.addresses.any((addr) => addr.id == a.id) ? a.id : null,
             })
         .toList();
 
@@ -108,6 +111,35 @@ class CustomersPage extends StatelessWidget {
                                       .contactInfoLabel),
                         ),
                         for (var i = 0; i < addressesData.length; i++) ...[
+                          DropdownButtonFormField<String>(
+                            value: addressesData[i]['selectedId'] as String?,
+                            decoration:
+                                const InputDecoration(labelText: 'Saved address'),
+                            items: service.addresses
+                                .map(
+                                  (a) => DropdownMenuItem<String>(
+                                    value: a.id,
+                                    child: Text(a.label),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                addressesData[i]['selectedId'] = value;
+                                if (value != null) {
+                                  final addr = service.addresses
+                                      .firstWhere((a) => a.id == value);
+                                  (addressesData[i]['label']
+                                          as TextEditingController)
+                                      .text = addr.label;
+                                  (addressesData[i]['details']
+                                          as TextEditingController)
+                                      .text = addr.details;
+                                  addressesData[i]['id'] = addr.id;
+                                }
+                              });
+                            },
+                          ),
                           TextFormField(
                             controller: addressesData[i]['label']
                                 as TextEditingController,
@@ -142,6 +174,7 @@ class CustomersPage extends StatelessWidget {
                                 'id': const Uuid().v4(),
                                 'label': TextEditingController(),
                                 'details': TextEditingController(),
+                                'selectedId': null,
                               });
                             });
                           },
