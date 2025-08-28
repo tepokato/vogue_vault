@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
-import '../models/address.dart';
 import '../models/customer.dart';
 import '../services/appointment_service.dart';
 
@@ -55,15 +54,6 @@ class CustomersPage extends StatelessWidget {
     final contactController =
         TextEditingController(text: customer?.contactInfo ?? '');
     final formKey = GlobalKey<FormState>();
-    final addressesData = (customer?.addresses ?? [])
-        .map((a) => {
-              'id': a.id,
-              'label': TextEditingController(text: a.label),
-              'details': TextEditingController(text: a.details),
-              'selectedId':
-                  service.addresses.any((addr) => addr.id == a.id) ? a.id : null,
-            })
-        .toList();
 
     try {
       await showDialog(
@@ -110,77 +100,6 @@ class CustomersPage extends StatelessWidget {
                                   AppLocalizations.of(context)!
                                       .contactInfoLabel),
                         ),
-                        for (var i = 0; i < addressesData.length; i++) ...[
-                          DropdownButtonFormField<String>(
-                            value: addressesData[i]['selectedId'] as String?,
-                            decoration:
-                                const InputDecoration(labelText: 'Saved address'),
-                            items: service.addresses
-                                .map(
-                                  (a) => DropdownMenuItem<String>(
-                                    value: a.id,
-                                    child: Text(a.label),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                addressesData[i]['selectedId'] = value;
-                                if (value != null) {
-                                  final addr = service.addresses
-                                      .firstWhere((a) => a.id == value);
-                                  (addressesData[i]['label']
-                                          as TextEditingController)
-                                      .text = addr.label;
-                                  (addressesData[i]['details']
-                                          as TextEditingController)
-                                      .text = addr.details;
-                                  addressesData[i]['id'] = addr.id;
-                                }
-                              });
-                            },
-                          ),
-                          TextFormField(
-                            controller: addressesData[i]['label']
-                                as TextEditingController,
-                            decoration:
-                                const InputDecoration(labelText: 'Label'),
-                          ),
-                          TextFormField(
-                            controller: addressesData[i]['details']
-                                as TextEditingController,
-                            decoration:
-                                const InputDecoration(labelText: 'Address'),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                final data = addressesData.removeAt(i);
-                                (data['label'] as TextEditingController)
-                                    .dispose();
-                                (data['details'] as TextEditingController)
-                                    .dispose();
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        ],
-                        TextButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              addressesData.add({
-                                'id': const Uuid().v4(),
-                                'label': TextEditingController(),
-                                'details': TextEditingController(),
-                                'selectedId': null,
-                              });
-                            });
-                          },
-                          icon: const Icon(Icons.add),
-                          label: const Text('Add Address'),
-                        ),
                       ],
                     ),
                   ),
@@ -196,20 +115,6 @@ class CustomersPage extends StatelessWidget {
                       if (!formKey.currentState!.validate()) return;
                       final service = context.read<AppointmentService>();
                       final id = customer?.id ?? const Uuid().v4();
-                      final addresses = addressesData
-                          .map((data) => Address(
-                                id: data['id'] as String,
-                                label: (data['label'] as TextEditingController)
-                                    .text
-                                    .trim(),
-                                details:
-                                    (data['details'] as TextEditingController)
-                                        .text
-                                        .trim(),
-                              ))
-                          .where((a) =>
-                              a.label.isNotEmpty && a.details.isNotEmpty)
-                          .toList();
                       final newCustomer = Customer(
                         id: id,
                         firstName: firstNameController.text.trim(),
@@ -217,7 +122,6 @@ class CustomersPage extends StatelessWidget {
                         contactInfo: contactController.text.trim().isEmpty
                             ? null
                             : contactController.text.trim(),
-                        addresses: addresses,
                       );
                       if (customer == null) {
                         await service.addCustomer(newCustomer);
@@ -238,10 +142,6 @@ class CustomersPage extends StatelessWidget {
       firstNameController.dispose();
       lastNameController.dispose();
       contactController.dispose();
-      for (final data in addressesData) {
-        (data['label'] as TextEditingController).dispose();
-        (data['details'] as TextEditingController).dispose();
-      }
     }
   }
 }

@@ -178,48 +178,17 @@ class AppointmentService extends ChangeNotifier {
   Future<void> addCustomer(Customer customer) async {
     _ensureInitialized();
     await _customersBox.put(customer.id, customer.toMap());
-    // Ensure customer addresses are also available in the global addresses box
-    for (final address in customer.addresses) {
-      await _addressesBox.put(address.id, address.toMap());
-    }
     notifyListeners();
   }
 
   Future<void> updateCustomer(Customer customer) async {
     _ensureInitialized();
-    final existingMap = _customersBox.get(customer.id);
-    Customer? previous;
-    if (existingMap != null) {
-      previous = Customer.fromMap(Map<String, dynamic>.from(existingMap));
-    }
-
     await _customersBox.put(customer.id, customer.toMap());
-
-    if (previous != null) {
-      final prevIds = previous.addresses.map((a) => a.id).toSet();
-      final newIds = customer.addresses.map((a) => a.id).toSet();
-      final removed = prevIds.difference(newIds);
-      for (final id in removed) {
-        await _addressesBox.delete(id);
-      }
-    }
-
-    // Keep global addresses in sync with any updates to the customer's addresses
-    for (final address in customer.addresses) {
-      await _addressesBox.put(address.id, address.toMap());
-    }
     notifyListeners();
   }
 
   Future<void> deleteCustomer(String id) async {
     _ensureInitialized();
-    final map = _customersBox.get(id);
-    if (map != null) {
-      final customer = Customer.fromMap(Map<String, dynamic>.from(map));
-      for (final address in customer.addresses) {
-        await _addressesBox.delete(address.id);
-      }
-    }
     await _customersBox.delete(id);
     notifyListeners();
   }
@@ -233,43 +202,11 @@ class AppointmentService extends ChangeNotifier {
   Future<void> updateAddress(Address address) async {
     _ensureInitialized();
     await _addressesBox.put(address.id, address.toMap());
-
-    for (final m in _customersBox.values) {
-      final customerMap = Map<String, dynamic>.from(m);
-      final customer = Customer.fromMap(customerMap);
-      bool changed = false;
-      final updatedAddresses = customer.addresses.map((a) {
-        if (a.id == address.id) {
-          changed = true;
-          return address;
-        }
-        return a;
-      }).toList();
-      if (changed) {
-        final updatedCustomer =
-            customer.copyWith(addresses: updatedAddresses);
-        await _customersBox.put(
-            updatedCustomer.id, updatedCustomer.toMap());
-      }
-    }
-
     notifyListeners();
   }
 
   Future<void> deleteAddress(String id) async {
     _ensureInitialized();
-    for (final m in _customersBox.values) {
-      final customerMap = Map<String, dynamic>.from(m);
-      final customer = Customer.fromMap(customerMap);
-      final updatedAddresses =
-          customer.addresses.where((a) => a.id != id).toList();
-      if (updatedAddresses.length != customer.addresses.length) {
-        final updatedCustomer =
-            customer.copyWith(addresses: updatedAddresses);
-        await _customersBox.put(
-            updatedCustomer.id, updatedCustomer.toMap());
-      }
-    }
     await _addressesBox.delete(id);
     notifyListeners();
   }
