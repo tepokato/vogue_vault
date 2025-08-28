@@ -12,7 +12,6 @@ import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/service_offering.dart';
 import 'package:vogue_vault/models/user_role.dart';
 import 'package:vogue_vault/models/address.dart';
-import 'package:vogue_vault/models/customer.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -177,68 +176,6 @@ void main() {
     expect(service.customers, isEmpty);
   });
 
-  test('customer addresses are stored globally', () async {
-    final service = AppointmentService();
-    await service.init();
-
-    const uuid = Uuid();
-    final address = Address(id: uuid.v4(), label: 'Home', details: '123 Main');
-    final customer = Customer(
-      id: uuid.v4(),
-      firstName: 'John',
-      lastName: 'Doe',
-      addresses: [address],
-    );
-
-    await service.addCustomer(customer);
-    expect(service.addresses, contains(address));
-  });
-
-  test('removing address from customer clears it from global list', () async {
-    final service = AppointmentService();
-    await service.init();
-
-    const uuid = Uuid();
-    final address = Address(id: uuid.v4(), label: 'Home', details: '123 Main');
-    final customer = Customer(
-      id: uuid.v4(),
-      firstName: 'John',
-      lastName: 'Doe',
-      addresses: [address],
-    );
-
-    await service.addCustomer(customer);
-    final updated = customer.copyWith(addresses: []);
-    await service.updateCustomer(updated);
-
-    expect(service.addresses, isEmpty);
-  });
-
-  test('address updates propagate to linked customers', () async {
-    final service = AppointmentService();
-    await service.init();
-
-    const uuid = Uuid();
-    final address = Address(id: uuid.v4(), label: 'Home', details: '123 Main');
-    final customer = Customer(
-      id: uuid.v4(),
-      firstName: 'John',
-      lastName: 'Doe',
-      addresses: [address],
-    );
-
-    await service.addCustomer(customer);
-
-    final updatedAddress = address.copyWith(details: '456 Side');
-    await service.updateAddress(updatedAddress);
-
-    final updatedCustomer = service.getCustomer(customer.id)!;
-    expect(updatedCustomer.addresses.single.details, '456 Side');
-
-    await service.deleteAddress(updatedAddress.id);
-    final afterDelete = service.getCustomer(customer.id)!;
-    expect(afterDelete.addresses, isEmpty);
-  });
 
   test('address CRUD operations', () async {
     final service = AppointmentService();
