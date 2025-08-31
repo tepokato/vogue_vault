@@ -20,6 +20,9 @@ class Appointment {
   /// Location where the appointment takes place.
   final String? location;
 
+  /// Price charged for the appointment.
+  final double? price;
+
   /// The type of service being scheduled.
   final ServiceType service;
 
@@ -36,6 +39,7 @@ class Appointment {
     this.customerId,
     this.guestName,
     this.location,
+    this.price,
     required this.service,
     required this.dateTime,
     this.duration = const Duration(hours: 1),
@@ -48,6 +52,7 @@ class Appointment {
     String? customerId,
     String? guestName,
     String? location,
+    double? price,
     ServiceType? service,
     DateTime? dateTime,
     Duration? duration,
@@ -58,6 +63,7 @@ class Appointment {
       customerId: customerId ?? this.customerId,
       guestName: guestName ?? this.guestName,
       location: location ?? this.location,
+      price: price ?? this.price,
       service: service ?? this.service,
       dateTime: dateTime ?? this.dateTime,
       duration: duration ?? this.duration,
@@ -72,6 +78,7 @@ class Appointment {
       customerId: map['customerId'] as String?,
       guestName: map['guestName'] as String?,
       location: map['location'] as String?,
+      price: map['price'] == null ? null : (map['price'] as num).toDouble(),
       service: ServiceType.values.byName(map['service'] as String),
       dateTime: DateTime.parse(map['dateTime'] as String),
       duration: Duration(minutes: (map['duration'] as int?) ?? 60),
@@ -86,6 +93,7 @@ class Appointment {
       'customerId': customerId,
       'guestName': guestName,
       'location': location,
+      'price': price,
       'service': service.name,
       'dateTime': dateTime.toIso8601String(),
       'duration': duration.inMinutes,
@@ -102,6 +110,7 @@ class Appointment {
           customerId == other.customerId &&
           guestName == other.guestName &&
           location == other.location &&
+          price == other.price &&
           service == other.service &&
           dateTime == other.dateTime &&
           duration == other.duration;
@@ -113,6 +122,7 @@ class Appointment {
       customerId.hashCode ^
       guestName.hashCode ^
       location.hashCode ^
+      price.hashCode ^
       service.hashCode ^
       dateTime.hashCode ^
       duration.hashCode;

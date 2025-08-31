@@ -13,6 +13,7 @@ void main() {
         customerId: 'c1',
         guestName: 'Guest',
         location: 'Shop',
+        price: 25.0,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(minutes: 45),
@@ -25,6 +26,7 @@ void main() {
       expect(from.customerId, appointment.customerId);
       expect(from.guestName, appointment.guestName);
       expect(from.location, appointment.location);
+      expect(from.price, appointment.price);
       expect(from.service, appointment.service);
       expect(from.dateTime, appointment.dateTime);
       expect(from.duration, appointment.duration);
@@ -59,6 +61,7 @@ void main() {
         customerId: 'c1',
         guestName: 'Guest',
         location: 'Shop',
+        price: 20.0,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
@@ -68,6 +71,7 @@ void main() {
         customerId: 'c1',
         guestName: 'Guest',
         location: 'Shop',
+        price: 20.0,
         service: ServiceType.barber,
         dateTime: DateTime(2023, 9, 10, 10, 0),
         duration: const Duration(hours: 1),
