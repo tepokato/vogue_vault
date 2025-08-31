@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:mockito/mockito.dart';
 
 import 'package:vogue_vault/services/appointment_service.dart';
+import 'package:vogue_vault/services/notification_service.dart';
 import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/user_profile.dart';
@@ -25,6 +27,8 @@ class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
   Future<String?> getTemporaryPath() async => Directory.systemTemp.path;
 }
+
+class _MockNotificationService extends Mock implements NotificationService {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -340,5 +344,54 @@ void main() {
     await service.addAppointment(appt2);
     final moved = appt2.copyWith(dateTime: DateTime(2023, 1, 1, 10, 30));
     expect(() => service.updateAppointment(moved), throwsA(isA<StateError>()));
+  });
+
+  test('updateAppointment reschedules reminder', () async {
+    final notificationService = _MockNotificationService();
+    when(notificationService.scheduleAppointmentReminder(any))
+        .thenAnswer((_) async {});
+    when(notificationService.rescheduleAppointmentReminder(any))
+        .thenAnswer((_) async {});
+
+    final service = AppointmentService(notificationService: notificationService);
+    await service.init();
+
+    const uuid = Uuid();
+    final appt = Appointment(
+      id: uuid.v4(),
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 1, 1, 10),
+      duration: const Duration(hours: 1),
+    );
+    await service.addAppointment(appt);
+
+    final updated = appt.copyWith(dateTime: DateTime(2023, 1, 1, 11));
+    await service.updateAppointment(updated);
+
+    verify(notificationService.rescheduleAppointmentReminder(updated)).called(1);
+  });
+
+  test('deleteAppointment cancels reminder', () async {
+    final notificationService = _MockNotificationService();
+    when(notificationService.scheduleAppointmentReminder(any))
+        .thenAnswer((_) async {});
+    when(notificationService.cancelAppointmentReminder(any))
+        .thenAnswer((_) async {});
+
+    final service = AppointmentService(notificationService: notificationService);
+    await service.init();
+
+    const uuid = Uuid();
+    final appt = Appointment(
+      id: uuid.v4(),
+      service: ServiceType.barber,
+      dateTime: DateTime(2023, 1, 1, 10),
+      duration: const Duration(hours: 1),
+    );
+    await service.addAppointment(appt);
+
+    await service.deleteAppointment(appt.id);
+
+    verify(notificationService.cancelAppointmentReminder(appt.id)).called(1);
   });
 }

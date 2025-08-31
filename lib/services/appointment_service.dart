@@ -245,11 +245,13 @@ class AppointmentService extends ChangeNotifier {
     }
     // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
+    await _notificationService?.rescheduleAppointmentReminder(appointment);
     notifyListeners();
   }
 
   Future<void> deleteAppointment(String id) async {
     _ensureInitialized();
+    await _notificationService?.cancelAppointmentReminder(id);
     await _appointmentsBox.delete(id);
     notifyListeners();
   }

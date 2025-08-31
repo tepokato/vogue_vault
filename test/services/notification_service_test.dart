@@ -117,4 +117,58 @@ void main() {
         tz.TZDateTime.from(appt.dateTime.subtract(const Duration(minutes: 10)), tz.local);
     expect(scheduled, expected);
   });
+
+  test('cancelAppointmentReminder cancels notification', () async {
+    final plugin = _MockNotificationsPlugin();
+    when(plugin.initialize(any)).thenAnswer((_) async {});
+    when(plugin.cancel(any)).thenAnswer((_) async {});
+
+    final service = NotificationService(plugin: plugin);
+    await service.init();
+
+    const id = 'cancel-id';
+    await service.cancelAppointmentReminder(id);
+
+    verify(plugin.cancel(id.hashCode)).called(1);
+  });
+
+  test('rescheduleAppointmentReminder cancels and schedules', () async {
+    final plugin = _MockNotificationsPlugin();
+    when(plugin.initialize(any)).thenAnswer((_) async {});
+    when(plugin.cancel(any)).thenAnswer((_) async {});
+    when(plugin.zonedSchedule(
+      any,
+      any,
+      any,
+      any,
+      any,
+      androidAllowWhileIdle: anyNamed('androidAllowWhileIdle'),
+      uiLocalNotificationDateInterpretation:
+          anyNamed('uiLocalNotificationDateInterpretation'),
+    )).thenAnswer((_) async {});
+
+    final service = NotificationService(plugin: plugin);
+    await service.init();
+
+    final appt = Appointment(
+      id: '3',
+      service: ServiceType.barber,
+      dateTime: DateTime.now().add(const Duration(hours: 2)),
+      duration: const Duration(hours: 1),
+    );
+
+    await service.rescheduleAppointmentReminder(appt);
+
+    verify(plugin.cancel(appt.id.hashCode)).called(1);
+    verify(plugin.zonedSchedule(
+      appt.id.hashCode,
+      any,
+      any,
+      any,
+      any,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    )).called(1);
+  });
 }

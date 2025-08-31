@@ -44,12 +44,14 @@ class NotificationService {
     await _settingsBox.put(_reminderOffsetKey, offset.inMinutes);
   }
 
+  int _notificationId(String appointmentId) => appointmentId.hashCode;
+
   Future<void> scheduleAppointmentReminder(Appointment appointment) async {
     _ensureInitialized();
     final scheduled = appointment.dateTime.subtract(reminderOffset);
     if (scheduled.isBefore(DateTime.now())) return;
     await _plugin.zonedSchedule(
-      appointment.id.hashCode,
+      _notificationId(appointment.id),
       'Appointment Reminder',
       'Upcoming ${appointment.service.name} appointment',
       tz.TZDateTime.from(scheduled, tz.local),
@@ -61,5 +63,16 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
+  }
+
+  Future<void> cancelAppointmentReminder(String appointmentId) async {
+    _ensureInitialized();
+    await _plugin.cancel(_notificationId(appointmentId));
+  }
+
+  Future<void> rescheduleAppointmentReminder(Appointment appointment) async {
+    _ensureInitialized();
+    await cancelAppointmentReminder(appointment.id);
+    await scheduleAppointmentReminder(appointment);
   }
 }
