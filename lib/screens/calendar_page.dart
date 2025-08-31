@@ -88,7 +88,8 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                         title: Text(
                           '${serviceTypeLabel(context, appt.service)} - '
-                          '$providerName',
+                          '$providerName'
+                          '${appt.price != null ? ' (\$${appt.price!.toStringAsFixed(2)})' : ''}',
                         ),
                         subtitle: Text(
                           '${DateFormat.jm(locale).format(appt.dateTime.toLocal())} - '

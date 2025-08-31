@@ -89,7 +89,8 @@ class AppointmentsPage extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    '${serviceTypeLabel(context, appt.service)} - $providerName',
+                    '${serviceTypeLabel(context, appt.service)} - $providerName'
+                    '${appt.price != null ? ' (\$${appt.price!.toStringAsFixed(2)})' : ''}',
                   ),
                   subtitle: Text(
                     '${DateFormat.yMMMd(locale).format(appt.dateTime.toLocal())} '

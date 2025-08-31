@@ -52,7 +52,8 @@ class AppointmentService extends ChangeNotifier {
       if (!map.containsKey('duration') ||
           !map.containsKey('customerId') ||
           !map.containsKey('guestName') ||
-          !map.containsKey('location')) {
+          !map.containsKey('location') ||
+          !map.containsKey('price')) {
         _appointmentsBox.put(appt.id, appt.toMap());
       }
       return appt;
@@ -120,7 +121,8 @@ class AppointmentService extends ChangeNotifier {
     if (!appointmentMap.containsKey('duration') ||
         !appointmentMap.containsKey('customerId') ||
         !appointmentMap.containsKey('guestName') ||
-        !appointmentMap.containsKey('location')) {
+        !appointmentMap.containsKey('location') ||
+        !appointmentMap.containsKey('price')) {
       _appointmentsBox.put(appt.id, appt.toMap());
     }
     return appt;

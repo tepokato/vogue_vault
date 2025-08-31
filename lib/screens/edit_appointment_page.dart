@@ -42,7 +42,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _customerId = widget.appointment?.customerId;
     _guestController.text = widget.appointment?.guestName ?? '';
     _locationController.text = widget.appointment?.location ?? '';
-    _priceController.text = '';
+    _priceController.text = widget.appointment?.price?.toStringAsFixed(2) ?? '';
     _addressId = null;
   }
 
@@ -280,6 +280,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     location: _locationController.text.isEmpty
                         ? null
                         : _locationController.text,
+                    price: _priceController.text.isEmpty
+                        ? null
+                        : double.parse(_priceController.text),
                     service: _service,
                     dateTime: _dateTime,
                     duration: _duration,
