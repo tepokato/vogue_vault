@@ -60,8 +60,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileTitle => 'Perfil';
 
   @override
-  String get imageSelectionUnsupported =>
-      'La selección de imágenes no es compatible con esta plataforma';
+  String get imageSelectionUnsupported => 'La selección de imágenes no es compatible con esta plataforma';
 
   @override
   String get nameLabel => 'Nombre';
@@ -205,8 +204,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get serviceTypeTattoo => 'Tatuador';
 
   @override
-  String get appointmentConflict =>
-      'La cita entra en conflicto con una reserva existente';
+  String get appointmentConflict => 'La cita entra en conflicto con una reserva existente';
 
   @override
   String get deleteUserTooltip => 'Eliminar usuario';
@@ -221,15 +219,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteAppointmentTitle => 'Eliminar cita';
 
   @override
-  String get deleteAppointmentConfirmation =>
-      '¿Está seguro de que desea eliminar esta cita?';
+  String get deleteAppointmentConfirmation => '¿Está seguro de que desea eliminar esta cita?';
 
   @override
   String get deleteUserTitle => 'Eliminar usuario';
 
   @override
-  String get deleteUserConfirmation =>
-      '¿Está seguro de que desea eliminar este usuario?';
+  String get deleteUserConfirmation => '¿Está seguro de que desea eliminar este usuario?';
 
   @override
   String get addressesTitle => 'Direcciones';
@@ -254,6 +250,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsTitle => 'Configuración';
+
+  @override
+  String get themeLabel => 'Tema';
+
+  @override
+  String get themeSystem => 'Sistema';
+
+  @override
+  String get themeLight => 'Claro';
+
+  @override
+  String get themeDark => 'Oscuro';
+
+  @override
+  String get languageLabel => 'Idioma';
 
   @override
   String minutesBefore(int minutes) {

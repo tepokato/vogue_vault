@@ -60,8 +60,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTitle => 'Profile';
 
   @override
-  String get imageSelectionUnsupported =>
-      'Image selection not supported on this platform';
+  String get imageSelectionUnsupported => 'Image selection not supported on this platform';
 
   @override
   String get nameLabel => 'Name';
@@ -205,8 +204,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get serviceTypeTattoo => 'Tattoo Artist';
 
   @override
-  String get appointmentConflict =>
-      'Appointment conflicts with existing booking';
+  String get appointmentConflict => 'Appointment conflicts with existing booking';
 
   @override
   String get deleteUserTooltip => 'Delete user';
@@ -221,15 +219,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAppointmentTitle => 'Delete Appointment';
 
   @override
-  String get deleteAppointmentConfirmation =>
-      'Are you sure you want to delete this appointment?';
+  String get deleteAppointmentConfirmation => 'Are you sure you want to delete this appointment?';
 
   @override
   String get deleteUserTitle => 'Delete User';
 
   @override
-  String get deleteUserConfirmation =>
-      'Are you sure you want to delete this user?';
+  String get deleteUserConfirmation => 'Are you sure you want to delete this user?';
 
   @override
   String get addressesTitle => 'Addresses';
@@ -254,6 +250,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTitle => 'Settings';
+
+  @override
+  String get themeLabel => 'Theme';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get languageLabel => 'Language';
 
   @override
   String minutesBefore(int minutes) {

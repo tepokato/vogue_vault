@@ -81,6 +81,11 @@
   "requiredField": "Requerido",
   "notificationSettingsTitle": "Configuración de notificaciones",
   "settingsTitle": "Configuración",
+  "themeLabel": "Tema",
+  "themeSystem": "Sistema",
+  "themeLight": "Claro",
+  "themeDark": "Oscuro",
+  "languageLabel": "Idioma",
   "minutesBefore": "{minutes} minutos antes",
   "@minutesBefore": {
     "description": "Etiqueta para el tiempo de recordatorio",
