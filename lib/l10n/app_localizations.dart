@@ -63,7 +63,7 @@ import 'app_localizations_es.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('es')
+    Locale('es'),
   ];
 
   /// No description provided for @appTitle.
@@ -289,12 +289,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to delete user'**
   String get deleteUserFailed;
-
-  /// No description provided for @deleteUserTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete user'**
-  String get deleteUserTooltip;
 
   /// No description provided for @cannotDeleteSelfTooltip.
   ///
@@ -500,11 +494,53 @@ abstract class AppLocalizations {
   /// **'Appointment conflicts with existing booking'**
   String get appointmentConflict;
 
+  /// No description provided for @deleteUserTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete user'**
+  String get deleteUserTooltip;
+
   /// No description provided for @deleteAppointmentTooltip.
   ///
   /// In en, this message translates to:
   /// **'Delete appointment'**
   String get deleteAppointmentTooltip;
+
+  /// No description provided for @addressesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Addresses'**
+  String get addressesTitle;
+
+  /// No description provided for @newAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Address'**
+  String get newAddressTitle;
+
+  /// No description provided for @editAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Address'**
+  String get editAddressTitle;
+
+  /// No description provided for @labelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get labelLabel;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get addressLabel;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredField;
 
   /// No description provided for @notificationSettingsTitle.
   ///
@@ -512,7 +548,7 @@ abstract class AppLocalizations {
   /// **'Notification Settings'**
   String get notificationSettingsTitle;
 
-  /// No description provided for @minutesBefore.
+  /// Label for reminder offset
   ///
   /// In en, this message translates to:
   /// **'{minutes} minutes before'**
@@ -546,8 +582,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:vogue_vault/l10n/app_localizations.dart';
+
 import '../models/address.dart';
 import '../services/appointment_service.dart';
 import '../widgets/app_scaffold.dart';
@@ -15,7 +17,7 @@ class AddressesPage extends StatelessWidget {
     final addresses = service.addresses;
 
     return AppScaffold(
-      title: 'Addresses',
+      title: AppLocalizations.of(context)!.addressesTitle,
       body: ListView.builder(
         itemCount: addresses.length,
         itemBuilder: (context, index) {
@@ -56,7 +58,11 @@ class AddressesPage extends StatelessWidget {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text(address == null ? 'New Address' : 'Edit Address'),
+            title: Text(
+              address == null
+                  ? AppLocalizations.of(context)!.newAddressTitle
+                  : AppLocalizations.of(context)!.editAddressTitle,
+            ),
             content: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -65,18 +71,22 @@ class AddressesPage extends StatelessWidget {
                   children: [
                     TextFormField(
                       controller: labelController,
-                      decoration: const InputDecoration(labelText: 'Label'),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.labelLabel,
+                      ),
                       validator: (value) =>
                           value == null || value.trim().isEmpty
-                          ? 'Required'
+                          ? AppLocalizations.of(context)!.requiredField
                           : null,
                     ),
                     TextFormField(
                       controller: detailsController,
-                      decoration: const InputDecoration(labelText: 'Address'),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.addressLabel,
+                      ),
                       validator: (value) =>
                           value == null || value.trim().isEmpty
-                          ? 'Required'
+                          ? AppLocalizations.of(context)!.requiredField
                           : null,
                     ),
                   ],
@@ -86,7 +96,7 @@ class AddressesPage extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
               TextButton(
                 onPressed: () async {
@@ -105,7 +115,7 @@ class AddressesPage extends StatelessWidget {
                   }
                   if (context.mounted) Navigator.pop(context);
                 },
-                child: const Text('Save'),
+                child: Text(AppLocalizations.of(context)!.saveButton),
               ),
             ],
           );

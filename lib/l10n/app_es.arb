@@ -67,8 +67,14 @@
   "serviceTypeTattoo": "Tatuador",
   "appointmentConflict": "La cita entra en conflicto con una reserva existente",
   "deleteUserTooltip": "Eliminar usuario",
-  "deleteAppointmentTooltip": "Eliminar cita"
-  ,"notificationSettingsTitle": "Configuración de notificaciones",
+  "deleteAppointmentTooltip": "Eliminar cita",
+  "addressesTitle": "Direcciones",
+  "newAddressTitle": "Nueva dirección",
+  "editAddressTitle": "Editar dirección",
+  "labelLabel": "Etiqueta",
+  "addressLabel": "Dirección",
+  "requiredField": "Requerido",
+  "notificationSettingsTitle": "Configuración de notificaciones",
   "minutesBefore": "{minutes} minutos antes",
   "@minutesBefore": {
     "description": "Etiqueta para el tiempo de recordatorio",
