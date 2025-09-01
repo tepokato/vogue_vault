@@ -80,6 +80,7 @@
   "addressLabel": "Dirección",
   "requiredField": "Requerido",
   "notificationSettingsTitle": "Configuración de notificaciones",
+  "settingsTitle": "Configuración",
   "minutesBefore": "{minutes} minutos antes",
   "@minutesBefore": {
     "description": "Etiqueta para el tiempo de recordatorio",

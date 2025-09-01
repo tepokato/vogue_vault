@@ -80,6 +80,7 @@
   "addressLabel": "Address",
   "requiredField": "Required",
   "notificationSettingsTitle": "Notification Settings",
+  "settingsTitle": "Settings",
   "minutesBefore": "{minutes} minutes before",
   "@minutesBefore": {
     "description": "Label for reminder offset",

@@ -253,6 +253,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationSettingsTitle => 'Notification Settings';
 
   @override
+  String get settingsTitle => 'Settings';
+
+  @override
   String minutesBefore(int minutes) {
     return '$minutes minutes before';
   }
