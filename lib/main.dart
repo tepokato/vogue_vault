@@ -14,13 +14,18 @@ import 'services/auth_service.dart';
 import 'services/notification_service.dart';
 
 InputDecorationTheme _buildInputDecorationTheme(ColorScheme scheme) {
+  final border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(30),
+    borderSide: BorderSide.none,
+  );
   return InputDecorationTheme(
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: scheme.onSurface),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: scheme.onSurface),
-    ),
+    filled: true,
+    fillColor: scheme.surface,
+    prefixIconColor: scheme.onSurface,
+    suffixIconColor: scheme.onSurface,
+    border: border,
+    enabledBorder: border,
+    focusedBorder: border,
     labelStyle: TextStyle(color: scheme.onSurface),
     floatingLabelStyle: TextStyle(color: scheme.onSurface),
     hintStyle: TextStyle(color: scheme.onSurface.withOpacity(0.6)),
@@ -31,6 +36,11 @@ const TextTheme _textTheme = TextTheme(
   headlineLarge: TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
+  ),
+  headlineMedium: TextStyle(
+    fontFamily: 'LibertinusSans',
+    fontSize: 32,
+    fontWeight: FontWeight.w400,
   ),
   bodyMedium: TextStyle(fontSize: 16),
 );
