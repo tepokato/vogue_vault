@@ -4,16 +4,15 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'customers_page.dart';
 import 'addresses_page.dart';
 import 'notification_settings_page.dart';
+import '../widgets/app_scaffold.dart';
 
 class MyBusinessPage extends StatelessWidget {
   const MyBusinessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.myBusinessTitle),
-      ),
+    return AppScaffold(
+      title: AppLocalizations.of(context)!.myBusinessTitle,
       body: ListView(
         children: [
           ListTile(
@@ -38,12 +37,15 @@ class MyBusinessPage extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.notifications),
-            title: Text(AppLocalizations.of(context)!.notificationSettingsTitle),
+            title: Text(
+              AppLocalizations.of(context)!.notificationSettingsTitle,
+            ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => const NotificationSettingsPage()),
+                  builder: (_) => const NotificationSettingsPage(),
+                ),
               );
             },
           ),
@@ -52,4 +54,3 @@ class MyBusinessPage extends StatelessWidget {
     );
   }
 }
-

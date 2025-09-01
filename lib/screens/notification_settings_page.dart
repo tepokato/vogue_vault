@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/notification_service.dart';
+import '../widgets/app_scaffold.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
 
   @override
-  State<NotificationSettingsPage> createState() => _NotificationSettingsPageState();
+  State<NotificationSettingsPage> createState() =>
+      _NotificationSettingsPageState();
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
@@ -41,8 +43,8 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.notificationSettingsTitle)),
+    return AppScaffold(
+      title: l10n.notificationSettingsTitle,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -78,4 +80,3 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     );
   }
 }
-

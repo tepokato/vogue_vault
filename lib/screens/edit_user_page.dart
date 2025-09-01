@@ -12,6 +12,7 @@ import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import 'manage_services_page.dart';
 import 'profile_page.dart';
+import '../widgets/app_scaffold.dart';
 
 class EditUserPage extends StatelessWidget {
   const EditUserPage({super.key});
@@ -20,25 +21,24 @@ class EditUserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final auth = context.watch<AuthService>();
-    final users =
-        service.users.where((u) => u.id != auth.currentUser).toList();
+    final users = service.users.where((u) => u.id != auth.currentUser).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.professionalsTooltip),
-      ),
+    return AppScaffold(
+      title: AppLocalizations.of(context)!.professionalsTooltip,
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final roleText = user.roles.map((role) {
-            switch (role) {
-              case UserRole.professional:
-                return AppLocalizations.of(context)!.professionalRole;
-              case UserRole.admin:
-                return AppLocalizations.of(context)!.adminRole;
-            }
-          }).join(', ');
+          final roleText = user.roles
+              .map((role) {
+                switch (role) {
+                  case UserRole.professional:
+                    return AppLocalizations.of(context)!.professionalRole;
+                  case UserRole.admin:
+                    return AppLocalizations.of(context)!.adminRole;
+                }
+              })
+              .join(', ');
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: user.photoBytes != null
@@ -60,19 +60,23 @@ class EditUserPage extends StatelessWidget {
                   builder: (context) {
                     return AlertDialog(
                       title: Text(
-                          AppLocalizations.of(context)!.professionalsTooltip),
+                        AppLocalizations.of(context)!.professionalsTooltip,
+                      ),
                       content: Text(
-                          AppLocalizations.of(context)!.deleteUserTooltip),
+                        AppLocalizations.of(context)!.deleteUserTooltip,
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context, false),
                           child: Text(
-                              AppLocalizations.of(context)!.cancelButton),
+                            AppLocalizations.of(context)!.cancelButton,
+                          ),
                         ),
                         TextButton(
                           onPressed: () => Navigator.pop(context, true),
-                          child: Text(AppLocalizations.of(context)!
-                              .deleteUserTooltip),
+                          child: Text(
+                            AppLocalizations.of(context)!.deleteUserTooltip,
+                          ),
                         ),
                       ],
                     );
@@ -89,11 +93,9 @@ class EditUserPage extends StatelessWidget {
                   final message = e is StateError
                       ? e.message
                       : AppLocalizations.of(context)!.deleteUserFailed;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(message),
-                    ),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
                 }
               },
             ),
@@ -108,14 +110,19 @@ class EditUserPage extends StatelessWidget {
     );
   }
 
-  Future<void> _showUserDialog(BuildContext context,
-      {UserProfile? user}) async {
-    final firstNameController =
-        TextEditingController(text: user?.firstName ?? '');
-    final lastNameController =
-        TextEditingController(text: user?.lastName ?? '');
-    final nicknameController =
-        TextEditingController(text: user?.nickname ?? '');
+  Future<void> _showUserDialog(
+    BuildContext context, {
+    UserProfile? user,
+  }) async {
+    final firstNameController = TextEditingController(
+      text: user?.firstName ?? '',
+    );
+    final lastNameController = TextEditingController(
+      text: user?.lastName ?? '',
+    );
+    final nicknameController = TextEditingController(
+      text: user?.nickname ?? '',
+    );
     final formKey = GlobalKey<FormState>();
     Uint8List? photoBytes = user?.photoBytes;
 
@@ -125,9 +132,11 @@ class EditUserPage extends StatelessWidget {
         builder: (_) => StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(user == null
-                  ? AppLocalizations.of(context)!.newUserTitle
-                  : AppLocalizations.of(context)!.editUserTitle),
+              title: Text(
+                user == null
+                    ? AppLocalizations.of(context)!.newUserTitle
+                    : AppLocalizations.of(context)!.editUserTitle,
+              ),
               content: Form(
                 key: formKey,
                 child: SingleChildScrollView(
@@ -139,8 +148,11 @@ class EditUserPage extends StatelessWidget {
                           if (!isImagePickerSupported) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .imageSelectionUnsupported),
+                                content: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.imageSelectionUnsupported,
+                                ),
                               ),
                             );
                             return;
@@ -163,28 +175,34 @@ class EditUserPage extends StatelessWidget {
                       TextFormField(
                         controller: firstNameController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context)!.firstNameLabel),
-                        validator: (value) => value == null ||
-                                value.trim().isEmpty
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.firstNameLabel,
+                        ),
+                        validator: (value) =>
+                            value == null || value.trim().isEmpty
                             ? AppLocalizations.of(context)!.firstNameRequired
                             : null,
                       ),
                       TextFormField(
                         controller: lastNameController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context)!.lastNameLabel),
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.lastNameLabel,
+                        ),
                         validator: (value) =>
                             value == null || value.trim().isEmpty
-                                ? AppLocalizations.of(context)!.lastNameRequired
-                                : null,
+                            ? AppLocalizations.of(context)!.lastNameRequired
+                            : null,
                       ),
                       TextFormField(
                         controller: nicknameController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context)!.nicknameLabel),
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.nicknameLabel,
+                        ),
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -194,9 +212,7 @@ class EditUserPage extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (_) => user == null
                                     ? const ProfilePage(isNewUser: true)
-                                    : ManageServicesPage(
-                                        userId: user.id,
-                                      ),
+                                    : ManageServicesPage(userId: user.id),
                               ),
                             );
                           },

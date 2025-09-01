@@ -10,6 +10,7 @@ import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../utils/service_type_utils.dart';
+import '../widgets/app_scaffold.dart';
 
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
@@ -34,7 +35,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   @override
   void initState() {
     super.initState();
-    _service = widget.appointment?.service ??
+    _service =
+        widget.appointment?.service ??
         widget.initialService ??
         ServiceType.barber;
     _dateTime = widget.appointment?.dateTime ?? DateTime.now();
@@ -61,19 +63,13 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     final locale = Localizations.localeOf(context).toString();
     final isEditing = widget.appointment != null;
     final offerings = auth.currentUser != null
-        ? service.getUser(auth.currentUser!)?.offerings ??
-            <ServiceOffering>[]
+        ? service.getUser(auth.currentUser!)?.offerings ?? <ServiceOffering>[]
         : <ServiceOffering>[];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          isEditing
-              ? AppLocalizations.of(context)!.editAppointmentTitle
-              : AppLocalizations.of(context)!.newAppointmentTitle,
-        ),
-      ),
-      resizeToAvoidBottomInset: true,
+    return AppScaffold(
+      title: isEditing
+          ? AppLocalizations.of(context)!.editAppointmentTitle
+          : AppLocalizations.of(context)!.newAppointmentTitle,
       body: SingleChildScrollView(
         padding: EdgeInsets.only(
           left: 16,
@@ -95,7 +91,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       (o) => DropdownMenuItem<ServiceOffering>(
                         value: o,
                         child: Text(
-                            '${serviceTypeLabel(context, o.type)} - ${o.name} (\$${o.price.toStringAsFixed(2)})'),
+                          '${serviceTypeLabel(context, o.type)} - ${o.name} (\$${o.price.toStringAsFixed(2)})',
+                        ),
                       ),
                     )
                     .toList(),
@@ -135,7 +132,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                 key: const ValueKey('priceField'),
                 controller: _priceController,
                 decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.priceLabel),
+                  labelText: AppLocalizations.of(context)!.priceLabel,
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
@@ -250,8 +248,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   setState(() {
                     _addressId = value;
                     if (value != null) {
-                      final addr =
-                          service.addresses.firstWhere((a) => a.id == value);
+                      final addr = service.addresses.firstWhere(
+                        (a) => a.id == value,
+                      );
                       _locationController.text = addr.details;
                     }
                   });
@@ -275,8 +274,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     id: id,
                     providerId: widget.appointment?.providerId,
                     customerId: _customerId,
-                    guestName:
-                        _guestController.text.isEmpty ? null : _guestController.text,
+                    guestName: _guestController.text.isEmpty
+                        ? null
+                        : _guestController.text,
                     location: _locationController.text.isEmpty
                         ? null
                         : _locationController.text,
