@@ -86,16 +86,23 @@ class _CalendarPageState extends State<CalendarPage> {
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
-                        title: Text(
-                          '${serviceTypeLabel(context, appt.service)} - '
-                          '$providerName'
-                          '${appt.price != null ? ' (\$${appt.price!.toStringAsFixed(2)})' : ''}',
-                        ),
-                        subtitle: Text(
-                          '${DateFormat.jm(locale).format(appt.dateTime.toLocal())} - '
-                          '${DateFormat.jm(locale).format(appt.dateTime.toLocal().add(appt.duration))}\n'
-                          '$customerName${appt.location != null ? ' @ ${appt.location}' : ''}',
-                        ),
+                          title: Text(
+                            '${serviceTypeLabel(context, appt.service)} - $providerName${appt.price != null ? ' (\$${appt.price!.toStringAsFixed(2)})' : ''}',
+                          ),
+                          subtitle: Text(
+                            (StringBuffer()
+                                  ..write(DateFormat.jm(locale)
+                                      .format(appt.dateTime.toLocal()))
+                                  ..write(' - ')
+                                  ..write(DateFormat.jm(locale).format(
+                                      appt.dateTime.toLocal().add(appt.duration)))
+                                  ..write('\n')
+                                  ..write(customerName)
+                                  ..write(appt.location != null
+                                      ? ' @ ${appt.location}'
+                                      : ''))
+                                .toString(),
+                          ),
                         isThreeLine: true,
                       );
                     },
