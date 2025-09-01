@@ -32,7 +32,7 @@ class AppointmentsPage extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: const Icon(Icons.person),
+          icon: const Icon(Icons.store),
           tooltip: AppLocalizations.of(context)!.myBusinessTooltip,
           onPressed: () {
             Navigator.push(
