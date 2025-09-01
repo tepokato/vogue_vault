@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/appointment.dart';
 import '../services/appointment_service.dart';
-import '../utils/service_type_utils.dart';
 import '../widgets/app_scaffold.dart';
+import '../widgets/appointment_tile.dart';
 
 /// Displays appointments on a calendar and lists those for the
 /// currently selected day.
@@ -33,7 +32,6 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final locale = Localizations.localeOf(context).toString();
 
     final selectedAppointments = service.appointments
         .where((a) => isSameDay(a.dateTime, _selectedDay))
@@ -69,41 +67,9 @@ class _CalendarPageState extends State<CalendarPage> {
                     itemCount: selectedAppointments.length,
                     itemBuilder: (context, index) {
                       final appt = selectedAppointments[index];
-                      final providerName = appt.providerId != null
-                          ? service.getUser(appt.providerId!)?.name ??
-                                AppLocalizations.of(context)!.unknownUser
-                          : AppLocalizations.of(context)!.unknownUser;
-                      final customerName = appt.customerId != null
-                          ? service.getCustomer(appt.customerId!)?.fullName ??
-                              AppLocalizations.of(context)!.unknownUser
-                          : appt.guestName ??
-                              AppLocalizations.of(context)!.unknownUser;
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: serviceTypeColor(appt.service),
-                          child: ImageIcon(
-                            AssetImage(serviceTypeIcon(appt.service)),
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        ),
-                          title: Text(
-                            '${serviceTypeLabel(context, appt.service)} - $providerName${appt.price != null ? ' (\$${appt.price!.toStringAsFixed(2)})' : ''}',
-                          ),
-                          subtitle: Text(
-                            (StringBuffer()
-                                  ..write(DateFormat.jm(locale)
-                                      .format(appt.dateTime.toLocal()))
-                                  ..write(' - ')
-                                  ..write(DateFormat.jm(locale).format(
-                                      appt.dateTime.toLocal().add(appt.duration)))
-                                  ..write('\n')
-                                  ..write(customerName)
-                                  ..write(appt.location != null
-                                      ? ' @ ${appt.location}'
-                                      : ''))
-                                .toString(),
-                          ),
-                        isThreeLine: true,
+                      return AppointmentTile(
+                        appointment: appt,
+                        showDate: false,
                       );
                     },
                   ),
