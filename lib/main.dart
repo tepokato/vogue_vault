@@ -13,6 +13,28 @@ import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
 
+InputDecorationTheme _buildInputDecorationTheme(ColorScheme scheme) {
+  return InputDecorationTheme(
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: scheme.onSurface),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: scheme.onSurface),
+    ),
+    labelStyle: TextStyle(color: scheme.onSurface),
+    floatingLabelStyle: TextStyle(color: scheme.onSurface),
+    hintStyle: TextStyle(color: scheme.onSurface.withOpacity(0.6)),
+  );
+}
+
+const TextTheme _textTheme = TextTheme(
+  headlineLarge: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+  ),
+  bodyMedium: TextStyle(fontSize: 16),
+);
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -75,25 +97,8 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         fontFamily: 'Poppins',
-        inputDecorationTheme: InputDecorationTheme(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightScheme.onSurface),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightScheme.onSurface),
-          ),
-          labelStyle: TextStyle(color: lightScheme.onSurface),
-          floatingLabelStyle: TextStyle(color: lightScheme.onSurface),
-          hintStyle:
-              TextStyle(color: lightScheme.onSurface.withOpacity(0.6)),
-        ),
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
-          bodyMedium: TextStyle(fontSize: 16),
-        ),
+        inputDecorationTheme: _buildInputDecorationTheme(lightScheme),
+        textTheme: _textTheme,
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
@@ -101,25 +106,8 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.darkBackground,
         fontFamily: 'Poppins',
-        inputDecorationTheme: InputDecorationTheme(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: darkScheme.onSurface),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: darkScheme.onSurface),
-          ),
-          labelStyle: TextStyle(color: darkScheme.onSurface),
-          floatingLabelStyle: TextStyle(color: darkScheme.onSurface),
-          hintStyle:
-              TextStyle(color: darkScheme.onSurface.withOpacity(0.6)),
-        ),
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
-          bodyMedium: TextStyle(fontSize: 16),
-        ),
+        inputDecorationTheme: _buildInputDecorationTheme(darkScheme),
+        textTheme: _textTheme,
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate,
