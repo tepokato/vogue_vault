@@ -578,6 +578,12 @@ abstract class AppLocalizations {
   /// **'Notification Settings'**
   String get notificationSettingsTitle;
 
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
   /// Label for reminder offset
   ///
   /// In en, this message translates to:
