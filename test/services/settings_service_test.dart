@@ -53,4 +53,16 @@ void main() {
     await service.setThemeMode(ThemeMode.light);
     expect(notified, isTrue);
   });
+
+  test('setLocale persists value', () async {
+    final service = SettingsService();
+    await service.init();
+
+    await service.setLocale(const Locale('es'));
+    expect(service.locale, const Locale('es'));
+
+    final reloaded = SettingsService();
+    await reloaded.init();
+    expect(reloaded.locale, const Locale('es'));
+  });
 }
