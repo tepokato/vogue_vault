@@ -133,7 +133,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: settingsService.locale,
+      locale: settingsService.locale ?? null,
       // Start the app with authentication.
       home: const AuthPage(),
       themeMode: settingsService.themeMode,

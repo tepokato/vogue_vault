@@ -53,19 +53,19 @@ class SettingsPage extends StatelessWidget {
           const Divider(),
           ListTile(
             title: Text(l10n.languageLabel),
-            trailing: DropdownButton<Locale>(
+            trailing: DropdownButton<Locale?>(
               value: service.locale,
-              onChanged: (locale) {
-                if (locale != null) {
-                  service.setLocale(locale);
-                }
-              },
-              items: const [
-                DropdownMenuItem(
+              onChanged: service.setLocale,
+              items: [
+                DropdownMenuItem<Locale?> (
+                  value: null,
+                  child: Text(l10n.themeSystem),
+                ),
+                const DropdownMenuItem(
                   value: Locale('en'),
                   child: Text('English'),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: Locale('es'),
                   child: Text('Español'),
                 ),

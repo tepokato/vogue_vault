@@ -9,7 +9,7 @@ class SettingsService extends ChangeNotifier {
   late Box _box;
   bool _initialized = false;
   ThemeMode _themeMode = ThemeMode.system;
-  Locale _locale = const Locale('en');
+  Locale? _locale;
 
   bool get isInitialized => _initialized;
 
@@ -18,7 +18,7 @@ class SettingsService extends ChangeNotifier {
     return _themeMode;
   }
 
-  Locale get locale {
+  Locale? get locale {
     _ensureInitialized();
     return _locale;
   }
@@ -51,10 +51,14 @@ class SettingsService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setLocale(Locale locale) async {
+  Future<void> setLocale(Locale? locale) async {
     _ensureInitialized();
     _locale = locale;
-    await _box.put(_localeKey, locale.languageCode);
+    if (locale != null) {
+      await _box.put(_localeKey, locale.languageCode);
+    } else {
+      await _box.delete(_localeKey);
+    }
     notifyListeners();
   }
 

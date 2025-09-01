@@ -73,11 +73,11 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(DropdownButton<Locale>));
+    await tester.tap(find.byType(DropdownButton<Locale?>));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Español').last);
     await tester.pumpAndSettle();
 
-    expect(service.locale.languageCode, 'es');
+    expect(service.locale?.languageCode, 'es');
   });
 }
