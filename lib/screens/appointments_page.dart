@@ -88,24 +88,24 @@ class AppointmentsPage extends StatelessWidget {
                       final confirm = await showDialog<bool>(
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
-                            title:
-                                Text(AppLocalizations.of(context)!.appointmentsTitle),
-                            content: Text(AppLocalizations.of(context)!
-                                .deleteAppointmentTooltip),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: Text(
-                                    AppLocalizations.of(context)!.cancelButton),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                child: Text(AppLocalizations.of(context)!
-                                    .deleteAppointmentTooltip),
-                              ),
-                            ],
-                          );
+                            return AlertDialog(
+                              title: Text(AppLocalizations.of(context)!
+                                  .deleteAppointmentTitle),
+                              content: Text(AppLocalizations.of(context)!
+                                  .deleteAppointmentConfirmation),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.cancelButton),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.deleteButton),
+                                ),
+                              ],
+                            );
                         },
                       );
 

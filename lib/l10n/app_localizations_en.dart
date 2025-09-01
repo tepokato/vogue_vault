@@ -215,6 +215,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAppointmentTooltip => 'Delete appointment';
 
   @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get deleteAppointmentTitle => 'Delete Appointment';
+
+  @override
+  String get deleteAppointmentConfirmation =>
+      'Are you sure you want to delete this appointment?';
+
+  @override
+  String get deleteUserTitle => 'Delete User';
+
+  @override
+  String get deleteUserConfirmation =>
+      'Are you sure you want to delete this user?';
+
+  @override
   String get addressesTitle => 'Addresses';
 
   @override

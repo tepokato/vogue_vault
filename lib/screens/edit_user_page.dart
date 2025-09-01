@@ -58,28 +58,29 @@ class EditUserPage extends StatelessWidget {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (context) {
-                    return AlertDialog(
-                      title: Text(
-                        AppLocalizations.of(context)!.professionalsTooltip,
-                      ),
-                      content: Text(
-                        AppLocalizations.of(context)!.deleteUserTooltip,
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(
-                            AppLocalizations.of(context)!.cancelButton,
-                          ),
+                      return AlertDialog(
+                        title: Text(
+                          AppLocalizations.of(context)!.deleteUserTitle,
                         ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          child: Text(
-                            AppLocalizations.of(context)!.deleteUserTooltip,
-                          ),
+                        content: Text(
+                          AppLocalizations.of(context)!
+                              .deleteUserConfirmation,
                         ),
-                      ],
-                    );
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(
+                              AppLocalizations.of(context)!.cancelButton,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: Text(
+                              AppLocalizations.of(context)!.deleteButton,
+                            ),
+                          ),
+                        ],
+                      );
                   },
                 );
 
