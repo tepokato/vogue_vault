@@ -97,4 +97,34 @@ void main() {
     expect(appt.updated, isNotNull);
     expect(appt.updated!.offerings, isEmpty);
   });
+
+  testWidgets('invalid price prevents saving', (tester) async {
+    final auth = _FakeAuthService();
+    final appt = _FakeAppointmentService();
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthService>.value(value: auth),
+          ChangeNotifierProvider<AppointmentService>.value(value: appt),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ManageServicesPage(userId: 'test@example.com'),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Add'));
+    await tester.pump();
+
+    final priceField = find.widgetWithText(TextFormField, 'Price');
+    await tester.enterText(priceField, '-5');
+
+    await tester.tap(find.text('Save'));
+    await tester.pump();
+
+    expect(appt.updated, isNull);
+  });
 }
