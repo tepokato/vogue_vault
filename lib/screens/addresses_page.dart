@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 
 import '../models/address.dart';
 import '../services/appointment_service.dart';
+import '../widgets/app_scaffold.dart';
 
 class AddressesPage extends StatelessWidget {
   const AddressesPage({super.key});
@@ -13,10 +14,8 @@ class AddressesPage extends StatelessWidget {
     final service = context.watch<AppointmentService>();
     final addresses = service.addresses;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Addresses'),
-      ),
+    return AppScaffold(
+      title: 'Addresses',
       body: ListView.builder(
         itemCount: addresses.length,
         itemBuilder: (context, index) {
@@ -42,9 +41,14 @@ class AddressesPage extends StatelessWidget {
     );
   }
 
-  Future<void> _showAddressDialog(BuildContext context, {Address? address}) async {
+  Future<void> _showAddressDialog(
+    BuildContext context, {
+    Address? address,
+  }) async {
     final labelController = TextEditingController(text: address?.label ?? '');
-    final detailsController = TextEditingController(text: address?.details ?? '');
+    final detailsController = TextEditingController(
+      text: address?.details ?? '',
+    );
     final formKey = GlobalKey<FormState>();
 
     try {
@@ -63,13 +67,17 @@ class AddressesPage extends StatelessWidget {
                       controller: labelController,
                       decoration: const InputDecoration(labelText: 'Label'),
                       validator: (value) =>
-                          value == null || value.trim().isEmpty ? 'Required' : null,
+                          value == null || value.trim().isEmpty
+                          ? 'Required'
+                          : null,
                     ),
                     TextFormField(
                       controller: detailsController,
                       decoration: const InputDecoration(labelText: 'Address'),
                       validator: (value) =>
-                          value == null || value.trim().isEmpty ? 'Required' : null,
+                          value == null || value.trim().isEmpty
+                          ? 'Required'
+                          : null,
                     ),
                   ],
                 ),
@@ -109,4 +117,3 @@ class AddressesPage extends StatelessWidget {
     }
   }
 }
-

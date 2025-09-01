@@ -5,6 +5,7 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/customer.dart';
 import '../services/appointment_service.dart';
+import '../widgets/app_scaffold.dart';
 
 class CustomersPage extends StatelessWidget {
   const CustomersPage({super.key});
@@ -14,10 +15,8 @@ class CustomersPage extends StatelessWidget {
     final service = context.watch<AppointmentService>();
     final customers = service.customers;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.customersTitle),
-      ),
+    return AppScaffold(
+      title: AppLocalizations.of(context)!.customersTitle,
       body: ListView.builder(
         itemCount: customers.length,
         itemBuilder: (context, index) {
@@ -25,8 +24,9 @@ class CustomersPage extends StatelessWidget {
           return ListTile(
             leading: const CircleAvatar(child: Icon(Icons.person)),
             title: Text(customer.fullName),
-            subtitle:
-                customer.contactInfo != null ? Text(customer.contactInfo!) : null,
+            subtitle: customer.contactInfo != null
+                ? Text(customer.contactInfo!)
+                : null,
             onTap: () => _showCustomerDialog(context, customer: customer),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
@@ -44,15 +44,20 @@ class CustomersPage extends StatelessWidget {
     );
   }
 
-  Future<void> _showCustomerDialog(BuildContext context,
-      {Customer? customer}) async {
+  Future<void> _showCustomerDialog(
+    BuildContext context, {
+    Customer? customer,
+  }) async {
     final service = context.read<AppointmentService>();
-    final firstNameController =
-        TextEditingController(text: customer?.firstName ?? '');
-    final lastNameController =
-        TextEditingController(text: customer?.lastName ?? '');
-    final contactController =
-        TextEditingController(text: customer?.contactInfo ?? '');
+    final firstNameController = TextEditingController(
+      text: customer?.firstName ?? '',
+    );
+    final lastNameController = TextEditingController(
+      text: customer?.lastName ?? '',
+    );
+    final contactController = TextEditingController(
+      text: customer?.contactInfo ?? '',
+    );
     final formKey = GlobalKey<FormState>();
 
     try {
@@ -62,9 +67,11 @@ class CustomersPage extends StatelessWidget {
           return StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
-                title: Text(customer == null
-                    ? AppLocalizations.of(context)!.newCustomerTitle
-                    : AppLocalizations.of(context)!.editCustomerTitle),
+                title: Text(
+                  customer == null
+                      ? AppLocalizations.of(context)!.newCustomerTitle
+                      : AppLocalizations.of(context)!.editCustomerTitle,
+                ),
                 content: Form(
                   key: formKey,
                   child: SingleChildScrollView(
@@ -74,31 +81,34 @@ class CustomersPage extends StatelessWidget {
                         TextFormField(
                           controller: firstNameController,
                           decoration: InputDecoration(
-                              labelText:
-                                  AppLocalizations.of(context)!.firstNameLabel),
+                            labelText: AppLocalizations.of(
+                              context,
+                            )!.firstNameLabel,
+                          ),
                           validator: (value) =>
                               value == null || value.trim().isEmpty
-                                  ? AppLocalizations.of(context)!
-                                      .firstNameRequired
-                                  : null,
+                              ? AppLocalizations.of(context)!.firstNameRequired
+                              : null,
                         ),
                         TextFormField(
                           controller: lastNameController,
                           decoration: InputDecoration(
-                              labelText:
-                                  AppLocalizations.of(context)!.lastNameLabel),
+                            labelText: AppLocalizations.of(
+                              context,
+                            )!.lastNameLabel,
+                          ),
                           validator: (value) =>
                               value == null || value.trim().isEmpty
-                                  ? AppLocalizations.of(context)!
-                                      .lastNameRequired
-                                  : null,
+                              ? AppLocalizations.of(context)!.lastNameRequired
+                              : null,
                         ),
                         TextFormField(
                           controller: contactController,
                           decoration: InputDecoration(
-                              labelText:
-                                  AppLocalizations.of(context)!
-                                      .contactInfoLabel),
+                            labelText: AppLocalizations.of(
+                              context,
+                            )!.contactInfoLabel,
+                          ),
                         ),
                       ],
                     ),
@@ -107,8 +117,7 @@ class CustomersPage extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child:
-                        Text(AppLocalizations.of(context)!.cancelButton),
+                    child: Text(AppLocalizations.of(context)!.cancelButton),
                   ),
                   TextButton(
                     onPressed: () async {
@@ -145,4 +154,3 @@ class CustomersPage extends StatelessWidget {
     }
   }
 }
-
