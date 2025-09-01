@@ -27,7 +27,7 @@ class MyBusinessPage extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.location_on),
-            title: const Text('Addresses'),
+            title: Text(AppLocalizations.of(context)!.addressesTitle),
             onTap: () {
               Navigator.push(
                 context,

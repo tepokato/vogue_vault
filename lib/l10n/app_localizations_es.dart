@@ -106,9 +106,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteUserFailed => 'No se pudo eliminar el usuario';
 
   @override
-  String get deleteUserTooltip => 'Eliminar usuario';
-
-  @override
   String get cannotDeleteSelfTooltip => 'No puedes eliminarte a ti mismo';
 
   @override
@@ -196,7 +193,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addFirstAppointment => 'Agrega tu primera cita';
 
   @override
-  @override
   String get serviceTypeBarber => 'Barbero';
 
   @override
@@ -213,13 +209,34 @@ class AppLocalizationsEs extends AppLocalizations {
       'La cita entra en conflicto con una reserva existente';
 
   @override
+  String get deleteUserTooltip => 'Eliminar usuario';
+
+  @override
   String get deleteAppointmentTooltip => 'Eliminar cita';
+
+  @override
+  String get addressesTitle => 'Direcciones';
+
+  @override
+  String get newAddressTitle => 'Nueva dirección';
+
+  @override
+  String get editAddressTitle => 'Editar dirección';
+
+  @override
+  String get labelLabel => 'Etiqueta';
+
+  @override
+  String get addressLabel => 'Dirección';
+
+  @override
+  String get requiredField => 'Requerido';
 
   @override
   String get notificationSettingsTitle => 'Configuración de notificaciones';
 
   @override
   String minutesBefore(int minutes) {
-    return minutes.toString() + ' minutos antes';
+    return '$minutes minutos antes';
   }
 }

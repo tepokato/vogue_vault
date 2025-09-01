@@ -106,9 +106,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteUserFailed => 'Failed to delete user';
 
   @override
-  String get deleteUserTooltip => 'Delete user';
-
-  @override
   String get cannotDeleteSelfTooltip => 'Cannot delete yourself';
 
   @override
@@ -196,7 +193,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addFirstAppointment => 'Add your first appointment';
 
   @override
-  @override
   String get serviceTypeBarber => 'Barber';
 
   @override
@@ -213,13 +209,34 @@ class AppLocalizationsEn extends AppLocalizations {
       'Appointment conflicts with existing booking';
 
   @override
+  String get deleteUserTooltip => 'Delete user';
+
+  @override
   String get deleteAppointmentTooltip => 'Delete appointment';
+
+  @override
+  String get addressesTitle => 'Addresses';
+
+  @override
+  String get newAddressTitle => 'New Address';
+
+  @override
+  String get editAddressTitle => 'Edit Address';
+
+  @override
+  String get labelLabel => 'Label';
+
+  @override
+  String get addressLabel => 'Address';
+
+  @override
+  String get requiredField => 'Required';
 
   @override
   String get notificationSettingsTitle => 'Notification Settings';
 
   @override
   String minutesBefore(int minutes) {
-    return minutes.toString() + ' minutes before';
+    return '$minutes minutes before';
   }
 }

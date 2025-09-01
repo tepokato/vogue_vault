@@ -67,8 +67,14 @@
   "serviceTypeTattoo": "Tattoo Artist",
   "appointmentConflict": "Appointment conflicts with existing booking",
   "deleteUserTooltip": "Delete user",
-  "deleteAppointmentTooltip": "Delete appointment"
-  ,"notificationSettingsTitle": "Notification Settings",
+  "deleteAppointmentTooltip": "Delete appointment",
+  "addressesTitle": "Addresses",
+  "newAddressTitle": "New Address",
+  "editAddressTitle": "Edit Address",
+  "labelLabel": "Label",
+  "addressLabel": "Address",
+  "requiredField": "Required",
+  "notificationSettingsTitle": "Notification Settings",
   "minutesBefore": "{minutes} minutes before",
   "@minutesBefore": {
     "description": "Label for reminder offset",
