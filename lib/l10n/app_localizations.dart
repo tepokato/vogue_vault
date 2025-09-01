@@ -506,6 +506,36 @@ abstract class AppLocalizations {
   /// **'Delete appointment'**
   String get deleteAppointmentTooltip;
 
+  /// No description provided for @deleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButton;
+
+  /// No description provided for @deleteAppointmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Appointment'**
+  String get deleteAppointmentTitle;
+
+  /// No description provided for @deleteAppointmentConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this appointment?'**
+  String get deleteAppointmentConfirmation;
+
+  /// No description provided for @deleteUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete User'**
+  String get deleteUserTitle;
+
+  /// No description provided for @deleteUserConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this user?'**
+  String get deleteUserConfirmation;
+
   /// No description provided for @addressesTitle.
   ///
   /// In en, this message translates to:

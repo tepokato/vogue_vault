@@ -215,6 +215,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteAppointmentTooltip => 'Eliminar cita';
 
   @override
+  String get deleteButton => 'Eliminar';
+
+  @override
+  String get deleteAppointmentTitle => 'Eliminar cita';
+
+  @override
+  String get deleteAppointmentConfirmation =>
+      '¿Está seguro de que desea eliminar esta cita?';
+
+  @override
+  String get deleteUserTitle => 'Eliminar usuario';
+
+  @override
+  String get deleteUserConfirmation =>
+      '¿Está seguro de que desea eliminar este usuario?';
+
+  @override
   String get addressesTitle => 'Direcciones';
 
   @override
