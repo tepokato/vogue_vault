@@ -18,6 +18,8 @@ class ManageServicesPage extends StatefulWidget {
 }
 
 class _ManageServicesPageState extends State<ManageServicesPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _editorKey = GlobalKey<ServiceOfferingEditorState>();
   late List<ServiceOffering> _offerings;
   late String _userId;
 
@@ -31,6 +33,7 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
   }
 
   Future<void> _save() async {
+    if (!(_editorKey.currentState?.validate() ?? false)) return;
     final service = context.read<AppointmentService>();
     final user = service.getUser(_userId);
     if (user != null) {
@@ -48,9 +51,13 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            ServiceOfferingEditor(
-              offerings: _offerings,
-              onChanged: (list) => setState(() => _offerings = list),
+            Form(
+              key: _formKey,
+              child: ServiceOfferingEditor(
+                key: _editorKey,
+                offerings: _offerings,
+                onChanged: (list) => setState(() => _offerings = list),
+              ),
             ),
             const SizedBox(height: 24),
             SizedBox(

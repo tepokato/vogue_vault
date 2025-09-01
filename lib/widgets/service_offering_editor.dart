@@ -23,10 +23,10 @@ class ServiceOfferingEditor extends StatefulWidget {
   });
 
   @override
-  State<ServiceOfferingEditor> createState() => _ServiceOfferingEditorState();
+  ServiceOfferingEditorState createState() => ServiceOfferingEditorState();
 }
 
-class _ServiceOfferingEditorState extends State<ServiceOfferingEditor> {
+class ServiceOfferingEditorState extends State<ServiceOfferingEditor> {
   late List<ServiceOffering> _offerings;
 
   @override
@@ -44,6 +44,9 @@ class _ServiceOfferingEditorState extends State<ServiceOfferingEditor> {
   }
 
   void _notify() => widget.onChanged(List.unmodifiable(_offerings));
+
+  /// Validates all fields within the surrounding [Form].
+  bool validate() => Form.of(context)?.validate() ?? false;
 
   @override
   Widget build(BuildContext context) {
