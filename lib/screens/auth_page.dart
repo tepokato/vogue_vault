@@ -87,11 +87,7 @@ class _AuthPageState extends State<AuthPage> {
                   Text(
                     AppLocalizations.of(context)!.appTitle,
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: colors.onSurface,
-                      fontFamily: 'LibertinusSans',
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: theme.textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 16),
                   Semantics(
@@ -105,17 +101,9 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
-                    style: TextStyle(color: colors.onSurface),
-                    cursorColor: colors.onSurface,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.emailLabel,
-                      prefixIcon: Icon(Icons.email, color: colors.onSurface),
-                      filled: true,
-                      fillColor: colors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -131,27 +119,18 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    style: TextStyle(color: colors.onSurface),
-                    cursorColor: colors.onSurface,
                     obscureText: !_showPassword,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.passwordLabel,
-                      prefixIcon: Icon(Icons.lock, color: colors.onSurface),
+                      prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _showPassword
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          color: colors.onSurface,
                         ),
                         onPressed: () =>
                             setState(() => _showPassword = !_showPassword),
-                      ),
-                      filled: true,
-                      fillColor: colors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
                       ),
                     ),
                     validator: (value) {
@@ -173,14 +152,6 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colors.primary,
-                      foregroundColor: colors.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
                     child: Text(AppLocalizations.of(context)!.loginButton),
                   ),
                   const SizedBox(height: 12),
@@ -195,17 +166,6 @@ class _AuthPageState extends State<AuthPage> {
                         ),
                       );
                     },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor:
-                          Theme.of(context).colorScheme.primary,
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
                     child: Text(AppLocalizations.of(context)!.createAccount),
                   ),
                 ],
