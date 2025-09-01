@@ -81,6 +81,11 @@
   "requiredField": "Required",
   "notificationSettingsTitle": "Notification Settings",
   "settingsTitle": "Settings",
+  "themeLabel": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "languageLabel": "Language",
   "minutesBefore": "{minutes} minutes before",
   "@minutesBefore": {
     "description": "Label for reminder offset",

@@ -17,8 +17,11 @@ class SettingsPage extends StatelessWidget {
       title: l10n.settingsTitle,
       body: ListView(
         children: [
+          ListTile(
+            title: Text(l10n.themeLabel),
+          ),
           RadioListTile<ThemeMode>(
-            title: const Text('System'),
+            title: Text(l10n.themeSystem),
             value: ThemeMode.system,
             groupValue: service.themeMode,
             onChanged: (mode) {
@@ -28,7 +31,7 @@ class SettingsPage extends StatelessWidget {
             },
           ),
           RadioListTile<ThemeMode>(
-            title: const Text('Light'),
+            title: Text(l10n.themeLight),
             value: ThemeMode.light,
             groupValue: service.themeMode,
             onChanged: (mode) {
@@ -38,7 +41,7 @@ class SettingsPage extends StatelessWidget {
             },
           ),
           RadioListTile<ThemeMode>(
-            title: const Text('Dark'),
+            title: Text(l10n.themeDark),
             value: ThemeMode.dark,
             groupValue: service.themeMode,
             onChanged: (mode) {
@@ -49,7 +52,7 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title: const Text('Language'),
+            title: Text(l10n.languageLabel),
             trailing: DropdownButton<Locale>(
               value: service.locale,
               onChanged: (locale) {
