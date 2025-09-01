@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../models/appointment.dart';
-import '../utils/service_type_utils.dart';
 import '../services/appointment_service.dart';
 import '../widgets/app_scaffold.dart';
+import '../widgets/appointment_tile.dart';
 import 'edit_appointment_page.dart';
 import 'my_business_page.dart';
 import 'calendar_page.dart';
@@ -18,7 +17,6 @@ class AppointmentsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final appointments = service.appointments;
-    final locale = Localizations.localeOf(context).toString();
 
     return AppScaffold(
       title: AppLocalizations.of(context)!.appointmentsTitle,
@@ -70,45 +68,10 @@ class AppointmentsPage extends StatelessWidget {
           : ListView.builder(
               itemCount: appointments.length,
               itemBuilder: (context, index) {
-                final Appointment appt = appointments[index];
-                final providerName = appt.providerId != null
-                    ? service.getUser(appt.providerId!)?.name ??
-                          AppLocalizations.of(context)!.unknownUser
-                    : AppLocalizations.of(context)!.unknownUser;
-                final customerName = appt.customerId != null
-                    ? service.getCustomer(appt.customerId!)?.fullName ??
-                        AppLocalizations.of(context)!.unknownUser
-                    : appt.guestName ??
-                        AppLocalizations.of(context)!.unknownUser;
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: serviceTypeColor(appt.service),
-                    child: ImageIcon(
-                      AssetImage(serviceTypeIcon(appt.service)),
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                    title: Text(
-                      '${serviceTypeLabel(context, appt.service)} - $providerName${appt.price != null ? ' (\$${appt.price!.toStringAsFixed(2)})' : ''}',
-                    ),
-                    subtitle: Text(
-                      (StringBuffer()
-                            ..write(DateFormat.yMMMd(locale)
-                                .format(appt.dateTime.toLocal()))
-                            ..write(' ')
-                            ..write(DateFormat.jm(locale)
-                                .format(appt.dateTime.toLocal()))
-                            ..write(' - ')
-                            ..write(DateFormat.jm(locale).format(
-                                appt.dateTime.toLocal().add(appt.duration)))
-                            ..write('\n')
-                            ..write(customerName)
-                            ..write(appt.location != null
-                                ? ' @ ${appt.location}'
-                                : ''))
-                          .toString(),
-                    ),
-                  isThreeLine: true,
+                final appt = appointments[index];
+                return AppointmentTile(
+                  appointment: appt,
+                  showDate: true,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -126,21 +89,18 @@ class AppointmentsPage extends StatelessWidget {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text(
-                                AppLocalizations.of(context)!
-                                    .appointmentsTitle),
+                            title:
+                                Text(AppLocalizations.of(context)!.appointmentsTitle),
                             content: Text(AppLocalizations.of(context)!
                                 .deleteAppointmentTooltip),
                             actions: [
                               TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, false),
-                                child: Text(AppLocalizations.of(context)!
-                                    .cancelButton),
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(
+                                    AppLocalizations.of(context)!.cancelButton),
                               ),
                               TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, true),
+                                onPressed: () => Navigator.pop(context, true),
                                 child: Text(AppLocalizations.of(context)!
                                     .deleteAppointmentTooltip),
                               ),
