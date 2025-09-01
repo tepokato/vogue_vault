@@ -12,6 +12,7 @@ import 'screens/auth_page.dart';
 import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
+import 'services/settings_service.dart';
 
 InputDecorationTheme _buildInputDecorationTheme(ColorScheme scheme) {
   final border = OutlineInputBorder(
@@ -57,21 +58,26 @@ Future<void> main() async {
   await appointmentService.init();
   final authService = AuthService();
   await authService.init();
+  final settingsService = SettingsService();
+  await settingsService.init();
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AppointmentService>.value(
-          value: appointmentService,
-        ),
-        ChangeNotifierProvider<AuthService>.value(
-          value: authService,
-        ),
-        Provider<NotificationService>.value(
-          value: notificationService,
-        ),
-      ],
-      child: const MyApp(),
+    ChangeNotifierProvider<SettingsService>.value(
+      value: settingsService,
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppointmentService>.value(
+            value: appointmentService,
+          ),
+          ChangeNotifierProvider<AuthService>.value(
+            value: authService,
+          ),
+          Provider<NotificationService>.value(
+            value: notificationService,
+          ),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -81,6 +87,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingsService = context.watch<SettingsService>();
     final lightScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
     ).copyWith(
@@ -128,6 +135,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       // Start the app with authentication.
       home: const AuthPage(),
+      themeMode: settingsService.themeMode,
     );
   }
 }
