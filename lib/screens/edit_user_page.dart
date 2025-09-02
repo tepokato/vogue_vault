@@ -87,7 +87,6 @@ class EditUserPage extends StatelessWidget {
                 if (confirm != true) return;
 
                 try {
-                  await auth.deleteUser(user.id);
                   await service.deleteUser(user.id);
                 } catch (e) {
                   if (!context.mounted) return;
