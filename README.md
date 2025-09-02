@@ -94,3 +94,7 @@ flutter build windows      # or macos / linux
 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Privacy Policy
+
+The app's data practices are described in [PRIVACY.md](PRIVACY.md). The policy can be published via GitHub Pages for a public URL to supply in the Play Console.
