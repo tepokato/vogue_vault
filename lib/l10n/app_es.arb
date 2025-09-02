@@ -86,6 +86,13 @@
   "themeLight": "Claro",
   "themeDark": "Oscuro",
   "languageLabel": "Idioma",
+  "appointmentReminderTitle": "Recordatorio de cita",
+  "upcomingAppointmentBody": "Próxima cita de {service}",
+  "@upcomingAppointmentBody": {
+    "placeholders": {
+      "service": {}
+    }
+  },
   "minutesBefore": "{minutes} minutos antes",
   "@minutesBefore": {
     "description": "Etiqueta para el tiempo de recordatorio",

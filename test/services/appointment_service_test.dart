@@ -348,10 +348,16 @@ void main() {
 
   test('updateAppointment reschedules reminder', () async {
     final notificationService = _MockNotificationService();
-    when(notificationService.scheduleAppointmentReminder(any))
-        .thenAnswer((_) async {});
-    when(notificationService.rescheduleAppointmentReminder(any))
-        .thenAnswer((_) async {});
+    when(notificationService.scheduleAppointmentReminder(
+      any,
+      context: anyNamed('context'),
+      serviceName: anyNamed('serviceName'),
+    )).thenAnswer((_) async {});
+    when(notificationService.rescheduleAppointmentReminder(
+      any,
+      context: anyNamed('context'),
+      serviceName: anyNamed('serviceName'),
+    )).thenAnswer((_) async {});
 
     final service = AppointmentService(notificationService: notificationService);
     await service.init();
@@ -368,13 +374,20 @@ void main() {
     final updated = appt.copyWith(dateTime: DateTime(2023, 1, 1, 11));
     await service.updateAppointment(updated);
 
-    verify(notificationService.rescheduleAppointmentReminder(updated)).called(1);
+    verify(notificationService.rescheduleAppointmentReminder(
+      updated,
+      context: anyNamed('context'),
+      serviceName: anyNamed('serviceName'),
+    )).called(1);
   });
 
   test('deleteAppointment cancels reminder', () async {
     final notificationService = _MockNotificationService();
-    when(notificationService.scheduleAppointmentReminder(any))
-        .thenAnswer((_) async {});
+    when(notificationService.scheduleAppointmentReminder(
+      any,
+      context: anyNamed('context'),
+      serviceName: anyNamed('serviceName'),
+    )).thenAnswer((_) async {});
     when(notificationService.cancelAppointmentReminder(any))
         .thenAnswer((_) async {});
 

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/appointment.dart';
@@ -227,25 +228,41 @@ class AppointmentService extends ChangeNotifier {
     });
   }
 
-  Future<void> addAppointment(Appointment appointment) async {
+  Future<void> addAppointment(
+    Appointment appointment, {
+    BuildContext? context,
+    String? serviceName,
+  }) async {
     _ensureInitialized();
     if (_hasConflict(appointment)) {
       throw StateError('Appointment conflicts with existing booking.');
     }
     // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
-    await _notificationService?.scheduleAppointmentReminder(appointment);
+    await _notificationService?.scheduleAppointmentReminder(
+      appointment,
+      context: context,
+      serviceName: serviceName,
+    );
     notifyListeners();
   }
 
-  Future<void> updateAppointment(Appointment appointment) async {
+  Future<void> updateAppointment(
+    Appointment appointment, {
+    BuildContext? context,
+    String? serviceName,
+  }) async {
     _ensureInitialized();
     if (_hasConflict(appointment)) {
       throw StateError('Appointment conflicts with existing booking.');
     }
     // providerId is persisted via the appointment's toMap representation.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
-    await _notificationService?.rescheduleAppointmentReminder(appointment);
+    await _notificationService?.rescheduleAppointmentReminder(
+      appointment,
+      context: context,
+      serviceName: serviceName,
+    );
     notifyListeners();
   }
 

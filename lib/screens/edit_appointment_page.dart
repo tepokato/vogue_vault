@@ -31,6 +31,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   final _locationController = TextEditingController();
   final _priceController = TextEditingController();
   String? _addressId;
+  String? _serviceName;
 
   @override
   void initState() {
@@ -101,6 +102,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   setState(() {
                     _service = value.type;
                     _priceController.text = value.price.toStringAsFixed(2);
+                    _serviceName = value.name;
                   });
                 },
               ),
@@ -122,6 +124,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   if (value == null) return;
                   setState(() {
                     _service = value;
+                    _serviceName = null;
                   });
                 },
                 validator: (value) => value == null
@@ -289,9 +292,17 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   );
                   try {
                     if (isEditing) {
-                      await service.updateAppointment(newAppt);
+                      await service.updateAppointment(
+                        newAppt,
+                        context: context,
+                        serviceName: _serviceName,
+                      );
                     } else {
-                      await service.addAppointment(newAppt);
+                      await service.addAppointment(
+                        newAppt,
+                        context: context,
+                        serviceName: _serviceName,
+                      );
                     }
                     if (!mounted) return;
                     Navigator.pop(context);

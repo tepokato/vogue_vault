@@ -611,6 +611,18 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get languageLabel;
 
+  /// No description provided for @appointmentReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment Reminder'**
+  String get appointmentReminderTitle;
+
+  /// No description provided for @upcomingAppointmentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming {service} appointment'**
+  String upcomingAppointmentBody(String service);
+
   /// Label for reminder offset
   ///
   /// In en, this message translates to:

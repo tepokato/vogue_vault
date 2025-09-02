@@ -1,9 +1,12 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../l10n/app_localizations.dart';
 import '../models/appointment.dart';
+import '../utils/service_type_utils.dart';
 
 class NotificationService {
   static const _settingsBoxName = 'settings';
@@ -46,14 +49,23 @@ class NotificationService {
 
   int _notificationId(String appointmentId) => appointmentId.hashCode;
 
-  Future<void> scheduleAppointmentReminder(Appointment appointment) async {
+  Future<void> scheduleAppointmentReminder(
+    Appointment appointment, {
+    BuildContext? context,
+    String? serviceName,
+  }) async {
     _ensureInitialized();
     final scheduled = appointment.dateTime.subtract(reminderOffset);
     if (scheduled.isBefore(DateTime.now())) return;
+
+    final label =
+        serviceName ?? (context != null ? serviceTypeLabel(context, appointment.service) : appointment.service.name);
+    final l10n = context != null ? AppLocalizations.of(context) : null;
+
     await _plugin.zonedSchedule(
       _notificationId(appointment.id),
-      'Appointment Reminder',
-      'Upcoming ${appointment.service.name} appointment',
+      l10n?.appointmentReminderTitle ?? 'Appointment Reminder',
+      l10n?.upcomingAppointmentBody(label) ?? 'Upcoming $label appointment',
       tz.TZDateTime.from(scheduled, tz.local),
       const NotificationDetails(
         android: AndroidNotificationDetails('appointments', 'Appointments'),
@@ -70,9 +82,17 @@ class NotificationService {
     await _plugin.cancel(_notificationId(appointmentId));
   }
 
-  Future<void> rescheduleAppointmentReminder(Appointment appointment) async {
+  Future<void> rescheduleAppointmentReminder(
+    Appointment appointment, {
+    BuildContext? context,
+    String? serviceName,
+  }) async {
     _ensureInitialized();
     await cancelAppointmentReminder(appointment.id);
-    await scheduleAppointmentReminder(appointment);
+    await scheduleAppointmentReminder(
+      appointment,
+      context: context,
+      serviceName: serviceName,
+    );
   }
 }
