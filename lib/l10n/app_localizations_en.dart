@@ -267,6 +267,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageLabel => 'Language';
 
   @override
+  String get appointmentReminderTitle => 'Appointment Reminder';
+
+  @override
+  String upcomingAppointmentBody(String service) {
+    return 'Upcoming $service appointment';
+  }
+
+  @override
   String minutesBefore(int minutes) {
     return '$minutes minutes before';
   }

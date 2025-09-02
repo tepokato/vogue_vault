@@ -43,7 +43,11 @@ class _FakeAppointmentService extends AppointmentService {
       _user != null && _user!.id == id ? _user : null;
 
   @override
-  Future<void> addAppointment(Appointment appointment) async {
+  Future<void> addAppointment(
+    Appointment appointment, {
+    BuildContext? context,
+    String? serviceName,
+  }) async {
     added = appointment;
   }
 }

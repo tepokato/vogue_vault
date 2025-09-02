@@ -86,6 +86,13 @@
   "themeLight": "Light",
   "themeDark": "Dark",
   "languageLabel": "Language",
+  "appointmentReminderTitle": "Appointment Reminder",
+  "upcomingAppointmentBody": "Upcoming {service} appointment",
+  "@upcomingAppointmentBody": {
+    "placeholders": {
+      "service": {}
+    }
+  },
   "minutesBefore": "{minutes} minutes before",
   "@minutesBefore": {
     "description": "Label for reminder offset",
