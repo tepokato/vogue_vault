@@ -54,3 +54,7 @@ windows/runner/resources/app_icon.ico
 
 # Local draft images
 draftlogin.png
+
+# Android release keystore
+android/key.properties
+android/app/voguevault.jks
