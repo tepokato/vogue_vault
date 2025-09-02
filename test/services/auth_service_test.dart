@@ -5,15 +5,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cryptography/cryptography.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:vogue_vault/services/auth_service.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
-  Future<String?> getApplicationDocumentsPath() async => Directory.systemTemp.path;
+  Future<String?> getApplicationDocumentsPath() async =>
+      Directory.systemTemp.path;
 
   @override
-  Future<String?> getApplicationSupportPath() async => Directory.systemTemp.path;
+  Future<String?> getApplicationSupportPath() async =>
+      Directory.systemTemp.path;
 
   @override
   Future<String?> getTemporaryPath() async => Directory.systemTemp.path;
@@ -25,6 +28,7 @@ void main() {
   setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
     await Hive.initFlutter();
+    FlutterSecureStorage.setMockInitialValues({});
   });
 
   tearDown(() async {
@@ -158,8 +162,8 @@ void main() {
     await service.init();
     await service.register('a@example.com', 'p1');
     await service.register('b@example.com', 'p2');
-    expect(
-        service.changeEmail('a@example.com', 'b@example.com'), throwsStateError);
+    expect(service.changeEmail('a@example.com', 'b@example.com'),
+        throwsStateError);
   });
 
   test('changePassword updates hash and validates current password', () async {

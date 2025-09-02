@@ -3,12 +3,14 @@ import 'dart:math';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthService extends ChangeNotifier {
   static const _boxName = 'auth';
   static const _usersKey = 'users';
   static const _currentUserKey = 'currentUser';
+  static const _encryptionKey = 'authEncryptionKey';
 
   /// Underlying storage box. We avoid using a typed [Box] here because
   /// Hive may return values as `Map<dynamic, dynamic>` regardless of the
@@ -16,13 +18,38 @@ class AuthService extends ChangeNotifier {
   /// when retrieving stored maps.
   late Box _box;
   bool _initialized = false;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    // Open the box without generics to bypass implicit casts from Hive.
-    _box = await Hive.openBox(_boxName);
+    final key = await _getOrCreateEncryptionKey();
+    final cipher = HiveAesCipher(key);
+    try {
+      // Attempt to open as an encrypted box.
+      _box = await Hive.openBox(_boxName, encryptionCipher: cipher);
+    } on HiveError {
+      // If opening fails, migrate data from an unencrypted box.
+      final legacyBox = await Hive.openBox(_boxName);
+      final legacyData = Map<dynamic, dynamic>.from(legacyBox.toMap());
+      await legacyBox.deleteFromDisk();
+      _box = await Hive.openBox(_boxName, encryptionCipher: cipher);
+      if (legacyData.isNotEmpty) {
+        await _box.putAll(legacyData);
+      }
+    }
     _initialized = true;
+  }
+
+  Future<List<int>> _getOrCreateEncryptionKey() async {
+    final stored = await _secureStorage.read(key: _encryptionKey);
+    if (stored != null) {
+      return base64Url.decode(stored);
+    }
+    final key = Hive.generateSecureKey();
+    await _secureStorage.write(
+        key: _encryptionKey, value: base64UrlEncode(key));
+    return key;
   }
 
   void _ensureInitialized() {
@@ -177,4 +204,3 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 }
-
