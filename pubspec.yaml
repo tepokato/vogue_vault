@@ -48,6 +48,7 @@ dependencies:
   table_calendar: ^3.0.9
   flutter_local_notifications: ^16.3.2
   timezone: ^0.9.3
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:
