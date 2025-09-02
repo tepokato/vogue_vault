@@ -11,10 +11,12 @@ import 'package:vogue_vault/services/settings_service.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
-  Future<String?> getApplicationDocumentsPath() async => Directory.systemTemp.path;
+  Future<String?> getApplicationDocumentsPath() async =>
+      Directory.systemTemp.path;
 
   @override
-  Future<String?> getApplicationSupportPath() async => Directory.systemTemp.path;
+  Future<String?> getApplicationSupportPath() async =>
+      Directory.systemTemp.path;
 
   @override
   Future<String?> getTemporaryPath() async => Directory.systemTemp.path;
@@ -48,17 +50,14 @@ void main() {
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: const [Locale('en'), Locale('es')],
-              locale: settings.locale ?? null,
+              locale: settings.locale,
             );
           },
         ),
       ),
     );
 
-    expect(
-      tester.widget<MaterialApp>(find.byType(MaterialApp)).locale,
-      isNull,
-    );
+    expect(tester.widget<MaterialApp>(find.byType(MaterialApp)).locale, isNull);
 
     await service.setLocale(const Locale('es'));
     await tester.pump();

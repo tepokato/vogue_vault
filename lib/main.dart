@@ -34,10 +34,7 @@ InputDecorationTheme _buildInputDecorationTheme(ColorScheme scheme) {
 }
 
 const TextTheme _textTheme = TextTheme(
-  headlineLarge: TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-  ),
+  headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
   headlineMedium: TextStyle(
     fontFamily: 'LibertinusSans',
     fontSize: 32,
@@ -53,8 +50,9 @@ Future<void> main() async {
 
   final notificationService = NotificationService();
   await notificationService.init();
-  final appointmentService =
-      AppointmentService(notificationService: notificationService);
+  final appointmentService = AppointmentService(
+    notificationService: notificationService,
+  );
   await appointmentService.init();
   final authService = AuthService();
   await authService.init();
@@ -69,12 +67,8 @@ Future<void> main() async {
           ChangeNotifierProvider<AppointmentService>.value(
             value: appointmentService,
           ),
-          ChangeNotifierProvider<AuthService>.value(
-            value: authService,
-          ),
-          Provider<NotificationService>.value(
-            value: notificationService,
-          ),
+          ChangeNotifierProvider<AuthService>.value(value: authService),
+          Provider<NotificationService>.value(value: notificationService),
         ],
         child: const MyApp(),
       ),
@@ -88,9 +82,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsService = context.watch<SettingsService>();
-    final lightScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-    ).copyWith(
+    final lightScheme =
+        ColorScheme.fromSeed(seedColor: AppColors.primary).copyWith(
       primary: AppColors.primary,
       surface: AppColors.background,
       secondary: AppColors.secondary,
@@ -133,7 +126,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: settingsService.locale ?? null,
+      locale: settingsService.locale,
       // Start the app with authentication.
       home: const AuthPage(),
       themeMode: settingsService.themeMode,
