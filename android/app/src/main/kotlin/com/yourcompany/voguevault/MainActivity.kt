@@ -1,4 +1,4 @@
-package com.example.vogue_vault
+package com.yourcompany.voguevault
 
 import io.flutter.embedding.android.FlutterActivity
 
