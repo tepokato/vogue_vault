@@ -557,6 +557,42 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete this user?'**
   String get deleteUserConfirmation;
 
+  /// No description provided for @deleteCustomerDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Customer'**
+  String get deleteCustomerDialogTitle;
+
+  /// No description provided for @deleteCustomerDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this customer?'**
+  String get deleteCustomerDialogBody;
+
+  /// No description provided for @deleteAddressDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Address'**
+  String get deleteAddressDialogTitle;
+
+  /// No description provided for @deleteAddressDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this address?'**
+  String get deleteAddressDialogBody;
+
+  /// No description provided for @dialogCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get dialogCancelAction;
+
+  /// No description provided for @dialogConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get dialogConfirmAction;
+
   /// No description provided for @addressesTitle.
   ///
   /// In en, this message translates to:
