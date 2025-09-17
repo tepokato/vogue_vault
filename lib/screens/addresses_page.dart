@@ -49,7 +49,30 @@ class AddressesPage extends StatelessWidget {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () async {
-                      await service.deleteAddress(address.id);
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (dialogContext) {
+                          return AlertDialog(
+                            title: Text(l10n.deleteAddressDialogTitle),
+                            content: Text(l10n.deleteAddressDialogBody),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(false),
+                                child: Text(l10n.dialogCancelAction),
+                              ),
+                              FilledButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(true),
+                                child: Text(l10n.dialogConfirmAction),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (shouldDelete == true) {
+                        await service.deleteAddress(address.id);
+                      }
                     },
                   ),
                 );

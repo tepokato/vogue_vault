@@ -50,7 +50,30 @@ class CustomersPage extends StatelessWidget {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () async {
-                      await service.deleteCustomer(customer.id);
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (dialogContext) {
+                          return AlertDialog(
+                            title: Text(l10n.deleteCustomerDialogTitle),
+                            content: Text(l10n.deleteCustomerDialogBody),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(false),
+                                child: Text(l10n.dialogCancelAction),
+                              ),
+                              FilledButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(true),
+                                child: Text(l10n.dialogConfirmAction),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (shouldDelete == true) {
+                        await service.deleteCustomer(customer.id);
+                      }
                     },
                   ),
                 );

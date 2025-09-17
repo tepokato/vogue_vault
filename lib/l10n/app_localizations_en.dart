@@ -240,6 +240,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteUserConfirmation => 'Are you sure you want to delete this user?';
 
   @override
+  String get deleteCustomerDialogTitle => 'Delete Customer';
+
+  @override
+  String get deleteCustomerDialogBody => 'Are you sure you want to delete this customer?';
+
+  @override
+  String get deleteAddressDialogTitle => 'Delete Address';
+
+  @override
+  String get deleteAddressDialogBody => 'Are you sure you want to delete this address?';
+
+  @override
+  String get dialogCancelAction => 'Cancel';
+
+  @override
+  String get dialogConfirmAction => 'Confirm';
+
+  @override
   String get addressesTitle => 'Addresses';
 
   @override
