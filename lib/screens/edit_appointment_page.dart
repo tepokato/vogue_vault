@@ -62,6 +62,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     final service = context.watch<AppointmentService>();
     final auth = context.watch<AuthService>();
     final locale = Localizations.localeOf(context).toString();
+    final localizations = AppLocalizations.of(context)!;
     final isEditing = widget.appointment != null;
     final offerings = auth.currentUser != null
         ? service.getUser(auth.currentUser!)?.offerings ?? <ServiceOffering>[]
@@ -202,7 +203,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 value: _customerId,
-                decoration: const InputDecoration(labelText: 'Customer'),
+                decoration: InputDecoration(
+                  labelText: localizations.customerLabel,
+                ),
                 items: service.customers
                     .map(
                       (c) => DropdownMenuItem<String>(
@@ -222,11 +225,13 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               TextFormField(
                 controller: _guestController,
-                decoration: const InputDecoration(labelText: 'Guest name'),
+                decoration: InputDecoration(
+                  labelText: localizations.guestNameLabel,
+                ),
                 validator: (_) {
                   if ((_customerId == null || _customerId!.isEmpty) &&
                       _guestController.text.isEmpty) {
-                    return 'Please select a customer or enter a guest name';
+                    return localizations.guestOrCustomerValidation;
                   }
                   return null;
                 },
@@ -238,7 +243,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               DropdownButtonFormField<String>(
                 value: _addressId,
-                decoration: const InputDecoration(labelText: 'Saved address'),
+                decoration: InputDecoration(
+                  labelText: localizations.savedAddressLabel,
+                ),
                 items: service.addresses
                     .map(
                       (a) => DropdownMenuItem<String>(
@@ -261,7 +268,9 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
               ),
               TextFormField(
                 controller: _locationController,
-                decoration: const InputDecoration(labelText: 'Location'),
+                decoration: InputDecoration(
+                  labelText: localizations.locationLabel,
+                ),
                 onChanged: (_) {
                   setState(() {
                     _addressId = null;

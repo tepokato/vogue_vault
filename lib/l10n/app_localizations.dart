@@ -353,6 +353,36 @@ abstract class AppLocalizations {
   /// **'Please select a service'**
   String get selectServiceValidation;
 
+  /// No description provided for @customerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get customerLabel;
+
+  /// No description provided for @guestNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest name'**
+  String get guestNameLabel;
+
+  /// No description provided for @guestOrCustomerValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a customer or enter a guest name'**
+  String get guestOrCustomerValidation;
+
+  /// No description provided for @savedAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved address'**
+  String get savedAddressLabel;
+
+  /// No description provided for @locationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get locationLabel;
+
   /// No description provided for @selectDateButton.
   ///
   /// In en, this message translates to:
