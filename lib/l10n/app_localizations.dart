@@ -461,6 +461,30 @@ abstract class AppLocalizations {
   /// **'Add your first appointment'**
   String get addFirstAppointment;
 
+  /// No description provided for @noCustomersYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No customers yet'**
+  String get noCustomersYet;
+
+  /// No description provided for @addFirstCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first customer'**
+  String get addFirstCustomer;
+
+  /// No description provided for @noAddressesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No addresses yet'**
+  String get noAddressesYet;
+
+  /// No description provided for @addFirstAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first address'**
+  String get addFirstAddress;
+
   /// No description provided for @serviceTypeBarber.
   ///
   /// In en, this message translates to:

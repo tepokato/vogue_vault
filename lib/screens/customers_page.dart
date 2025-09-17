@@ -14,29 +14,48 @@ class CustomersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final customers = service.customers;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppScaffold(
-      title: AppLocalizations.of(context)!.customersTitle,
-      body: ListView.builder(
-        itemCount: customers.length,
-        itemBuilder: (context, index) {
-          final customer = customers[index];
-          return ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.person)),
-            title: Text(customer.fullName),
-            subtitle: customer.contactInfo != null
-                ? Text(customer.contactInfo!)
-                : null,
-            onTap: () => _showCustomerDialog(context, customer: customer),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                await service.deleteCustomer(customer.id);
+      title: l10n.customersTitle,
+      body: customers.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.noCustomersYet,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => _showCustomerDialog(context),
+                    child: Text(l10n.addFirstCustomer),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: customers.length,
+              itemBuilder: (context, index) {
+                final customer = customers[index];
+                return ListTile(
+                  leading: const CircleAvatar(child: Icon(Icons.person)),
+                  title: Text(customer.fullName),
+                  subtitle: customer.contactInfo != null
+                      ? Text(customer.contactInfo!)
+                      : null,
+                  onTap: () => _showCustomerDialog(context, customer: customer),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      await service.deleteCustomer(customer.id);
+                    },
+                  ),
+                );
               },
             ),
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCustomerDialog(context),
         child: const Icon(Icons.add),
