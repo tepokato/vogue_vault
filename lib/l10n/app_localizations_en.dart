@@ -138,6 +138,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectServiceValidation => 'Please select a service';
 
   @override
+  String get customerLabel => 'Customer';
+
+  @override
+  String get guestNameLabel => 'Guest name';
+
+  @override
+  String get guestOrCustomerValidation => 'Please select a customer or enter a guest name';
+
+  @override
+  String get savedAddressLabel => 'Saved address';
+
+  @override
+  String get locationLabel => 'Location';
+
+  @override
   String get selectDateButton => 'Select Date';
 
   @override
