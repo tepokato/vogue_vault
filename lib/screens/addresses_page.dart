@@ -15,27 +15,46 @@ class AddressesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final addresses = service.addresses;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppScaffold(
-      title: AppLocalizations.of(context)!.addressesTitle,
-      body: ListView.builder(
-        itemCount: addresses.length,
-        itemBuilder: (context, index) {
-          final address = addresses[index];
-          return ListTile(
-            leading: const Icon(Icons.location_on),
-            title: Text(address.label),
-            subtitle: Text(address.details),
-            onTap: () => _showAddressDialog(context, address: address),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                await service.deleteAddress(address.id);
+      title: l10n.addressesTitle,
+      body: addresses.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.noAddressesYet,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => _showAddressDialog(context),
+                    child: Text(l10n.addFirstAddress),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: addresses.length,
+              itemBuilder: (context, index) {
+                final address = addresses[index];
+                return ListTile(
+                  leading: const Icon(Icons.location_on),
+                  title: Text(address.label),
+                  subtitle: Text(address.details),
+                  onTap: () => _showAddressDialog(context, address: address),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      await service.deleteAddress(address.id);
+                    },
+                  ),
+                );
               },
             ),
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddressDialog(context),
         child: const Icon(Icons.add),

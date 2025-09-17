@@ -192,6 +192,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addFirstAppointment => 'Add your first appointment';
 
   @override
+  String get noCustomersYet => 'No customers yet';
+
+  @override
+  String get addFirstCustomer => 'Add your first customer';
+
+  @override
+  String get noAddressesYet => 'No addresses yet';
+
+  @override
+  String get addFirstAddress => 'Add your first address';
+
+  @override
   String get serviceTypeBarber => 'Barber';
 
   @override
