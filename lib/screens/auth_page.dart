@@ -102,7 +102,7 @@ class _AuthPageState extends State<AuthPage> {
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.emailLabel,
+                      labelText: AppLocalizations.of(context)!.emailLabel,
                       prefixIcon: const Icon(Icons.email),
                     ),
                     validator: (value) {
@@ -121,7 +121,7 @@ class _AuthPageState extends State<AuthPage> {
                     controller: _passwordController,
                     obscureText: !_showPassword,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.passwordLabel,
+                      labelText: AppLocalizations.of(context)!.passwordLabel,
                       prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
