@@ -84,18 +84,29 @@ class _AuthPageState extends State<AuthPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    AppLocalizations.of(context)!.appTitle,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 16),
-                  Semantics(
-                    label: AppLocalizations.of(context)!.appTitle,
-                    child: Image.asset(
-                      'assets/images/VV_LOGO.webp',
-                      height: 200,
-                      color: colors.onSurface,
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            AppLocalizations.of(context)!.appTitle,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.headlineMedium,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Semantics(
+                          label: AppLocalizations.of(context)!.appTitle,
+                          image: true,
+                          child: Image.asset(
+                            'assets/images/VV_LOGO.webp',
+                            height: 200,
+                            color: colors.onSurface,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 32),
