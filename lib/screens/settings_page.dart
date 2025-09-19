@@ -69,6 +69,10 @@ class SettingsPage extends StatelessWidget {
                   value: Locale('es'),
                   child: Text('Español'),
                 ),
+                const DropdownMenuItem(
+                  value: Locale('pt'),
+                  child: Text('Português'),
+                ),
               ],
             ),
           ),
