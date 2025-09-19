@@ -49,7 +49,7 @@ void main() {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              supportedLocales: const [Locale('en'), Locale('es')],
+              supportedLocales: const [Locale('en'), Locale('es'), Locale('pt')],
               locale: settings.locale,
             );
           },
@@ -65,6 +65,14 @@ void main() {
     expect(
       tester.widget<MaterialApp>(find.byType(MaterialApp)).locale,
       const Locale('es'),
+    );
+
+    await service.setLocale(const Locale('pt'));
+    await tester.pump();
+
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).locale,
+      const Locale('pt'),
     );
   });
 }

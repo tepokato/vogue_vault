@@ -65,4 +65,16 @@ void main() {
     await reloaded.init();
     expect(reloaded.locale, const Locale('es'));
   });
+
+  test('setLocale accepts Portuguese', () async {
+    final service = SettingsService();
+    await service.init();
+
+    await service.setLocale(const Locale('pt'));
+    expect(service.locale, const Locale('pt'));
+
+    final reloaded = SettingsService();
+    await reloaded.init();
+    expect(reloaded.locale, const Locale('pt'));
+  });
 }

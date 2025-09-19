@@ -37,5 +37,13 @@ void main() {
     expect(serviceTypeLabel(context, ServiceType.nails), 'Uñas');
     expect(serviceTypeLabel(context, ServiceType.tattoo), 'Tatuador');
   });
+
+  testWidgets('returns Portuguese labels', (tester) async {
+    final context = await pumpApp(tester, const Locale('pt'));
+    expect(serviceTypeLabel(context, ServiceType.barber), 'Barbeiro');
+    expect(serviceTypeLabel(context, ServiceType.hairdresser), 'Cabeleireiro');
+    expect(serviceTypeLabel(context, ServiceType.nails), 'Unhas');
+    expect(serviceTypeLabel(context, ServiceType.tattoo), 'Tatuador');
+  });
 }
 

@@ -80,4 +80,27 @@ void main() {
     expect(find.text('Barbero'), findsOneWidget);
     expect(find.text('barber'), findsNothing);
   });
+
+  testWidgets('displays Portuguese service type labels', (tester) async {
+    var offerings = [
+      ServiceOffering(type: ServiceType.barber, name: '', price: 0),
+    ];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pt'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: ServiceOfferingEditor(
+            offerings: offerings,
+            onChanged: (list) => offerings = list,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Barbeiro'), findsOneWidget);
+    expect(find.text('barber'), findsNothing);
+  });
 }
