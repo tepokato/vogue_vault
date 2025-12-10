@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/settings_service.dart';
+import 'notification_settings_page.dart';
 import '../widgets/app_scaffold.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -17,9 +18,7 @@ class SettingsPage extends StatelessWidget {
       title: l10n.settingsTitle,
       body: ListView(
         children: [
-          ListTile(
-            title: Text(l10n.themeLabel),
-          ),
+          _SettingsSectionHeader(title: l10n.themeLabel),
           RadioListTile<ThemeMode>(
             title: Text(l10n.themeSystem),
             value: ThemeMode.system,
@@ -51,15 +50,16 @@ class SettingsPage extends StatelessWidget {
             },
           ),
           const Divider(),
+          _SettingsSectionHeader(title: l10n.languageLabel),
           ListTile(
             title: Text(l10n.languageLabel),
             trailing: DropdownButton<Locale?>(
               value: service.locale,
               onChanged: service.setLocale,
               items: [
-                DropdownMenuItem<Locale?> (
+                DropdownMenuItem<Locale?>(
                   value: null,
-                  child: Text(l10n.themeSystem),
+                  child: Text(l10n.languageSystemLabel),
                 ),
                 const DropdownMenuItem(
                   value: Locale('en'),
@@ -76,7 +76,39 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
+          const Divider(),
+          _SettingsSectionHeader(title: l10n.notificationSettingsTitle),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: Text(l10n.notificationSettingsTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const NotificationSettingsPage(),
+                ),
+              );
+            },
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingsSectionHeader extends StatelessWidget {
+  const _SettingsSectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleMedium,
       ),
     );
   }
