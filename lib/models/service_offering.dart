@@ -62,7 +62,7 @@ class ServiceOffering {
       type: serviceType,
       name: map['name'] as String,
       price: (map['price'] as num).toDouble(),
-      duration: Duration(minutes: (map['duration'] as int?) ?? 60),
+      duration: Duration(minutes: (map['duration'] is num ? (map['duration'] as num).toInt() : null) ?? 60),
     );
   }
 
