@@ -835,6 +835,12 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get themeDark;
 
+  /// No description provided for @languageSystemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Match device language'**
+  String get languageSystemLabel;
+
   /// No description provided for @languageLabel.
   ///
   /// In en, this message translates to:

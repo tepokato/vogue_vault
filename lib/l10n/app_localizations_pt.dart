@@ -386,6 +386,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get themeDark => 'Escuro';
 
   @override
+  String get languageSystemLabel => 'Usar idioma do dispositivo';
+
+  @override
   String get languageLabel => 'Idioma';
 
   @override

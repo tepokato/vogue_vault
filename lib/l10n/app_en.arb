@@ -123,6 +123,7 @@
   "themeSystem": "System",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "languageSystemLabel": "Match device language",
   "languageLabel": "Language",
   "appointmentReminderTitle": "Appointment Reminder",
   "upcomingAppointmentBody": "Upcoming {service} appointment",

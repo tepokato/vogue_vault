@@ -123,6 +123,7 @@
   "themeSystem": "Sistema",
   "themeLight": "Claro",
   "themeDark": "Escuro",
+  "languageSystemLabel": "Usar idioma do dispositivo",
   "languageLabel": "Idioma",
   "appointmentReminderTitle": "Lembrete de agendamento",
   "upcomingAppointmentBody": "Próximo agendamento de {service}",

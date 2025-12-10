@@ -123,6 +123,7 @@
   "themeSystem": "Sistema",
   "themeLight": "Claro",
   "themeDark": "Oscuro",
+  "languageSystemLabel": "Coincidir con el idioma del dispositivo",
   "languageLabel": "Idioma",
   "appointmentReminderTitle": "Recordatorio de cita",
   "upcomingAppointmentBody": "Próxima cita de {service}",
