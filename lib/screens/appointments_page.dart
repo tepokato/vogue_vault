@@ -27,6 +27,14 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   ServiceType? _serviceFilter;
   final TextEditingController _searchController = TextEditingController();
 
+  void _replaceWithPage(Widget page) {
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -94,22 +102,12 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
         IconButton(
           icon: const Icon(Icons.calendar_today),
           tooltip: l10n.calendarTooltip,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const CalendarPage()),
-            );
-          },
+          onPressed: () => _replaceWithPage(const CalendarPage()),
         ),
         IconButton(
           icon: const Icon(Icons.store),
           tooltip: l10n.myBusinessTooltip,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MyBusinessPage()),
-            );
-          },
+          onPressed: () => _replaceWithPage(const MyBusinessPage()),
         ),
       ],
       body: appointments.isEmpty
@@ -156,11 +154,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                                     subtitle: Text(l10n.importAppointmentsCta),
                                     onTap: () {
                                       Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const CustomersPage(),
-                                        ),
+                                      _replaceWithPage(
+                                        const CustomersPage(),
                                       );
                                     },
                                   ),
@@ -170,11 +165,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                                     subtitle: Text(l10n.importAppointmentsCta),
                                     onTap: () {
                                       Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const CalendarPage(),
-                                        ),
+                                      _replaceWithPage(
+                                        const CalendarPage(),
                                       );
                                     },
                                   ),
