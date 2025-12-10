@@ -295,6 +295,42 @@ abstract class AppLocalizations {
   /// **'Invalid price'**
   String get invalidPrice;
 
+  /// No description provided for @priceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a price'**
+  String get priceRequired;
+
+  /// No description provided for @priceExampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 45.00'**
+  String get priceExampleHint;
+
+  /// No description provided for @durationHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Average appointment length in minutes'**
+  String get durationHelperText;
+
+  /// No description provided for @durationExampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 45'**
+  String get durationExampleHint;
+
+  /// No description provided for @durationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a duration'**
+  String get durationRequired;
+
+  /// No description provided for @invalidDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number of minutes'**
+  String get invalidDuration;
+
   /// No description provided for @deleteUserFailed.
   ///
   /// In en, this message translates to:

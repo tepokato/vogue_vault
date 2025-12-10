@@ -13,10 +13,14 @@ class ServiceOffering {
   /// The price of the service.
   final double price;
 
+  /// The duration of the service.
+  final Duration duration;
+
   const ServiceOffering({
     required this.type,
     required this.name,
     required this.price,
+    this.duration = const Duration(hours: 1),
   });
 
   /// Creates a copy of this offering with optional replacements.
@@ -24,11 +28,13 @@ class ServiceOffering {
     ServiceType? type,
     String? name,
     double? price,
+    Duration? duration,
   }) {
     return ServiceOffering(
       type: type ?? this.type,
       name: name ?? this.name,
       price: price ?? this.price,
+      duration: duration ?? this.duration,
     );
   }
 
@@ -37,6 +43,7 @@ class ServiceOffering {
         'type': type.name,
         'name': name,
         'price': price,
+        'duration': duration.inMinutes,
       };
 
   /// Creates a [ServiceOffering] from a JSON-compatible [map].
@@ -55,6 +62,7 @@ class ServiceOffering {
       type: serviceType,
       name: map['name'] as String,
       price: (map['price'] as num).toDouble(),
+      duration: Duration(minutes: (map['duration'] as int?) ?? 60),
     );
   }
 
@@ -65,9 +73,11 @@ class ServiceOffering {
           runtimeType == other.runtimeType &&
           type == other.type &&
           name == other.name &&
-          price == other.price;
+          price == other.price &&
+          duration == other.duration;
 
   @override
-  int get hashCode => type.hashCode ^ name.hashCode ^ price.hashCode;
+  int get hashCode =>
+      type.hashCode ^ name.hashCode ^ price.hashCode ^ duration.hashCode;
 }
 

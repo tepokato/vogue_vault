@@ -13,6 +13,7 @@ void main() {
     expect(offering.type, ServiceType.values.first);
     expect(offering.name, 'Mystery');
     expect(offering.price, 5);
+    expect(offering.duration, const Duration(minutes: 60));
   });
 }
 

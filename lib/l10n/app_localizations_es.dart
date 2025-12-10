@@ -108,6 +108,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get invalidPrice => 'Precio inválido';
 
   @override
+  String get priceRequired => 'Ingresa un precio';
+
+  @override
+  String get priceExampleHint => 'ej. 45.00';
+
+  @override
+  String get durationHelperText => 'Duración promedio de la cita en minutos';
+
+  @override
+  String get durationExampleHint => 'ej. 45';
+
+  @override
+  String get durationRequired => 'Ingresa una duración';
+
+  @override
+  String get invalidDuration => 'Ingresa un número válido de minutos';
+
+  @override
   String get deleteUserFailed => 'No se pudo eliminar el usuario';
 
   @override
