@@ -232,6 +232,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addFirstAppointment => 'Add your first appointment';
 
   @override
+  String get appointmentsEmptyDescription =>
+      'Keep bookings organized, send reminders, and track client details in one place.';
+
+  @override
+  String get importAppointmentsCta => 'Import from contacts or calendars';
+
+  @override
   String get noCustomersYet => 'No customers yet';
 
   @override
@@ -296,6 +303,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogConfirmAction => 'Confirm';
+
+  @override
+  String get searchAppointmentsLabel => 'Search';
+
+  @override
+  String get searchAppointmentsHint =>
+      'Search by client, provider, location, or service';
+
+  @override
+  String get appointmentTimeFilterLabel => 'Time';
+
+  @override
+  String get appointmentFilterAllLabel => 'All';
+
+  @override
+  String get appointmentFilterUpcomingLabel => 'Upcoming';
+
+  @override
+  String get appointmentFilterPastLabel => 'Past';
+
+  @override
+  String get appointmentServiceFilterLabel => 'Service type';
+
+  @override
+  String get appointmentServiceAllLabel => 'All services';
+
+  @override
+  String get noAppointmentsMatchFilters =>
+      'No appointments match your filters yet.';
 
   @override
   String get addressesTitle => 'Addresses';

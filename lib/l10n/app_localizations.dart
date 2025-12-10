@@ -535,6 +535,18 @@ abstract class AppLocalizations {
   /// **'Add your first appointment'**
   String get addFirstAppointment;
 
+  /// No description provided for @appointmentsEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep bookings organized, send reminders, and track client details in one place.'**
+  String get appointmentsEmptyDescription;
+
+  /// No description provided for @importAppointmentsCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from contacts or calendars'**
+  String get importAppointmentsCta;
+
   /// No description provided for @noCustomersYet.
   ///
   /// In en, this message translates to:
@@ -666,6 +678,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get dialogConfirmAction;
+
+  /// No description provided for @searchAppointmentsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchAppointmentsLabel;
+
+  /// No description provided for @searchAppointmentsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by client, provider, location, or service'**
+  String get searchAppointmentsHint;
+
+  /// No description provided for @appointmentTimeFilterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get appointmentTimeFilterLabel;
+
+  /// No description provided for @appointmentFilterAllLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get appointmentFilterAllLabel;
+
+  /// No description provided for @appointmentFilterUpcomingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get appointmentFilterUpcomingLabel;
+
+  /// No description provided for @appointmentFilterPastLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Past'**
+  String get appointmentFilterPastLabel;
+
+  /// No description provided for @appointmentServiceFilterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Service type'**
+  String get appointmentServiceFilterLabel;
+
+  /// No description provided for @appointmentServiceAllLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'All services'**
+  String get appointmentServiceAllLabel;
+
+  /// No description provided for @noAppointmentsMatchFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'No appointments match your filters yet.'**
+  String get noAppointmentsMatchFilters;
 
   /// No description provided for @addressesTitle.
   ///
