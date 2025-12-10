@@ -168,6 +168,31 @@ class AppLocalizationsPt extends AppLocalizations {
   String get passwordLabel => 'Senha';
 
   @override
+  String get passwordRequirementsHint =>
+      'Use pelo menos 8 caracteres com um número e um símbolo.';
+
+  @override
+  String get forgotPasswordButton => 'Esqueceu a senha?';
+
+  @override
+  String get resetPasswordTitle => 'Redefinir senha';
+
+  @override
+  String get resetPasswordDescription =>
+      'Atualize sua senha usando o e-mail da sua conta.';
+
+  @override
+  String get resetPasswordButton => 'Atualizar senha';
+
+  @override
+  String get resetPasswordSuccessMessage =>
+      'Senha atualizada. Você já pode entrar com a nova senha.';
+
+  @override
+  String get resetPasswordErrorMessage =>
+      'Não encontramos uma conta com esse e-mail.';
+
+  @override
   String get currentPasswordLabel => 'Senha atual';
 
   @override
