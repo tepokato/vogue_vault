@@ -36,6 +36,36 @@ void main() {
     expect(find.text('Invalid price'), findsOneWidget);
   });
 
+  testWidgets('invalid duration shows error', (tester) async {
+    var offerings = [
+      ServiceOffering(type: ServiceType.values.first, name: '', price: 10),
+    ];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Form(
+            child: ServiceOfferingEditor(
+              offerings: offerings,
+              onChanged: (list) => offerings = list,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final durationField =
+        find.widgetWithText(TextFormField, 'Duration (minutes)');
+    await tester.enterText(durationField, '0');
+
+    final formState = tester.state<FormState>(find.byType(Form));
+    expect(formState.validate(), isFalse);
+    await tester.pump();
+    expect(find.text('Enter a valid number of minutes'), findsOneWidget);
+  });
+
   testWidgets('add button adds offering', (tester) async {
     var offerings = <ServiceOffering>[];
 

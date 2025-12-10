@@ -95,20 +95,61 @@ class ServiceOfferingEditorState extends State<ServiceOfferingEditor> {
               Expanded(
                 child: TextFormField(
                   initialValue: _offerings[i].price.toString(),
-                  decoration: InputDecoration(labelText: l10n.priceLabel),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   onChanged: (val) {
+                    final parsed = double.tryParse(val);
                     setState(() {
                       _offerings[i] = _offerings[i]
-                          .copyWith(price: double.tryParse(val) ?? 0);
+                          .copyWith(price: parsed ?? _offerings[i].price);
                     });
                     _notify();
                   },
                   validator: (val) {
-                    final parsed = double.tryParse(val ?? '');
-                    if (parsed == null || parsed < 0) {
+                    if (val == null || val.trim().isEmpty) {
+                      return l10n.priceRequired;
+                    }
+                    final parsed = double.tryParse(val);
+                    if (parsed == null || parsed <= 0) {
                       return l10n.invalidPrice;
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: l10n.priceLabel,
+                    hintText: l10n.priceExampleHint,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextFormField(
+                  initialValue: _offerings[i].duration.inMinutes.toString(),
+                  decoration: InputDecoration(
+                    labelText: l10n.durationMinutesLabel,
+                    hintText: l10n.durationExampleHint,
+                    helperText: l10n.durationHelperText,
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: false),
+                  onChanged: (val) {
+                    final parsed = int.tryParse(val);
+                    setState(() {
+                      _offerings[i] = _offerings[i].copyWith(
+                        duration: parsed != null
+                            ? Duration(minutes: parsed)
+                            : _offerings[i].duration,
+                      );
+                    });
+                    _notify();
+                  },
+                  validator: (val) {
+                    if (val == null || val.trim().isEmpty) {
+                      return l10n.durationRequired;
+                    }
+                    final parsed = int.tryParse(val);
+                    if (parsed == null || parsed <= 0) {
+                      return l10n.invalidDuration;
                     }
                     return null;
                   },
