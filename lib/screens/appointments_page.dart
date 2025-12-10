@@ -28,6 +28,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   final TextEditingController _searchController = TextEditingController();
 
   void _replaceWithPage(Widget page) {
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => page),
