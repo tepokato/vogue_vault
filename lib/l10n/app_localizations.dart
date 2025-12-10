@@ -181,6 +181,18 @@ abstract class AppLocalizations {
   /// **'Calendar'**
   String get calendarTooltip;
 
+  /// No description provided for @previousMonthTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get previousMonthTooltip;
+
+  /// No description provided for @nextMonthTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get nextMonthTooltip;
+
   /// No description provided for @unknownUser.
   ///
   /// In en, this message translates to:
@@ -396,6 +408,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Duration (minutes)'**
   String get durationMinutesLabel;
+
+  /// No description provided for @addAppointmentTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add appointment'**
+  String get addAppointmentTooltip;
+
+  /// No description provided for @availabilityLegendAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Open slots'**
+  String get availabilityLegendAvailable;
+
+  /// No description provided for @availabilityLegendFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Fully booked'**
+  String get availabilityLegendFull;
 
   /// No description provided for @invalidCredentials.
   ///

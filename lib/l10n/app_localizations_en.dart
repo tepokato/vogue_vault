@@ -51,6 +51,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarTooltip => 'Calendar';
 
   @override
+  String get previousMonthTooltip => 'Previous month';
+
+  @override
+  String get nextMonthTooltip => 'Next month';
+
+  @override
   String get unknownUser => 'Unknown';
 
   @override
@@ -157,6 +163,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get durationMinutesLabel => 'Duration (minutes)';
+
+  @override
+  String get addAppointmentTooltip => 'Add appointment';
+
+  @override
+  String get availabilityLegendAvailable => 'Open slots';
+
+  @override
+  String get availabilityLegendFull => 'Fully booked';
 
   @override
   String get invalidCredentials => 'Invalid credentials';
