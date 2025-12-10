@@ -15,7 +15,13 @@ import '../widgets/app_scaffold.dart';
 class EditAppointmentPage extends StatefulWidget {
   final Appointment? appointment;
   final ServiceType? initialService;
-  const EditAppointmentPage({super.key, this.appointment, this.initialService});
+  final DateTime? initialDate;
+  const EditAppointmentPage({
+    super.key,
+    this.appointment,
+    this.initialService,
+    this.initialDate,
+  });
 
   @override
   State<EditAppointmentPage> createState() => _EditAppointmentPageState();
@@ -40,7 +46,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
         widget.appointment?.service ??
         widget.initialService ??
         ServiceType.barber;
-    _dateTime = widget.appointment?.dateTime ?? DateTime.now();
+    _dateTime =
+        widget.appointment?.dateTime ?? widget.initialDate ?? DateTime.now();
     _duration = widget.appointment?.duration ?? const Duration(hours: 1);
     _customerId = widget.appointment?.customerId;
     _guestController.text = widget.appointment?.guestName ?? '';
