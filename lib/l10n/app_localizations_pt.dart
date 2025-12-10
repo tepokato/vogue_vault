@@ -232,6 +232,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addFirstAppointment => 'Adicione seu primeiro agendamento';
 
   @override
+  String get appointmentsEmptyDescription =>
+      'Organize agendamentos, envie lembretes e acompanhe os dados dos clientes em um só lugar.';
+
+  @override
+  String get importAppointmentsCta =>
+      'Importar de contatos ou calendários';
+
+  @override
   String get noCustomersYet => 'Ainda não há clientes';
 
   @override
@@ -296,6 +304,35 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dialogConfirmAction => 'Confirmar';
+
+  @override
+  String get searchAppointmentsLabel => 'Buscar';
+
+  @override
+  String get searchAppointmentsHint =>
+      'Busque por cliente, profissional, local ou serviço';
+
+  @override
+  String get appointmentTimeFilterLabel => 'Tempo';
+
+  @override
+  String get appointmentFilterAllLabel => 'Todos';
+
+  @override
+  String get appointmentFilterUpcomingLabel => 'Próximos';
+
+  @override
+  String get appointmentFilterPastLabel => 'Passados';
+
+  @override
+  String get appointmentServiceFilterLabel => 'Tipo de serviço';
+
+  @override
+  String get appointmentServiceAllLabel => 'Todos os serviços';
+
+  @override
+  String get noAppointmentsMatchFilters =>
+      'Nenhum agendamento corresponde aos seus filtros.';
 
   @override
   String get addressesTitle => 'Endereços';
