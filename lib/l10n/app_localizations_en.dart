@@ -168,6 +168,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordLabel => 'Password';
 
   @override
+  String get passwordRequirementsHint =>
+      'Use at least 8 characters with a number and symbol.';
+
+  @override
+  String get forgotPasswordButton => 'Forgot password?';
+
+  @override
+  String get resetPasswordTitle => 'Reset password';
+
+  @override
+  String get resetPasswordDescription =>
+      'Update your password using your account email.';
+
+  @override
+  String get resetPasswordButton => 'Update password';
+
+  @override
+  String get resetPasswordSuccessMessage =>
+      'Password updated. You can sign in with your new password.';
+
+  @override
+  String get resetPasswordErrorMessage =>
+      "We couldn't find an account with that email.";
+
+  @override
   String get currentPasswordLabel => 'Current password';
 
   @override

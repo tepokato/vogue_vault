@@ -185,6 +185,21 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> resetPassword(String email, String newPassword) async {
+    _ensureInitialized();
+    final users = _users;
+    final user = users[email];
+    if (user == null) {
+      return false;
+    }
+    final newSaltBytes = _generateSalt();
+    final newSalt = base64UrlEncode(newSaltBytes);
+    final newHash = await _hashPassword(newPassword, newSalt);
+    users[email] = {'salt': newSalt, 'hash': newHash};
+    await _box.put(_usersKey, users);
+    return true;
+  }
+
   Future<void> logout() async {
     _ensureInitialized();
     await _box.delete(_currentUserKey);

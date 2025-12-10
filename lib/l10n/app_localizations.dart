@@ -415,6 +415,48 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get passwordLabel;
 
+  /// No description provided for @passwordRequirementsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters with a number and symbol.'**
+  String get passwordRequirementsHint;
+
+  /// No description provided for @forgotPasswordButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordButton;
+
+  /// No description provided for @resetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPasswordTitle;
+
+  /// No description provided for @resetPasswordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your password using your account email.'**
+  String get resetPasswordDescription;
+
+  /// No description provided for @resetPasswordButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Update password'**
+  String get resetPasswordButton;
+
+  /// No description provided for @resetPasswordSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated. You can sign in with your new password.'**
+  String get resetPasswordSuccessMessage;
+
+  /// No description provided for @resetPasswordErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn't find an account with that email.'**
+  String get resetPasswordErrorMessage;
+
   /// No description provided for @currentPasswordLabel.
   ///
   /// In en, this message translates to:

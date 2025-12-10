@@ -168,6 +168,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get passwordLabel => 'Contraseña';
 
   @override
+  String get passwordRequirementsHint =>
+      'Usa al menos 8 caracteres con un número y un símbolo.';
+
+  @override
+  String get forgotPasswordButton => '¿Olvidaste tu contraseña?';
+
+  @override
+  String get resetPasswordTitle => 'Restablecer contraseña';
+
+  @override
+  String get resetPasswordDescription =>
+      'Actualiza tu contraseña usando el correo de tu cuenta.';
+
+  @override
+  String get resetPasswordButton => 'Actualizar contraseña';
+
+  @override
+  String get resetPasswordSuccessMessage =>
+      'Contraseña actualizada. Ya puedes iniciar sesión con la nueva.';
+
+  @override
+  String get resetPasswordErrorMessage =>
+      'No pudimos encontrar una cuenta con ese correo.';
+
+  @override
   String get currentPasswordLabel => 'Contraseña actual';
 
   @override
