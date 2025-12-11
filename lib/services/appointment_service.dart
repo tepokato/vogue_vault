@@ -45,37 +45,46 @@ class AppointmentService extends ChangeNotifier {
     }
   }
 
+  bool _isLegacyAppointmentMap(Map<String, dynamic> map) {
+    return !map.containsKey('duration') ||
+        !map.containsKey('customerId') ||
+        !map.containsKey('guestName') ||
+        !map.containsKey('location') ||
+        !map.containsKey('price');
+  }
+
+  Appointment _deserializeAppointment(dynamic value) {
+    final map = Map<String, dynamic>.from(value);
+    final appointment = Appointment.fromMap(map);
+    if (_isLegacyAppointmentMap(map)) {
+      _appointmentsBox.put(appointment.id, appointment.toMap());
+    }
+    return appointment;
+  }
+
+  UserProfile _deserializeUser(dynamic value) {
+    final userMap = Map<String, dynamic>.from(value);
+    return UserProfile.fromMap({
+      ...userMap,
+      'offerings':
+          (userMap['offerings'] as List?)
+                  ?.map((e) => Map<String, dynamic>.from(e as Map))
+                  .toList() ??
+              <Map<String, dynamic>>[],
+    });
+  }
+
   List<Appointment> get appointments {
     if (!_initialized) return [];
-    final appts = _appointmentsBox.values.map((m) {
-      final map = Map<String, dynamic>.from(m);
-      final appt = Appointment.fromMap(map);
-      if (!map.containsKey('duration') ||
-          !map.containsKey('customerId') ||
-          !map.containsKey('guestName') ||
-          !map.containsKey('location') ||
-          !map.containsKey('price')) {
-        _appointmentsBox.put(appt.id, appt.toMap());
-      }
-      return appt;
-    }).toList();
+    final appts =
+        _appointmentsBox.values.map(_deserializeAppointment).toList();
     appts.sort((a, b) => a.dateTime.compareTo(b.dateTime));
     return appts;
   }
 
   List<UserProfile> get users {
     if (!_initialized) return [];
-    return _usersBox.values.map((m) {
-      final userMap = Map<String, dynamic>.from(m);
-      return UserProfile.fromMap({
-        ...userMap,
-        'offerings':
-            (userMap['offerings'] as List?)
-                ?.map((e) => Map<String, dynamic>.from(e as Map))
-                .toList() ??
-            <Map<String, dynamic>>[],
-      });
-    }).toList();
+    return _usersBox.values.map(_deserializeUser).toList();
   }
 
   List<Customer> get customers {
@@ -102,31 +111,14 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
     final map = _usersBox.get(id);
     if (map == null) return null;
-    final userMap = Map<String, dynamic>.from(map);
-    return UserProfile.fromMap({
-      ...userMap,
-      'offerings':
-          (userMap['offerings'] as List?)
-              ?.map((e) => Map<String, dynamic>.from(e as Map))
-              .toList() ??
-          <Map<String, dynamic>>[],
-    });
+    return _deserializeUser(map);
   }
 
   Appointment? getAppointment(String id) {
     _ensureInitialized();
     final map = _appointmentsBox.get(id);
     if (map == null) return null;
-    final appointmentMap = Map<String, dynamic>.from(map);
-    final appt = Appointment.fromMap(appointmentMap);
-    if (!appointmentMap.containsKey('duration') ||
-        !appointmentMap.containsKey('customerId') ||
-        !appointmentMap.containsKey('guestName') ||
-        !appointmentMap.containsKey('location') ||
-        !appointmentMap.containsKey('price')) {
-      _appointmentsBox.put(appt.id, appt.toMap());
-    }
-    return appt;
+    return _deserializeAppointment(map);
   }
 
   Customer? getCustomer(String id) {
@@ -159,7 +151,7 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
 
     final affected = _appointmentsBox.values
-        .map((m) => Appointment.fromMap(Map<String, dynamic>.from(m)))
+        .map(_deserializeAppointment)
         .where((a) => a.providerId == id)
         .toList();
 
@@ -281,8 +273,7 @@ class AppointmentService extends ChangeNotifier {
       await _usersBox.delete(oldId);
     }
     for (final m in _appointmentsBox.values) {
-      final map = Map<String, dynamic>.from(m);
-      final appt = Appointment.fromMap(map);
+      final appt = _deserializeAppointment(m);
       if (appt.providerId == oldId) {
         final updated = appt.copyWith(providerId: newId);
         await _appointmentsBox.put(updated.id, updated.toMap());
