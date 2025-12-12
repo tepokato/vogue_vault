@@ -23,6 +23,7 @@ class SettingsService extends ChangeNotifier {
     return _locale;
   }
 
+  /// Opens the settings box and restores previously chosen theme and locale.
   Future<void> init() async {
     _box = await Hive.openBox(_boxName);
     final storedTheme = _box.get(_themeModeKey);
@@ -44,6 +45,8 @@ class SettingsService extends ChangeNotifier {
     }
   }
 
+  /// Persists the chosen theme by storing the [ThemeMode.index] to keep Hive
+  /// payloads small and portable across platforms.
   Future<void> setThemeMode(ThemeMode mode) async {
     _ensureInitialized();
     _themeMode = mode;
@@ -51,6 +54,8 @@ class SettingsService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Persists the chosen locale using the language code. Passing `null` resets
+  /// the preference back to the device default.
   Future<void> setLocale(Locale? locale) async {
     _ensureInitialized();
     _locale = locale;

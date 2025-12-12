@@ -43,6 +43,9 @@ const TextTheme _textTheme = TextTheme(
   bodyMedium: TextStyle(fontSize: 16),
 );
 
+// Entry point that prepares storage-backed services before rendering the app.
+// Keeping initialization here makes it easy to inject mocks in tests or add
+// additional services without touching UI code.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

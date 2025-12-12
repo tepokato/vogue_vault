@@ -36,12 +36,16 @@ class NotificationService {
     }
   }
 
+  /// Reads the persisted reminder offset, defaulting to 30 minutes for users
+  /// who have not customized the lead time.
   Duration get reminderOffset {
     final minutes =
         (_settingsBox.get(_reminderOffsetKey, defaultValue: 30) as int?) ?? 30;
     return Duration(minutes: minutes);
   }
 
+  /// Stores the reminder offset in minutes to avoid timezone serialization
+  /// concerns that come with persisting whole [Duration] objects.
   Future<void> setReminderOffset(Duration offset) async {
     _ensureInitialized();
     await _settingsBox.put(_reminderOffsetKey, offset.inMinutes);
@@ -49,6 +53,8 @@ class NotificationService {
 
   int _notificationId(String appointmentId) => appointmentId.hashCode;
 
+  /// Schedules a notification for the appointment, respecting the stored
+  /// reminder offset and skipping notifications scheduled in the past.
   Future<void> scheduleAppointmentReminder(
     Appointment appointment, {
     BuildContext? context,
