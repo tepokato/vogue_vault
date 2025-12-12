@@ -22,6 +22,8 @@ class AuthService extends ChangeNotifier {
 
   bool get isInitialized => _initialized;
 
+  /// Opens the encrypted Hive box and migrates any legacy unencrypted data into
+  /// it so users keep their credentials across updates.
   Future<void> init() async {
     final key = await _getOrCreateEncryptionKey();
     final cipher = HiveAesCipher(key);
@@ -41,6 +43,8 @@ class AuthService extends ChangeNotifier {
     _initialized = true;
   }
 
+  /// Retrieves an existing encryption key from secure storage or generates and
+  /// persists a new one when the app is first launched.
   Future<List<int>> _getOrCreateEncryptionKey() async {
     final stored = await _secureStorage.read(key: _encryptionKey);
     if (stored != null) {

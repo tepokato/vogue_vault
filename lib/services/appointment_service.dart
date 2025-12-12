@@ -10,6 +10,9 @@ import '../models/customer.dart';
 import '../models/address.dart';
 import 'notification_service.dart';
 
+/// Handles persistence and validation for appointments, users, customers, and
+/// addresses. The service owns the Hive boxes and keeps them in sync with
+/// in-memory models.
 class AppointmentService extends ChangeNotifier {
   static const _appointmentsBoxName = 'appointments';
   static const _usersBoxName = 'users';
@@ -31,6 +34,8 @@ class AppointmentService extends ChangeNotifier {
   AppointmentService({NotificationService? notificationService})
       : _notificationService = notificationService;
 
+  /// Opens backing stores for all managed entity types. Call this before
+  /// accessing any getters or mutations to avoid runtime errors.
   Future<void> init() async {
     _appointmentsBox = await Hive.openBox(_appointmentsBoxName);
     _usersBox = await Hive.openBox(_usersBoxName);
@@ -45,6 +50,9 @@ class AppointmentService extends ChangeNotifier {
     }
   }
 
+  /// Returns true when the stored appointment map is missing fields that were
+  /// introduced in newer app versions. Used to opportunistically upgrade
+  /// legacy data when it is read.
   bool _isLegacyAppointmentMap(Map<String, dynamic> map) {
     return !map.containsKey('duration') ||
         !map.containsKey('customerId') ||
@@ -53,6 +61,8 @@ class AppointmentService extends ChangeNotifier {
         !map.containsKey('price');
   }
 
+  /// Converts loosely typed Hive data into an [Appointment] while also writing
+  /// back any missing fields to keep stored records consistent.
   Appointment _deserializeAppointment(dynamic value) {
     final map = Map<String, dynamic>.from(value);
     final appointment = Appointment.fromMap(map);
@@ -62,6 +72,8 @@ class AppointmentService extends ChangeNotifier {
     return appointment;
   }
 
+  /// Converts stored user maps into [UserProfile] instances and normalizes
+  /// nested offerings to avoid type exceptions from Hive's dynamic values.
   UserProfile _deserializeUser(dynamic value) {
     final userMap = Map<String, dynamic>.from(value);
     return UserProfile.fromMap({
@@ -143,6 +155,9 @@ class AppointmentService extends ChangeNotifier {
     await _saveEntity(_usersBox, user.id, user.toMap());
   }
 
+  /// Removes a provider and optionally reassigns their appointments to another
+  /// provider. If no reassignment is provided, the related appointments are
+  /// deleted to avoid orphaned bookings.
   Future<void> deleteUser(String id, {String? reassignedUserId}) async {
     _ensureInitialized();
 
@@ -194,6 +209,9 @@ class AppointmentService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Checks whether the provided appointment overlaps with any existing
+  /// appointment for the same provider. The comparison ignores the appointment
+  /// being edited by matching on the ID.
   bool _hasConflict(Appointment appointment) {
     final providerId = appointment.providerId;
     if (providerId == null) return false;
@@ -217,7 +235,8 @@ class AppointmentService extends ChangeNotifier {
     if (_hasConflict(appointment)) {
       throw StateError('Appointment conflicts with existing booking.');
     }
-    // providerId is persisted via the appointment's toMap representation.
+    // providerId is persisted via the appointment's toMap representation to
+    // keep storage and in-memory data aligned with the same source of truth.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
     await _notificationService?.scheduleAppointmentReminder(
       appointment,
@@ -236,7 +255,8 @@ class AppointmentService extends ChangeNotifier {
     if (_hasConflict(appointment)) {
       throw StateError('Appointment conflicts with existing booking.');
     }
-    // providerId is persisted via the appointment's toMap representation.
+    // providerId is persisted via the appointment's toMap representation to
+    // keep storage and in-memory data aligned with the same source of truth.
     await _appointmentsBox.put(appointment.id, appointment.toMap());
     await _notificationService?.rescheduleAppointmentReminder(
       appointment,
@@ -259,6 +279,8 @@ class AppointmentService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates stored appointments to reference a user's new identifier. This is
+  /// primarily used when an email change alters the canonical user ID.
   Future<void> renameUserId(String oldId, String newId) async {
     _ensureInitialized();
     final userMap = _usersBox.get(oldId);
