@@ -136,15 +136,11 @@ class AppointmentService extends ChangeNotifier {
   }
 
   Future<void> addUser(UserProfile user) async {
-    _ensureInitialized();
-    await _usersBox.put(user.id, user.toMap());
-    notifyListeners();
+    await _saveEntity(_usersBox, user.id, user.toMap());
   }
 
   Future<void> updateUser(UserProfile user) async {
-    _ensureInitialized();
-    await _usersBox.put(user.id, user.toMap());
-    notifyListeners();
+    await _saveEntity(_usersBox, user.id, user.toMap());
   }
 
   Future<void> deleteUser(String id, {String? reassignedUserId}) async {
@@ -171,15 +167,11 @@ class AppointmentService extends ChangeNotifier {
   }
 
   Future<void> addCustomer(Customer customer) async {
-    _ensureInitialized();
-    await _customersBox.put(customer.id, customer.toMap());
-    notifyListeners();
+    await _saveEntity(_customersBox, customer.id, customer.toMap());
   }
 
   Future<void> updateCustomer(Customer customer) async {
-    _ensureInitialized();
-    await _customersBox.put(customer.id, customer.toMap());
-    notifyListeners();
+    await _saveEntity(_customersBox, customer.id, customer.toMap());
   }
 
   Future<void> deleteCustomer(String id) async {
@@ -189,15 +181,11 @@ class AppointmentService extends ChangeNotifier {
   }
 
   Future<void> addAddress(Address address) async {
-    _ensureInitialized();
-    await _addressesBox.put(address.id, address.toMap());
-    notifyListeners();
+    await _saveEntity(_addressesBox, address.id, address.toMap());
   }
 
   Future<void> updateAddress(Address address) async {
-    _ensureInitialized();
-    await _addressesBox.put(address.id, address.toMap());
-    notifyListeners();
+    await _saveEntity(_addressesBox, address.id, address.toMap());
   }
 
   Future<void> deleteAddress(String id) async {
@@ -262,6 +250,12 @@ class AppointmentService extends ChangeNotifier {
     _ensureInitialized();
     await _notificationService?.cancelAppointmentReminder(id);
     await _appointmentsBox.delete(id);
+    notifyListeners();
+  }
+
+  Future<void> _saveEntity(Box box, String id, Map<String, dynamic> data) async {
+    _ensureInitialized();
+    await box.put(id, data);
     notifyListeners();
   }
 
