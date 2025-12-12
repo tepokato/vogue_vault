@@ -16,6 +16,7 @@ class SettingsPage extends StatelessWidget {
 
     return AppScaffold(
       title: l10n.settingsTitle,
+      showSettingsButton: false,
       body: ListView(
         children: [
           _SettingsSectionHeader(title: l10n.themeLabel),

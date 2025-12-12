@@ -145,6 +145,12 @@ abstract class AppLocalizations {
   /// **'My Business'**
   String get myBusinessTooltip;
 
+  /// No description provided for @settingsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTooltip;
+
   /// No description provided for @myBusinessTitle.
   ///
   /// In en, this message translates to:
