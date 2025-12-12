@@ -4,7 +4,6 @@ import 'package:vogue_vault/l10n/app_localizations.dart';
 import 'customers_page.dart';
 import 'addresses_page.dart';
 import 'notification_settings_page.dart';
-import 'settings_page.dart';
 import '../widgets/app_scaffold.dart';
 
 class MyBusinessPage extends StatelessWidget {
@@ -47,16 +46,6 @@ class MyBusinessPage extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => const NotificationSettingsPage(),
                 ),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: Text(AppLocalizations.of(context)!.settingsTitle),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsPage()),
               );
             },
           ),

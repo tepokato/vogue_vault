@@ -33,6 +33,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myBusinessTooltip => 'Mi Negocio';
 
   @override
+  String get settingsTooltip => 'Configuración';
+
+  @override
   String get myBusinessTitle => 'Mi Negocio';
 
   @override
