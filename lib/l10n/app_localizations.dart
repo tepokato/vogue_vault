@@ -889,6 +889,66 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get languageLabel;
 
+  /// No description provided for @cloudBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backups'**
+  String get cloudBackupTitle;
+
+  /// No description provided for @googleDriveBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Drive backup'**
+  String get googleDriveBackupTitle;
+
+  /// No description provided for @googleDriveBackupDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a copy of your Vogue Vault data to Google Drive.'**
+  String get googleDriveBackupDescription;
+
+  /// No description provided for @googleDriveBackupAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up now'**
+  String get googleDriveBackupAction;
+
+  /// No description provided for @googleDriveBackupInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Backing up...'**
+  String get googleDriveBackupInProgress;
+
+  /// No description provided for @googleDriveBackupLastRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {time}'**
+  String googleDriveBackupLastRun(String time);
+
+  /// No description provided for @googleDriveBackupNeverRan.
+  ///
+  /// In en, this message translates to:
+  /// **'No backups created yet.'**
+  String get googleDriveBackupNeverRan;
+
+  /// No description provided for @googleDriveBackupSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved to Google Drive.'**
+  String get googleDriveBackupSuccess;
+
+  /// No description provided for @googleDriveBackupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn't back up to Google Drive.'**
+  String get googleDriveBackupFailed;
+
+  /// No description provided for @googleDriveBackupError.
+  ///
+  /// In en, this message translates to:
+  /// **'Last error: {message}'**
+  String googleDriveBackupError(String message);
+
   /// No description provided for @appointmentReminderTitle.
   ///
   /// In en, this message translates to:

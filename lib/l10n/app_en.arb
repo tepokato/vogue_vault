@@ -132,6 +132,26 @@
   "themeDark": "Dark",
   "languageSystemLabel": "Match device language",
   "languageLabel": "Language",
+  "cloudBackupTitle": "Cloud backups",
+  "googleDriveBackupTitle": "Google Drive backup",
+  "googleDriveBackupDescription": "Save a copy of your Vogue Vault data to Google Drive.",
+  "googleDriveBackupAction": "Back up now",
+  "googleDriveBackupInProgress": "Backing up...",
+  "googleDriveBackupLastRun": "Last backup: {time}",
+  "@googleDriveBackupLastRun": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "googleDriveBackupNeverRan": "No backups created yet.",
+  "googleDriveBackupSuccess": "Backup saved to Google Drive.",
+  "googleDriveBackupFailed": "Couldn't back up to Google Drive.",
+  "googleDriveBackupError": "Last error: {message}",
+  "@googleDriveBackupError": {
+    "placeholders": {
+      "message": {}
+    }
+  },
   "appointmentReminderTitle": "Appointment Reminder",
   "upcomingAppointmentBody": "Upcoming {service} appointment",
   "@upcomingAppointmentBody": {

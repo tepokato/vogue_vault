@@ -414,6 +414,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageLabel => 'Idioma';
 
   @override
+  String get cloudBackupTitle => 'Copias de seguridad en la nube';
+
+  @override
+  String get googleDriveBackupTitle => 'Copia de seguridad en Google Drive';
+
+  @override
+  String get googleDriveBackupDescription =>
+      'Guarda una copia de tus datos de Vogue Vault en Google Drive.';
+
+  @override
+  String get googleDriveBackupAction => 'Hacer copia ahora';
+
+  @override
+  String get googleDriveBackupInProgress => 'Creando copia...';
+
+  @override
+  String googleDriveBackupLastRun(String time) {
+    return 'Última copia: $time';
+  }
+
+  @override
+  String get googleDriveBackupNeverRan => 'Aún no hay copias.';
+
+  @override
+  String get googleDriveBackupSuccess => 'Copia guardada en Google Drive.';
+
+  @override
+  String get googleDriveBackupFailed =>
+      'No se pudo crear la copia en Google Drive.';
+
+  @override
+  String googleDriveBackupError(String message) {
+    return 'Último error: $message';
+  }
+
+  @override
   String get appointmentReminderTitle => 'Recordatorio de cita';
 
   @override

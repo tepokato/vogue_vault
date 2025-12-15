@@ -13,6 +13,7 @@ import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
 import 'services/settings_service.dart';
+import 'services/backup_service.dart';
 
 InputDecorationTheme _buildInputDecorationTheme(ColorScheme scheme) {
   final border = OutlineInputBorder(
@@ -61,6 +62,7 @@ Future<void> main() async {
   await authService.init();
   final settingsService = SettingsService();
   await settingsService.init();
+  final backupService = BackupService(appointmentService);
 
   runApp(
     ChangeNotifierProvider<SettingsService>.value(
@@ -71,6 +73,7 @@ Future<void> main() async {
             value: appointmentService,
           ),
           ChangeNotifierProvider<AuthService>.value(value: authService),
+          ChangeNotifierProvider<BackupService>.value(value: backupService),
           Provider<NotificationService>.value(value: notificationService),
         ],
         child: const MyApp(),
