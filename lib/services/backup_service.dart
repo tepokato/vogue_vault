@@ -44,7 +44,7 @@ class BackupService extends ChangeNotifier {
     try {
       final account = await _googleSignIn.signIn();
       if (account == null) {
-        throw StateError('Sign-in aborted');
+        throw 'Sign-in aborted by user.';
       }
 
       final authHeaders = await account.authHeaders;
