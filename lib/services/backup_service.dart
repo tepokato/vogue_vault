@@ -47,7 +47,15 @@ class BackupService extends ChangeNotifier {
         throw 'Sign-in aborted by user.';
       }
 
-      final authHeaders = await account.authHeaders;
+      final authentication = await account.authentication;
+      final accessToken = authentication.accessToken;
+      if (accessToken == null) {
+        throw Exception('Unable to retrieve authentication token. Please try signing in again.');
+      }
+
+      final authHeaders = {
+        'Authorization': 'Bearer $accessToken',
+      };
       final client = _GoogleAuthClient(authHeaders);
       final driveApi = drive.DriveApi(client);
 
