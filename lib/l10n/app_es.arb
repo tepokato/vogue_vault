@@ -132,6 +132,26 @@
   "themeDark": "Oscuro",
   "languageSystemLabel": "Coincidir con el idioma del dispositivo",
   "languageLabel": "Idioma",
+  "cloudBackupTitle": "Copias de seguridad en la nube",
+  "googleDriveBackupTitle": "Copia de seguridad en Google Drive",
+  "googleDriveBackupDescription": "Guarda una copia de tus datos de Vogue Vault en Google Drive.",
+  "googleDriveBackupAction": "Hacer copia ahora",
+  "googleDriveBackupInProgress": "Creando copia...",
+  "googleDriveBackupLastRun": "Última copia: {time}",
+  "@googleDriveBackupLastRun": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "googleDriveBackupNeverRan": "Aún no hay copias.",
+  "googleDriveBackupSuccess": "Copia guardada en Google Drive.",
+  "googleDriveBackupFailed": "No se pudo crear la copia en Google Drive.",
+  "googleDriveBackupError": "Último error: {message}",
+  "@googleDriveBackupError": {
+    "placeholders": {
+      "message": {}
+    }
+  },
   "appointmentReminderTitle": "Recordatorio de cita",
   "upcomingAppointmentBody": "Próxima cita de {service}",
   "@upcomingAppointmentBody": {

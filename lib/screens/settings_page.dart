@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../services/backup_service.dart';
 import '../services/settings_service.dart';
 import 'notification_settings_page.dart';
 import '../widgets/app_scaffold.dart';
@@ -13,6 +15,16 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final service = context.watch<SettingsService>();
+    final backupService = context.watch<BackupService>();
+
+    final lastBackup = backupService.lastBackupAt;
+    final statusText = backupService.isBackingUp
+        ? l10n.googleDriveBackupInProgress
+        : lastBackup != null
+            ? l10n.googleDriveBackupLastRun(
+                DateFormat.yMMMd().add_jm().format(lastBackup.toLocal()),
+              )
+            : l10n.googleDriveBackupNeverRan;
 
     return AppScaffold(
       title: l10n.settingsTitle,
@@ -91,6 +103,58 @@ class SettingsPage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          const Divider(),
+          _SettingsSectionHeader(title: l10n.cloudBackupTitle),
+          ListTile(
+            leading: const Icon(Icons.cloud_upload),
+            title: Text(l10n.googleDriveBackupTitle),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.googleDriveBackupDescription),
+                const SizedBox(height: 4),
+                Text(statusText),
+                if (backupService.lastError != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.googleDriveBackupError(backupService.lastError!),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            trailing: backupService.isBackingUp
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await backupService.backUpToGoogleDrive();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.googleDriveBackupSuccess),
+                            ),
+                          );
+                        }
+                      } catch (_) {
+                        if (context.mounted) {
+                          final message = backupService.lastError ??
+                              l10n.googleDriveBackupFailed;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(message)),
+                          );
+                        }
+                      }
+                    },
+                    child: Text(l10n.googleDriveBackupAction),
+                  ),
           ),
         ],
       ),
