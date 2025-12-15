@@ -50,7 +50,7 @@ class BackupService extends ChangeNotifier {
       final authentication = await account.authentication;
       final accessToken = authentication.accessToken;
       if (accessToken == null) {
-        throw 'Unable to retrieve authentication token. Please try signing in again.';
+        throw Exception('Unable to retrieve authentication token. Please try signing in again.');
       }
 
       final authHeaders = {
