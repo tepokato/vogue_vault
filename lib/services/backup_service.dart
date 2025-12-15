@@ -55,16 +55,22 @@ class BackupService extends ChangeNotifier {
       final bytes = utf8.encode(jsonEncode(backupPayload));
       final media = drive.Media(Stream<List<int>>.value(bytes), bytes.length);
 
-      final file = drive.File()
-        ..name = 'vogue_vault_backup.json'
-        ..parents = ['appDataFolder']
+      const fileName = 'vogue_vault_backup.json';
+      final query = "name = '$fileName' and 'appDataFolder' in parents";
+      final fileList = await driveApi.files.list(spaces: 'appDataFolder', q: query, $fields: 'files(id)');
+      final files = fileList.files;
+      final String? existingFileId = (files != null && files.isNotEmpty) ? files.first.id : null;
+
+      final fileMetadata = drive.File()
+        ..name = fileName
         ..mimeType = 'application/json';
 
-      await driveApi.files.create(
-        file,
-        uploadMedia: media,
-        $fields: 'id',
-      );
+      if (existingFileId != null) {
+        await driveApi.files.update(fileMetadata, existingFileId, uploadMedia: media);
+      } else {
+        fileMetadata.parents = ['appDataFolder'];
+        await driveApi.files.create(fileMetadata, uploadMedia: media, $fields: 'id');
+      }
 
       _lastBackupAt = DateTime.now();
     } catch (error) {
