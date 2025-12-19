@@ -18,6 +18,7 @@ class CustomersPage extends StatelessWidget {
 
     return AppScaffold(
       title: l10n.customersTitle,
+      currentDestination: AppDestination.customers,
       body: customers.isEmpty
           ? Center(
               child: Column(
