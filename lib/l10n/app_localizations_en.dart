@@ -208,6 +208,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use at least 8 characters with a number and symbol.';
 
   @override
+  String get passwordStrengthLabel => 'Strength';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
   String get forgotPasswordButton => 'Forgot password?';
 
   @override
