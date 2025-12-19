@@ -13,6 +13,7 @@ import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import '../utils/service_type_utils.dart';
 import '../widgets/app_scaffold.dart';
+import '../widgets/password_strength_indicator.dart';
 import 'appointments_page.dart';
 import 'auth_page.dart';
 import 'manage_services_page.dart';
@@ -389,7 +390,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
+                        onChanged: (_) => setState(() {}),
                         obscureText: !_showNewPassword,
+                      ),
+                      PasswordStrengthIndicator(
+                        password: _newPwdController.text,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(

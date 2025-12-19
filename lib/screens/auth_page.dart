@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
+import '../widgets/password_strength_indicator.dart';
 import 'appointments_page.dart';
 import 'profile_page.dart';
 
@@ -153,6 +154,7 @@ class _AuthPageState extends State<AuthPage> {
                           ),
                         ),
                       ),
+                      onChanged: (_) => setModalState(() {}),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return AppLocalizations.of(context)!.passwordRequired;
@@ -163,6 +165,9 @@ class _AuthPageState extends State<AuthPage> {
                         }
                         return null;
                       },
+                    ),
+                    PasswordStrengthIndicator(
+                      password: newPasswordController.text,
                     ),
                     const SizedBox(height: 12),
                     TextFormField(

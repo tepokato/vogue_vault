@@ -208,6 +208,18 @@ class AppLocalizationsPt extends AppLocalizations {
       'Use pelo menos 8 caracteres com um número e um símbolo.';
 
   @override
+  String get passwordStrengthLabel => 'Força';
+
+  @override
+  String get passwordStrengthWeak => 'Fraca';
+
+  @override
+  String get passwordStrengthMedium => 'Média';
+
+  @override
+  String get passwordStrengthStrong => 'Forte';
+
+  @override
   String get forgotPasswordButton => 'Esqueceu a senha?';
 
   @override

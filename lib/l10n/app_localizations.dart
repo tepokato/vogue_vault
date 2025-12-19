@@ -493,6 +493,30 @@ abstract class AppLocalizations {
   /// **'Use at least 8 characters with a number and symbol.'**
   String get passwordRequirementsHint;
 
+  /// No description provided for @passwordStrengthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength'**
+  String get passwordStrengthLabel;
+
+  /// No description provided for @passwordStrengthWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get passwordStrengthWeak;
+
+  /// No description provided for @passwordStrengthMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get passwordStrengthMedium;
+
+  /// No description provided for @passwordStrengthStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get passwordStrengthStrong;
+
   /// No description provided for @forgotPasswordButton.
   ///
   /// In en, this message translates to:
