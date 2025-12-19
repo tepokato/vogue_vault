@@ -45,6 +45,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
     return AppScaffold(
       title: l10n.calendarTitle,
+      currentDestination: AppDestination.calendar,
       body: Column(
         children: [
           Padding(

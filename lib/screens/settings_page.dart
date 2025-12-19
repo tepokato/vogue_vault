@@ -28,6 +28,7 @@ class SettingsPage extends StatelessWidget {
 
     return AppScaffold(
       title: l10n.settingsTitle,
+      currentDestination: AppDestination.settings,
       showSettingsButton: false,
       body: ListView(
         children: [

@@ -98,12 +98,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
     return AppScaffold(
       title: l10n.appointmentsTitle,
+      currentDestination: AppDestination.appointments,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.calendar_today),
-          tooltip: l10n.calendarTooltip,
-          onPressed: () => _replaceWithPage(const CalendarPage()),
-        ),
         IconButton(
           icon: const Icon(Icons.store),
           tooltip: l10n.myBusinessTooltip,
