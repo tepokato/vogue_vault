@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:vogue_vault/l10n/app_localizations.dart';
@@ -25,6 +26,7 @@ class _FakeAppointmentService extends AppointmentService {
 
 void main() {
   testWidgets('appointment tile shows provider, customer and price', (tester) async {
+    const locale = Locale('en', 'US');
     final appt = Appointment(
       id: '1',
       service: ServiceType.barber,
@@ -40,11 +42,14 @@ void main() {
     }, {
       'c1': Customer(id: 'c1', firstName: 'Jane', lastName: 'Doe'),
     });
+    final priceText =
+        NumberFormat.simpleCurrency(locale: locale.toLanguageTag()).format(appt.price);
 
     await tester.pumpWidget(
       ChangeNotifierProvider<AppointmentService>.value(
         value: service,
         child: MaterialApp(
+          locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: AppointmentTile(appointment: appt)),
@@ -53,7 +58,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Barber - Alex Smith (\$50.00)'), findsOneWidget);
+    expect(find.text('Barber - Alex Smith ($priceText)'), findsOneWidget);
     expect(find.textContaining('Jane Doe @ Salon'), findsOneWidget);
   });
 
