@@ -63,7 +63,7 @@ class AppointmentTile extends StatelessWidget {
     }
 
     final priceStr = appointment.price != null
-        ? ' (\$${appointment.price!.toStringAsFixed(2)})'
+        ? ' (${NumberFormat.simpleCurrency(locale: locale).format(appointment.price)})'
         : '';
 
     return ListTile(
