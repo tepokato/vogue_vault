@@ -137,14 +137,15 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                         borderRadius: BorderRadius.circular(16),
                         onTap: _openNewAppointment,
                         child: DottedBorder(
-                          strokeWidth: 2,
-                          dashPattern: const [8, 6],
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.6),
-                          borderType: BorderType.RRect,
-                          radius: const Radius.circular(16),
+                          options: RoundedRectDottedBorderOptions(
+                            strokeWidth: 2,
+                            dashPattern: const [8, 6],
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.6),
+                            radius: const Radius.circular(16),
+                          ),
                           child: Container(
                             width: 180,
                             height: 180,
