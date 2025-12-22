@@ -280,6 +280,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addFirstAppointment => 'Add your first appointment';
 
   @override
+  String get addBookingCta => 'Tap to add a booking';
+
+  @override
   String get appointmentsEmptyDescription =>
       'Keep bookings organized, send reminders, and track client details in one place.';
 
