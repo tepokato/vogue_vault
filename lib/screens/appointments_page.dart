@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
@@ -26,6 +27,13 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   AppointmentTimeFilter _timeFilter = AppointmentTimeFilter.upcoming;
   ServiceType? _serviceFilter;
   final TextEditingController _searchController = TextEditingController();
+
+  void _openNewAppointment() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const EditAppointmentPage()),
+    );
+  }
 
   void _replaceWithPage(Widget page) {
     if (!mounted) return;
@@ -121,18 +129,65 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                       l10n.appointmentsEmptyDescription,
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const EditAppointmentPage(),
+                    const SizedBox(height: 24),
+                    Semantics(
+                      button: true,
+                      label: l10n.addFirstAppointment,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: _openNewAppointment,
+                        child: DottedBorder(
+                          strokeWidth: 2,
+                          dashPattern: const [8, 6],
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.6),
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(16),
+                          child: Container(
+                            width: 180,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.06),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  size: 38,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  l10n.addFirstAppointment,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  l10n.addBookingCta,
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withOpacity(0.7),
+                                          ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
-                        );
-                      },
-                      child: Text(
-                        l10n.addFirstAppointment,
+                        ),
                       ),
                     ),
                     TextButton(
@@ -337,10 +392,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const EditAppointmentPage()),
-          );
+          _openNewAppointment();
         },
         child: const Icon(Icons.add),
       ),

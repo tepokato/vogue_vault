@@ -89,6 +89,7 @@
   "createAccount": "Create an account",
   "noAppointmentsScheduled": "No appointments scheduled.",
   "addFirstAppointment": "Add your first appointment",
+  "addBookingCta": "Tap to add a booking",
   "appointmentsEmptyDescription": "Keep bookings organized, send reminders, and track client details in one place.",
   "importAppointmentsCta": "Import from contacts or calendars",
   "noCustomersYet": "No customers yet",

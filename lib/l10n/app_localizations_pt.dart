@@ -280,6 +280,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addFirstAppointment => 'Adicione seu primeiro agendamento';
 
   @override
+  String get addBookingCta => 'Toque para adicionar uma reserva';
+
+  @override
   String get appointmentsEmptyDescription =>
       'Organize agendamentos, envie lembretes e acompanhe os dados dos clientes em um só lugar.';
 

@@ -631,6 +631,12 @@ abstract class AppLocalizations {
   /// **'Add your first appointment'**
   String get addFirstAppointment;
 
+  /// No description provided for @addBookingCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to add a booking'**
+  String get addBookingCta;
+
   /// No description provided for @appointmentsEmptyDescription.
   ///
   /// In en, this message translates to:

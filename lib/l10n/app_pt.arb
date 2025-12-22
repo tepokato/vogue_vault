@@ -89,6 +89,7 @@
   "createAccount": "Criar uma conta",
   "noAppointmentsScheduled": "Nenhum agendamento marcado.",
   "addFirstAppointment": "Adicione seu primeiro agendamento",
+  "addBookingCta": "Toque para adicionar uma reserva",
   "appointmentsEmptyDescription": "Organize agendamentos, envie lembretes e acompanhe os dados dos clientes em um só lugar.",
   "importAppointmentsCta": "Importar de contatos ou calendários",
   "noCustomersYet": "Ainda não há clientes",
