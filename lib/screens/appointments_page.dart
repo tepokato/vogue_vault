@@ -391,12 +391,6 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 ),
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _openNewAppointment();
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
