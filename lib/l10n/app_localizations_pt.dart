@@ -462,6 +462,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageLabel => 'Idioma';
 
   @override
+  String get dataExportTitle => 'Exportação de dados';
+
+  @override
+  String get exportAppointmentsCsvTitle => 'Copiar CSV de agendamentos';
+
+  @override
+  String get exportAppointmentsCsvDescription =>
+      'Crie um CSV com seus agendamentos.';
+
+  @override
+  String get exportCustomersCsvTitle => 'Copiar CSV de clientes';
+
+  @override
+  String get exportCustomersCsvDescription =>
+      'Crie um CSV com sua lista de clientes.';
+
+  @override
+  String get exportCsvAction => 'Copiar CSV';
+
+  @override
+  String get exportCsvSuccess => 'CSV copiado para a área de transferência.';
+
+  @override
+  String get exportCsvEmpty => 'Não há dados para exportar.';
+
+  @override
+  String get exportCsvFailed => 'Não foi possível preparar a exportação CSV.';
+
+  @override
   String get cloudBackupTitle => 'Backups na nuvem';
 
   @override

@@ -1,15 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../services/appointment_service.dart';
 import '../services/backup_service.dart';
 import '../services/settings_service.dart';
+import '../utils/csv_exporter.dart';
 import 'notification_settings_page.dart';
 import '../widgets/app_scaffold.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  Future<void> _copyAppointmentsCsv(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final appointmentService = context.read<AppointmentService>();
+    final appointments = appointmentService.appointments;
+
+    if (appointments.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.exportCsvEmpty)));
+      return;
+    }
+
+    try {
+      final customersById = {
+        for (final customer in appointmentService.customers)
+          customer.id: customer,
+      };
+      final providersById = {
+        for (final provider in appointmentService.users) provider.id: provider,
+      };
+      final csv = CsvExporter.exportAppointments(
+        appointments: appointments,
+        customersById: customersById,
+        providersById: providersById,
+      );
+      await Clipboard.setData(ClipboardData(text: csv));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.exportCsvSuccess)));
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.exportCsvFailed)));
+      }
+    }
+  }
+
+  Future<void> _copyCustomersCsv(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final appointmentService = context.read<AppointmentService>();
+    final customers = appointmentService.customers;
+
+    if (customers.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.exportCsvEmpty)));
+      return;
+    }
+
+    try {
+      final csv = CsvExporter.exportCustomers(customers: customers);
+      await Clipboard.setData(ClipboardData(text: csv));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.exportCsvSuccess)));
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.exportCsvFailed)));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +170,26 @@ class SettingsPage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          const Divider(),
+          _SettingsSectionHeader(title: l10n.dataExportTitle),
+          ListTile(
+            leading: const Icon(Icons.download),
+            title: Text(l10n.exportAppointmentsCsvTitle),
+            subtitle: Text(l10n.exportAppointmentsCsvDescription),
+            trailing: ElevatedButton(
+              onPressed: () => _copyAppointmentsCsv(context),
+              child: Text(l10n.exportCsvAction),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.person_outline),
+            title: Text(l10n.exportCustomersCsvTitle),
+            subtitle: Text(l10n.exportCustomersCsvDescription),
+            trailing: ElevatedButton(
+              onPressed: () => _copyCustomersCsv(context),
+              child: Text(l10n.exportCsvAction),
+            ),
           ),
           const Divider(),
           _SettingsSectionHeader(title: l10n.cloudBackupTitle),
