@@ -55,6 +55,7 @@ class AppointmentService extends ChangeNotifier {
   /// legacy data when it is read.
   bool _isLegacyAppointmentMap(Map<String, dynamic> map) {
     return !map.containsKey('duration') ||
+        !map.containsKey('bufferDuration') ||
         !map.containsKey('customerId') ||
         !map.containsKey('guestName') ||
         !map.containsKey('location') ||
@@ -216,12 +217,16 @@ class AppointmentService extends ChangeNotifier {
     final providerId = appointment.providerId;
     if (providerId == null) return false;
     final newStart = appointment.dateTime;
-    final newEnd = newStart.add(appointment.duration);
+    final newEnd = newStart
+        .add(appointment.duration)
+        .add(appointment.bufferDuration);
     return appointments.any((existing) {
       if (existing.providerId != providerId) return false;
       if (existing.id == appointment.id) return false;
       final existingStart = existing.dateTime;
-      final existingEnd = existingStart.add(existing.duration);
+      final existingEnd = existingStart
+          .add(existing.duration)
+          .add(existing.bufferDuration);
       return newStart.isBefore(existingEnd) && existingStart.isBefore(newEnd);
     });
   }

@@ -50,7 +50,6 @@ Tech Stack
 Roadmap
 
 - Recurring appointments with series edits and exceptions
-- Buffer/travel time between appointments
 - Waitlist management and availability blocks
 - Client profiles with service history, notes, and reference photos
 - Service add-ons and bundled packages
@@ -58,7 +57,6 @@ Roadmap
 - Expenses tracking and profitability insights
 - Data export (CSV/PDF) and backup/sync across devices
 - External calendar integrations (Google/Apple)
-- More granular reminders and notification customization
 
 ---
 

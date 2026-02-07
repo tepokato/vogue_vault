@@ -252,7 +252,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
     final totalDuration = appointmentsOnDay.fold<Duration>(
       Duration.zero,
-      (sum, appt) => sum + appt.duration,
+      (sum, appt) => sum + appt.duration + appt.bufferDuration,
     );
 
     return totalDuration >= _workingDayCapacity

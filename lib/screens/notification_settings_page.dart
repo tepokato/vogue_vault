@@ -15,11 +15,14 @@ class NotificationSettingsPage extends StatefulWidget {
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   final List<Duration> _options = const [
+    Duration(minutes: 0),
     Duration(minutes: 5),
     Duration(minutes: 10),
     Duration(minutes: 15),
     Duration(minutes: 30),
     Duration(minutes: 60),
+    Duration(minutes: 120),
+    Duration(minutes: 1440),
   ];
 
   late Duration _selected;
@@ -54,7 +57,11 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 children: _options
                     .map(
                       (d) => RadioListTile<Duration>(
-                        title: Text(l10n.minutesBefore(d.inMinutes)),
+                        title: Text(
+                          d.inMinutes == 0
+                              ? l10n.reminderAtTime
+                              : l10n.minutesBefore(d.inMinutes),
+                        ),
                         value: d,
                         groupValue: _selected,
                         onChanged: (value) {

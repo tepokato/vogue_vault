@@ -186,6 +186,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get durationMinutesLabel => 'Duração (minutos)';
 
   @override
+  String get bufferTimeLabel => 'Tempo de intervalo (minutos)';
+
+  @override
   String get addAppointmentTooltip => 'Adicionar compromisso';
 
   @override
@@ -472,7 +475,15 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get reminderAtTime => 'No horário do agendamento';
+
+  @override
   String minutesBefore(int minutes) {
     return '$minutes minutos antes';
+  }
+
+  @override
+  String bufferMinutesSummary(int minutes) {
+    return 'Intervalo: $minutes min';
   }
 }

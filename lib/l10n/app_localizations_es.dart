@@ -186,6 +186,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get durationMinutesLabel => 'Duración (minutos)';
 
   @override
+  String get bufferTimeLabel => 'Tiempo de buffer (minutos)';
+
+  @override
   String get addAppointmentTooltip => 'Agregar cita';
 
   @override
@@ -473,7 +476,15 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get reminderAtTime => 'En el momento de la cita';
+
+  @override
   String minutesBefore(int minutes) {
     return '$minutes minutos antes';
+  }
+
+  @override
+  String bufferMinutesSummary(int minutes) {
+    return 'Buffer: $minutes min';
   }
 }

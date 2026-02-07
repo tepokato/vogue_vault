@@ -451,6 +451,12 @@ abstract class AppLocalizations {
   /// **'Duration (minutes)'**
   String get durationMinutesLabel;
 
+  /// No description provided for @bufferTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buffer time (minutes)'**
+  String get bufferTimeLabel;
+
   /// No description provided for @addAppointmentTooltip.
   ///
   /// In en, this message translates to:
@@ -991,11 +997,23 @@ abstract class AppLocalizations {
   /// **'Upcoming {service} appointment'**
   String upcomingAppointmentBody(String service);
 
+  /// No description provided for @reminderAtTime.
+  ///
+  /// In en, this message translates to:
+  /// **'At appointment time'**
+  String get reminderAtTime;
+
   /// Label for reminder offset
   ///
   /// In en, this message translates to:
   /// **'{minutes} minutes before'**
   String minutesBefore(int minutes);
+
+  /// No description provided for @bufferMinutesSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Buffer: {minutes} min'**
+  String bufferMinutesSummary(int minutes);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -59,6 +59,7 @@
   "locationLabel": "Ubicación",
   "selectDateButton": "Seleccionar fecha",
   "durationMinutesLabel": "Duración (minutos)",
+  "bufferTimeLabel": "Tiempo de buffer (minutos)",
   "addAppointmentTooltip": "Agregar cita",
   "availabilityLegendAvailable": "Espacios disponibles",
   "availabilityLegendFull": "Completamente reservado",
@@ -164,9 +165,18 @@
       "service": {}
     }
   },
+  "reminderAtTime": "En el momento de la cita",
   "minutesBefore": "{minutes} minutos antes",
   "@minutesBefore": {
     "description": "Etiqueta para el tiempo de recordatorio",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferMinutesSummary": "Buffer: {minutes} min",
+  "@bufferMinutesSummary": {
     "placeholders": {
       "minutes": {
         "type": "int"
