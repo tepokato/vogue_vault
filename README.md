@@ -59,12 +59,6 @@ Roadmap
 
 ---
 
-Who This App Is Not For
-
-Vogue Vault is not meant for customers. Clients cannot browse, book, or interact with the app directly — it’s built specifically as a tool for professionals only.
-
----
-
 Installation
 
 ### Prerequisites
