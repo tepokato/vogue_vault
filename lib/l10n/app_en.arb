@@ -32,6 +32,29 @@
   "manageServicesTitle": "Manage Services",
   "saveButton": "Save",
   "addButton": "Add",
+  "addAddOnButton": "Add add-on",
+  "addAddOnTitle": "Add add-on",
+  "editAddOnTitle": "Edit add-on",
+  "addOnNameLabel": "Add-on name",
+  "addOnPriceLabel": "Add-on price",
+  "addOnNameValidation": "Enter an add-on name",
+  "addOnPriceValidation": "Enter a valid add-on price",
+  "addOnsLabel": "Add-ons",
+  "addOnsEmptyState": "No add-ons yet",
+  "editAddOnTooltip": "Edit add-on",
+  "deleteAddOnTooltip": "Remove add-on",
+  "totalWithAddOnsLabel": "Total with add-ons: {price}",
+  "@totalWithAddOnsLabel": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "addOnsSummary": "Add-ons: {names}",
+  "@addOnsSummary": {
+    "placeholders": {
+      "names": {}
+    }
+  },
   "priceLabel": "Price",
   "invalidPrice": "Invalid price",
   "priceRequired": "Please enter a price",

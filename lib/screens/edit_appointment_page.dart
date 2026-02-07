@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../models/add_on.dart';
 import '../models/appointment.dart';
 import '../models/service_offering.dart';
 import '../models/service_type.dart';
@@ -39,6 +40,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   final _priceController = TextEditingController();
   String? _addressId;
   String? _serviceName;
+  List<AddOn> _addOns = [];
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _locationController.text = widget.appointment?.location ?? '';
     _priceController.text = widget.appointment?.price?.toStringAsFixed(2) ?? '';
     _addressId = null;
+    _addOns = [...(widget.appointment?.addOns ?? const [])];
   }
 
   @override
@@ -64,6 +67,95 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _locationController.dispose();
     _priceController.dispose();
     super.dispose();
+  }
+
+  Future<void> _showAddOnDialog({AddOn? addOn, int? index}) async {
+    final nameController = TextEditingController(text: addOn?.name ?? '');
+    final priceController = TextEditingController(
+      text: addOn?.price.toStringAsFixed(2) ?? '',
+    );
+    final formKey = GlobalKey<FormState>();
+    final l10n = AppLocalizations.of(context)!;
+
+    final result = await showDialog<AddOn>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            addOn == null ? l10n.addAddOnTitle : l10n.editAddOnTitle,
+          ),
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: l10n.addOnNameLabel,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return l10n.addOnNameValidation;
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: priceController,
+                  decoration: InputDecoration(
+                    labelText: l10n.addOnPriceLabel,
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return l10n.addOnPriceValidation;
+                    }
+                    final parsed = double.tryParse(value);
+                    if (parsed == null || parsed < 0) {
+                      return l10n.addOnPriceValidation;
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancelButton),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (!formKey.currentState!.validate()) return;
+                Navigator.pop(
+                  context,
+                  AddOn(
+                    name: nameController.text.trim(),
+                    price: double.parse(priceController.text),
+                  ),
+                );
+              },
+              child: Text(l10n.saveButton),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        if (index == null) {
+          _addOns.add(result);
+        } else {
+          _addOns[index] = result;
+        }
+      });
+    }
+
+    nameController.dispose();
+    priceController.dispose();
   }
 
   @override
@@ -76,6 +168,13 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     final offerings = auth.currentUser != null
         ? service.getUser(auth.currentUser!)?.offerings ?? <ServiceOffering>[]
         : <ServiceOffering>[];
+    final currency = NumberFormat.simpleCurrency(locale: locale);
+    final basePrice = double.tryParse(_priceController.text);
+    final addOnTotal =
+        _addOns.fold<double>(0, (sum, addOn) => sum + addOn.price);
+    final totalPrice = basePrice == null && addOnTotal == 0
+        ? null
+        : (basePrice ?? 0) + addOnTotal;
 
     return AppScaffold(
       title: isEditing
@@ -148,6 +247,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   labelText: AppLocalizations.of(context)!.priceLabel,
                 ),
                 keyboardType: TextInputType.number,
+                onChanged: (_) => setState(() {}),
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
                   return double.tryParse(value) == null
@@ -155,6 +255,75 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                       : null;
                 },
               ),
+              if (totalPrice != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      localizations.totalWithAddOnsLabel(
+                        currency.format(totalPrice),
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    localizations.addOnsLabel,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  TextButton.icon(
+                    onPressed: () => _showAddOnDialog(),
+                    icon: const Icon(Icons.add),
+                    label: Text(localizations.addAddOnButton),
+                  ),
+                ],
+              ),
+              if (_addOns.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      localizations.addOnsEmptyState,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ),
+              ..._addOns.asMap().entries.map((entry) {
+                final index = entry.key;
+                final addOn = entry.value;
+                return Card(
+                  child: ListTile(
+                    title: Text(addOn.name),
+                    subtitle: Text(currency.format(addOn.price)),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          tooltip: localizations.editAddOnTooltip,
+                          onPressed: () =>
+                              _showAddOnDialog(addOn: addOn, index: index),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          tooltip: localizations.deleteAddOnTooltip,
+                          onPressed: () {
+                            setState(() {
+                              _addOns.removeAt(index);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
               DropdownButtonFormField<int>(
                 value: _duration.inMinutes,
                 decoration: InputDecoration(
@@ -323,6 +492,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                         ? null
                         : double.parse(_priceController.text),
                     service: _service,
+                    addOns: _addOns,
                     dateTime: _dateTime,
                     duration: _duration,
                     bufferDuration: _bufferDuration,

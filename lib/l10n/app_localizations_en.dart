@@ -103,6 +103,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addButton => 'Add';
+  @override
+  String get addAddOnButton => 'Add add-on';
+  @override
+  String get addAddOnTitle => 'Add add-on';
+  @override
+  String get editAddOnTitle => 'Edit add-on';
+  @override
+  String get addOnNameLabel => 'Add-on name';
+  @override
+  String get addOnPriceLabel => 'Add-on price';
+  @override
+  String get addOnNameValidation => 'Enter an add-on name';
+  @override
+  String get addOnPriceValidation => 'Enter a valid add-on price';
+  @override
+  String get addOnsLabel => 'Add-ons';
+  @override
+  String get addOnsEmptyState => 'No add-ons yet';
+  @override
+  String get editAddOnTooltip => 'Edit add-on';
+  @override
+  String get deleteAddOnTooltip => 'Remove add-on';
+  @override
+  String totalWithAddOnsLabel(String price) {
+    return 'Total with add-ons: $price';
+  }
+
+  @override
+  String addOnsSummary(String names) {
+    return 'Add-ons: $names';
+  }
 
   @override
   String get priceLabel => 'Price';

@@ -59,7 +59,8 @@ class AppointmentService extends ChangeNotifier {
         !map.containsKey('customerId') ||
         !map.containsKey('guestName') ||
         !map.containsKey('location') ||
-        !map.containsKey('price');
+        !map.containsKey('price') ||
+        !map.containsKey('addOns');
   }
 
   /// Converts loosely typed Hive data into an [Appointment] while also writing
