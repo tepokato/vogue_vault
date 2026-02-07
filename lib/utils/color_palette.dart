@@ -14,8 +14,20 @@ class AppColors {
   /// Light background color ensuring high text contrast.
   static const Color background = Color(0xFFFEFAE0);
 
+  /// Light surface variant used for inputs and cards.
+  static const Color surfaceVariant = Color(0xFFF3E9D2);
+
+  /// High-contrast text color for light surfaces.
+  static const Color textDark = Color(0xFF2E2A24);
+
   /// Dark background color for dark theme surfaces.
   static const Color darkBackground = Color(0xFF121212);
+
+  /// Dark surface variant for elevated elements.
+  static const Color darkSurfaceVariant = Color(0xFF2A2622);
+
+  /// High-contrast text color for dark surfaces.
+  static const Color textLight = Color(0xFFF5F3EF);
 
   /// Additional highlight color for differentiating services.
   static const Color highlight = Color(0xFFE9EDC9);
