@@ -38,6 +38,11 @@ class AppTheme {
     return ColorScheme.fromSeed(seedColor: AppColors.primary).copyWith(
       primary: AppColors.primary,
       surface: AppColors.background,
+      background: AppColors.background,
+      onSurface: AppColors.textDark,
+      onBackground: AppColors.textDark,
+      surfaceVariant: AppColors.surfaceVariant,
+      onSurfaceVariant: AppColors.textDark.withOpacity(0.8),
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
     );
@@ -52,6 +57,11 @@ class AppTheme {
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
       surface: AppColors.darkBackground,
+      background: AppColors.darkBackground,
+      onSurface: AppColors.textLight,
+      onBackground: AppColors.textLight,
+      surfaceVariant: AppColors.darkSurfaceVariant,
+      onSurfaceVariant: AppColors.textLight.withOpacity(0.8),
     );
   }
 
