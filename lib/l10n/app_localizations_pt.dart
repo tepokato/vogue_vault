@@ -103,6 +103,37 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get addButton => 'Adicionar';
+  @override
+  String get addAddOnButton => 'Adicionar adicional';
+  @override
+  String get addAddOnTitle => 'Adicionar adicional';
+  @override
+  String get editAddOnTitle => 'Editar adicional';
+  @override
+  String get addOnNameLabel => 'Nome do adicional';
+  @override
+  String get addOnPriceLabel => 'Preço do adicional';
+  @override
+  String get addOnNameValidation => 'Informe um nome para o adicional';
+  @override
+  String get addOnPriceValidation => 'Informe um preço válido para o adicional';
+  @override
+  String get addOnsLabel => 'Adicionais';
+  @override
+  String get addOnsEmptyState => 'Ainda não há adicionais';
+  @override
+  String get editAddOnTooltip => 'Editar adicional';
+  @override
+  String get deleteAddOnTooltip => 'Remover adicional';
+  @override
+  String totalWithAddOnsLabel(String price) {
+    return 'Total com adicionais: $price';
+  }
+
+  @override
+  String addOnsSummary(String names) {
+    return 'Adicionais: $names';
+  }
 
   @override
   String get priceLabel => 'Preço';

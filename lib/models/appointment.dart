@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+
+import 'add_on.dart';
 import 'service_type.dart';
 
 /// Represents a scheduled appointment.
@@ -26,6 +29,9 @@ class Appointment {
   /// The type of service being scheduled.
   final ServiceType service;
 
+  /// Optional add-ons attached to the appointment.
+  final List<AddOn> addOns;
+
   /// The date and time when the appointment takes place.
   final DateTime dateTime;
 
@@ -44,6 +50,7 @@ class Appointment {
     this.location,
     this.price,
     required this.service,
+    this.addOns = const [],
     required this.dateTime,
     this.duration = const Duration(hours: 1),
     this.bufferDuration = Duration.zero,
@@ -58,6 +65,7 @@ class Appointment {
     String? location,
     double? price,
     ServiceType? service,
+    List<AddOn>? addOns,
     DateTime? dateTime,
     Duration? duration,
     Duration? bufferDuration,
@@ -70,6 +78,7 @@ class Appointment {
       location: location ?? this.location,
       price: price ?? this.price,
       service: service ?? this.service,
+      addOns: addOns ?? this.addOns,
       dateTime: dateTime ?? this.dateTime,
       duration: duration ?? this.duration,
       bufferDuration: bufferDuration ?? this.bufferDuration,
@@ -86,6 +95,11 @@ class Appointment {
       location: map['location'] as String?,
       price: map['price'] == null ? null : (map['price'] as num).toDouble(),
       service: ServiceType.values.byName(map['service'] as String),
+      addOns:
+          (map['addOns'] as List?)
+                  ?.map((e) => AddOn.fromMap(Map<String, dynamic>.from(e)))
+                  .toList() ??
+              const [],
       dateTime: DateTime.parse(map['dateTime'] as String),
       duration: Duration(minutes: (map['duration'] as int?) ?? 60),
       bufferDuration: Duration(minutes: (map['bufferDuration'] as int?) ?? 0),
@@ -102,10 +116,21 @@ class Appointment {
       'location': location,
       'price': price,
       'service': service.name,
+      'addOns': addOns.map((addOn) => addOn.toMap()).toList(),
       'dateTime': dateTime.toIso8601String(),
       'duration': duration.inMinutes,
       'bufferDuration': bufferDuration.inMinutes,
     };
+  }
+
+  /// Returns the combined price of the base service and add-ons.
+  double? get totalPrice {
+    final addOnTotal =
+        addOns.fold<double>(0, (sum, addOn) => sum + addOn.price);
+    if (price == null && addOnTotal == 0) {
+      return null;
+    }
+    return (price ?? 0) + addOnTotal;
   }
 
   @override
@@ -120,6 +145,7 @@ class Appointment {
           location == other.location &&
           price == other.price &&
           service == other.service &&
+          listEquals(addOns, other.addOns) &&
           dateTime == other.dateTime &&
           duration == other.duration &&
           bufferDuration == other.bufferDuration;
@@ -133,6 +159,7 @@ class Appointment {
       location.hashCode ^
       price.hashCode ^
       service.hashCode ^
+      addOns.hashCode ^
       dateTime.hashCode ^
       duration.hashCode ^
       bufferDuration.hashCode;

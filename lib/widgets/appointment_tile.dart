@@ -67,9 +67,17 @@ class AppointmentTile extends StatelessWidget {
     if (appointment.location != null) {
       buffer.write(' @ ${appointment.location}');
     }
+    if (appointment.addOns.isNotEmpty) {
+      buffer.write('\n');
+      buffer.write(
+        l10n.addOnsSummary(
+          appointment.addOns.map((addOn) => addOn.name).join(', '),
+        ),
+      );
+    }
 
-    final priceStr = appointment.price != null
-        ? ' (${NumberFormat.simpleCurrency(locale: locale).format(appointment.price)})'
+    final priceStr = appointment.totalPrice != null
+        ? ' (${NumberFormat.simpleCurrency(locale: locale).format(appointment.totalPrice)})'
         : '';
 
     return ListTile(

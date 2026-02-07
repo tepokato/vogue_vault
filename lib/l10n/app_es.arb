@@ -32,6 +32,29 @@
   "manageServicesTitle": "Administrar servicios",
   "saveButton": "Guardar",
   "addButton": "Agregar",
+  "addAddOnButton": "Agregar extra",
+  "addAddOnTitle": "Agregar extra",
+  "editAddOnTitle": "Editar extra",
+  "addOnNameLabel": "Nombre del extra",
+  "addOnPriceLabel": "Precio del extra",
+  "addOnNameValidation": "Ingresa un nombre para el extra",
+  "addOnPriceValidation": "Ingresa un precio válido para el extra",
+  "addOnsLabel": "Extras",
+  "addOnsEmptyState": "Aún no hay extras",
+  "editAddOnTooltip": "Editar extra",
+  "deleteAddOnTooltip": "Quitar extra",
+  "totalWithAddOnsLabel": "Total con extras: {price}",
+  "@totalWithAddOnsLabel": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "addOnsSummary": "Extras: {names}",
+  "@addOnsSummary": {
+    "placeholders": {
+      "names": {}
+    }
+  },
   "priceLabel": "Precio",
   "invalidPrice": "Precio inválido",
   "priceRequired": "Ingresa un precio",

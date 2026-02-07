@@ -289,6 +289,84 @@ abstract class AppLocalizations {
   /// **'Add'**
   String get addButton;
 
+  /// No description provided for @addAddOnButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add add-on'**
+  String get addAddOnButton;
+
+  /// No description provided for @addAddOnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add add-on'**
+  String get addAddOnTitle;
+
+  /// No description provided for @editAddOnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit add-on'**
+  String get editAddOnTitle;
+
+  /// No description provided for @addOnNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add-on name'**
+  String get addOnNameLabel;
+
+  /// No description provided for @addOnPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add-on price'**
+  String get addOnPriceLabel;
+
+  /// No description provided for @addOnNameValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an add-on name'**
+  String get addOnNameValidation;
+
+  /// No description provided for @addOnPriceValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid add-on price'**
+  String get addOnPriceValidation;
+
+  /// No description provided for @addOnsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add-ons'**
+  String get addOnsLabel;
+
+  /// No description provided for @addOnsEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No add-ons yet'**
+  String get addOnsEmptyState;
+
+  /// No description provided for @editAddOnTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit add-on'**
+  String get editAddOnTooltip;
+
+  /// No description provided for @deleteAddOnTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove add-on'**
+  String get deleteAddOnTooltip;
+
+  /// No description provided for @totalWithAddOnsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total with add-ons: {price}'**
+  String totalWithAddOnsLabel(String price);
+
+  /// No description provided for @addOnsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Add-ons: {names}'**
+  String addOnsSummary(String names);
+
   /// No description provided for @priceLabel.
   ///
   /// In en, this message translates to:

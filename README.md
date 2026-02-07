@@ -52,7 +52,6 @@ Roadmap
 - Recurring appointments with series edits and exceptions
 - Waitlist management and availability blocks
 - Client profiles with service history, notes, and reference photos
-- Service add-ons and bundled packages
 - Payments tracking, deposits, and invoice/receipt generation
 - Expenses tracking and profitability insights
 - Data export (CSV/PDF) and backup/sync across devices
