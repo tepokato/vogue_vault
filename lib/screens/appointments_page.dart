@@ -107,6 +107,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     return AppScaffold(
       title: l10n.appointmentsTitle,
       currentDestination: AppDestination.appointments,
+      showAddAppointmentShortcut: false,
       actions: [
         IconButton(
           icon: const Icon(Icons.store),
