@@ -59,6 +59,7 @@
   "locationLabel": "Localização",
   "selectDateButton": "Selecionar data",
   "durationMinutesLabel": "Duração (minutos)",
+  "bufferTimeLabel": "Tempo de intervalo (minutos)",
   "addAppointmentTooltip": "Adicionar compromisso",
   "availabilityLegendAvailable": "Vagas disponíveis",
   "availabilityLegendFull": "Agenda cheia",
@@ -164,9 +165,18 @@
       "service": {}
     }
   },
+  "reminderAtTime": "No horário do agendamento",
   "minutesBefore": "{minutes} minutos antes",
   "@minutesBefore": {
     "description": "Rótulo para o tempo do lembrete",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferMinutesSummary": "Intervalo: {minutes} min",
+  "@bufferMinutesSummary": {
     "placeholders": {
       "minutes": {
         "type": "int"

@@ -59,6 +59,7 @@
   "locationLabel": "Location",
   "selectDateButton": "Select Date",
   "durationMinutesLabel": "Duration (minutes)",
+  "bufferTimeLabel": "Buffer time (minutes)",
   "addAppointmentTooltip": "Add appointment",
   "availabilityLegendAvailable": "Open slots",
   "availabilityLegendFull": "Fully booked",
@@ -164,9 +165,18 @@
       "service": {}
     }
   },
+  "reminderAtTime": "At appointment time",
   "minutesBefore": "{minutes} minutes before",
   "@minutesBefore": {
     "description": "Label for reminder offset",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferMinutesSummary": "Buffer: {minutes} min",
+  "@bufferMinutesSummary": {
     "placeholders": {
       "minutes": {
         "type": "int"

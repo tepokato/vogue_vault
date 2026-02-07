@@ -186,6 +186,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get durationMinutesLabel => 'Duration (minutes)';
 
   @override
+  String get bufferTimeLabel => 'Buffer time (minutes)';
+
+  @override
   String get addAppointmentTooltip => 'Add appointment';
 
   @override
@@ -470,7 +473,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get reminderAtTime => 'At appointment time';
+
+  @override
   String minutesBefore(int minutes) {
     return '$minutes minutes before';
+  }
+
+  @override
+  String bufferMinutesSummary(int minutes) {
+    return 'Buffer: $minutes min';
   }
 }

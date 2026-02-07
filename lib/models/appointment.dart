@@ -32,6 +32,9 @@ class Appointment {
   /// Length of the appointment.
   final Duration duration;
 
+  /// Buffer time after the appointment for travel or cleanup.
+  final Duration bufferDuration;
+
   /// Creates a new [Appointment].
   Appointment({
     required this.id,
@@ -43,6 +46,7 @@ class Appointment {
     required this.service,
     required this.dateTime,
     this.duration = const Duration(hours: 1),
+    this.bufferDuration = Duration.zero,
   });
 
   /// Returns a copy of this appointment with the given fields replaced.
@@ -56,6 +60,7 @@ class Appointment {
     ServiceType? service,
     DateTime? dateTime,
     Duration? duration,
+    Duration? bufferDuration,
   }) {
     return Appointment(
       id: id ?? this.id,
@@ -67,6 +72,7 @@ class Appointment {
       service: service ?? this.service,
       dateTime: dateTime ?? this.dateTime,
       duration: duration ?? this.duration,
+      bufferDuration: bufferDuration ?? this.bufferDuration,
     );
   }
 
@@ -82,6 +88,7 @@ class Appointment {
       service: ServiceType.values.byName(map['service'] as String),
       dateTime: DateTime.parse(map['dateTime'] as String),
       duration: Duration(minutes: (map['duration'] as int?) ?? 60),
+      bufferDuration: Duration(minutes: (map['bufferDuration'] as int?) ?? 0),
     );
   }
 
@@ -97,6 +104,7 @@ class Appointment {
       'service': service.name,
       'dateTime': dateTime.toIso8601String(),
       'duration': duration.inMinutes,
+      'bufferDuration': bufferDuration.inMinutes,
     };
   }
 
@@ -113,7 +121,8 @@ class Appointment {
           price == other.price &&
           service == other.service &&
           dateTime == other.dateTime &&
-          duration == other.duration;
+          duration == other.duration &&
+          bufferDuration == other.bufferDuration;
 
   @override
   int get hashCode =>
@@ -125,5 +134,6 @@ class Appointment {
       price.hashCode ^
       service.hashCode ^
       dateTime.hashCode ^
-      duration.hashCode;
+      duration.hashCode ^
+      bufferDuration.hashCode;
 }

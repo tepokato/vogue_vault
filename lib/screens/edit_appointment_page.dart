@@ -32,6 +32,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   late ServiceType _service;
   DateTime _dateTime = DateTime.now();
   late Duration _duration;
+  late Duration _bufferDuration;
   String? _customerId;
   final _guestController = TextEditingController();
   final _locationController = TextEditingController();
@@ -49,6 +50,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _dateTime =
         widget.appointment?.dateTime ?? widget.initialDate ?? DateTime.now();
     _duration = widget.appointment?.duration ?? const Duration(hours: 1);
+    _bufferDuration = widget.appointment?.bufferDuration ?? Duration.zero;
     _customerId = widget.appointment?.customerId;
     _guestController.text = widget.appointment?.guestName ?? '';
     _locationController.text = widget.appointment?.location ?? '';
@@ -167,6 +169,24 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   if (value == null) return;
                   setState(() {
                     _duration = Duration(minutes: value);
+                  });
+                },
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<int>(
+                value: _bufferDuration.inMinutes,
+                decoration: InputDecoration(
+                  labelText: localizations.bufferTimeLabel,
+                ),
+                items: const [0, 10, 15, 30, 45, 60]
+                    .map(
+                      (m) => DropdownMenuItem<int>(value: m, child: Text('$m')),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() {
+                    _bufferDuration = Duration(minutes: value);
                   });
                 },
               ),
@@ -305,6 +325,7 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                     service: _service,
                     dateTime: _dateTime,
                     duration: _duration,
+                    bufferDuration: _bufferDuration,
                   );
                   try {
                     if (isEditing) {

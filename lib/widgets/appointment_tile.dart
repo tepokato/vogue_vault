@@ -35,16 +35,17 @@ class AppointmentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
     final locale = Localizations.localeOf(context).toString();
+    final l10n = AppLocalizations.of(context)!;
 
     final providerName = appointment.providerId != null
         ? service.getUser(appointment.providerId!)?.name ??
-            AppLocalizations.of(context)!.unknownUser
-        : AppLocalizations.of(context)!.unknownUser;
+            l10n.unknownUser
+        : l10n.unknownUser;
     final customerName = appointment.customerId != null
         ? service.getCustomer(appointment.customerId!)?.fullName ??
-            AppLocalizations.of(context)!.unknownUser
+            l10n.unknownUser
         : appointment.guestName ??
-            AppLocalizations.of(context)!.unknownUser;
+            l10n.unknownUser;
 
     final buffer = StringBuffer();
     if (showDate) {
@@ -56,6 +57,11 @@ class AppointmentTile extends StatelessWidget {
     buffer.write(' - ');
     buffer.write(DateFormat.jm(locale)
         .format(appointment.dateTime.toLocal().add(appointment.duration)));
+    if (appointment.bufferDuration > Duration.zero) {
+      buffer.write(
+        ' (${l10n.bufferMinutesSummary(appointment.bufferDuration.inMinutes)})',
+      );
+    }
     buffer.write('\n');
     buffer.write(customerName);
     if (appointment.location != null) {
@@ -84,4 +90,3 @@ class AppointmentTile extends StatelessWidget {
     );
   }
 }
-
