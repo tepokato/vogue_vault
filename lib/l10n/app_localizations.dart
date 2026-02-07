@@ -1003,6 +1003,60 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get languageLabel;
 
+  /// No description provided for @dataExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data export'**
+  String get dataExportTitle;
+
+  /// No description provided for @exportAppointmentsCsvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy appointments CSV'**
+  String get exportAppointmentsCsvTitle;
+
+  /// No description provided for @exportAppointmentsCsvDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a CSV snapshot of scheduled appointments.'**
+  String get exportAppointmentsCsvDescription;
+
+  /// No description provided for @exportCustomersCsvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy customers CSV'**
+  String get exportCustomersCsvTitle;
+
+  /// No description provided for @exportCustomersCsvDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a CSV snapshot of your customer list.'**
+  String get exportCustomersCsvDescription;
+
+  /// No description provided for @exportCsvAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy CSV'**
+  String get exportCsvAction;
+
+  /// No description provided for @exportCsvSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV copied to clipboard.'**
+  String get exportCsvSuccess;
+
+  /// No description provided for @exportCsvEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available to export.'**
+  String get exportCsvEmpty;
+
+  /// No description provided for @exportCsvFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn't prepare the CSV export.'**
+  String get exportCsvFailed;
+
   /// No description provided for @cloudBackupTitle.
   ///
   /// In en, this message translates to:

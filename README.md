@@ -54,7 +54,7 @@ Roadmap
 - Client profiles with service history, notes, and reference photos
 - Payments tracking, deposits, and invoice/receipt generation
 - Expenses tracking and profitability insights
-- Data export (CSV/PDF) and backup/sync across devices
+- Backup/sync across devices
 - External calendar integrations (Google/Apple)
 
 ---
