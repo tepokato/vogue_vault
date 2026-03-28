@@ -29,7 +29,7 @@ class _FakeAppointmentService extends AppointmentService {
   }
 
   @override
-  Future<void> deleteUser(String id, {String? reassignedUserId}) async {
+  Future<void> deleteProviderProfile(String id, {String? reassignedUserId}) async {
     deletedId = id;
     _users.removeWhere((u) => u.id == id);
     notifyListeners();
@@ -37,15 +37,8 @@ class _FakeAppointmentService extends AppointmentService {
 }
 
 class _FakeAuthService extends AuthService {
-  bool deleted = false;
-
   @override
   String? get currentUser => 'test';
-
-  @override
-  Future<void> deleteUser(String email) async {
-    deleted = true;
-  }
 }
 
 void main() {
@@ -149,6 +142,5 @@ void main() {
 
     expect(find.text('Other User'), findsNothing);
     expect(service.deletedId, 'other');
-    expect(auth.deleted, isTrue);
   });
 }

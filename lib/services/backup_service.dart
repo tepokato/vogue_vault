@@ -11,6 +11,8 @@ import '../models/appointment.dart';
 import '../models/customer.dart';
 import '../models/user_profile.dart';
 import 'appointment_service.dart';
+import 'backup_crypto.dart';
+import 'hive_master_key.dart';
 
 class BackupService extends ChangeNotifier {
   BackupService(this._appointmentService);
@@ -20,7 +22,6 @@ class BackupService extends ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       drive.DriveApi.driveAppdataScope,
-      drive.DriveApi.driveFileScope,
     ],
   );
 
@@ -60,7 +61,10 @@ class BackupService extends ChangeNotifier {
       final driveApi = drive.DriveApi(client);
 
       final backupPayload = _buildBackupPayload();
-      final bytes = utf8.encode(jsonEncode(backupPayload));
+      final jsonPlain = jsonEncode(backupPayload);
+      final key = await getOrCreateHiveMasterKey();
+      final encrypted = await encryptBackupUtf8(jsonPlain, key);
+      final bytes = utf8.encode(encrypted);
       final media = drive.Media(Stream<List<int>>.value(bytes), bytes.length);
 
       const fileName = 'vogue_vault_backup.json';

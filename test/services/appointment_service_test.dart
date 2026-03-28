@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -14,6 +15,7 @@ import 'package:vogue_vault/models/user_profile.dart';
 import 'package:vogue_vault/models/service_offering.dart';
 import 'package:vogue_vault/models/user_role.dart';
 import 'package:vogue_vault/models/address.dart';
+import 'package:vogue_vault/models/customer.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -36,6 +38,7 @@ void main() {
   setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
     await Hive.initFlutter();
+    FlutterSecureStorage.setMockInitialValues({});
   });
 
   tearDown(() async {
@@ -88,7 +91,7 @@ void main() {
     expect(appts.first.providerId, isNull);
   });
 
-  test('deleteUser removes appointments for provider', () async {
+  test('deleteProviderProfile removes appointments for provider', () async {
     final service = AppointmentService();
     await service.init();
 
@@ -115,7 +118,7 @@ void main() {
       'dateTime': DateTime.parse('2023-01-01').toIso8601String(),
     });
 
-    await service.deleteUser(providerId);
+    await service.deleteProviderProfile(providerId);
 
     expect(apptsBox.isEmpty, isTrue);
     expect(usersBox.get(providerId), isNull);
@@ -292,8 +295,38 @@ void main() {
 
     expect(service.getUser(oldId), isNull);
     expect(service.getUser(newId), isNotNull);
+    expect(service.getUser(newId)!.id, newId);
     final updatedAppt = service.getAppointment(appt.id)!;
     expect(updatedAppt.providerId, newId);
+  });
+
+  test('deleteCustomer clears customerId on appointments', () async {
+    final service = AppointmentService();
+    await service.init();
+
+    const uuid = Uuid();
+    final customerId = uuid.v4();
+    final apptId = uuid.v4();
+    final customer = Customer(
+      id: customerId,
+      firstName: 'Pat',
+      lastName: 'Lee',
+    );
+    await service.addCustomer(customer);
+    await service.addAppointment(
+      Appointment(
+        id: apptId,
+        customerId: customerId,
+        service: ServiceType.barber,
+        dateTime: DateTime.parse('2023-01-01'),
+        duration: const Duration(hours: 1),
+      ),
+    );
+
+    await service.deleteCustomer(customerId);
+
+    expect(service.customers, isEmpty);
+    expect(service.getAppointment(apptId)!.customerId, isNull);
   });
 
   test('addAppointment throws on provider time conflict', () async {

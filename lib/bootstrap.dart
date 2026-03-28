@@ -16,12 +16,12 @@ Future<void> bootstrap() async {
 
   final notificationService = NotificationService();
   await notificationService.init();
+  final authService = AuthService();
+  await authService.init();
   final appointmentService = AppointmentService(
     notificationService: notificationService,
   );
   await appointmentService.init();
-  final authService = AuthService();
-  await authService.init();
   final settingsService = SettingsService();
   await settingsService.init();
   final backupService = BackupService(appointmentService);

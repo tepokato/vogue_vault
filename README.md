@@ -45,6 +45,8 @@ Tech Stack
 - **table_calendar** — calendar UI for appointment views
 - **flutter_local_notifications** — local reminders and alerts
 
+Local Hive databases for business data are encrypted with a key stored in platform secure storage. Optional Google Drive backup uploads an **encrypted** JSON payload (not plaintext) to your account’s Drive app data area; restore from backup is not implemented yet.
+
 ---
 
 Roadmap

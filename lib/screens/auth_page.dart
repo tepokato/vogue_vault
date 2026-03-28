@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
-import '../widgets/password_strength_indicator.dart';
 import 'appointments_page.dart';
 import 'profile_page.dart';
 
@@ -72,175 +71,6 @@ class _AuthPageState extends State<AuthPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const AppointmentsPage()),
-      );
-    }
-  }
-
-  Future<void> _showForgotPasswordSheet() async {
-    final resetFormKey = GlobalKey<FormState>();
-    final emailController =
-        TextEditingController(text: _emailController.text.trim());
-    final newPasswordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
-    bool showNewPassword = false;
-    bool showConfirmPassword = false;
-
-    final success = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        final insets = MediaQuery.of(context).viewInsets.bottom;
-        return Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, insets + 24),
-          child: StatefulBuilder(
-            builder: (context, setModalState) {
-              return Form(
-                key: resetFormKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.resetPasswordTitle,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      AppLocalizations.of(context)!
-                          .resetPasswordDescription,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: emailController,
-                      autofillHints: const [
-                        AutofillHints.username,
-                        AutofillHints.email,
-                      ],
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.emailLabel,
-                        prefixIcon: const Icon(Icons.email),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.emailRequired;
-                        }
-                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                        if (!emailRegex.hasMatch(value)) {
-                          return AppLocalizations.of(context)!
-                              .invalidEmailFormat;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: newPasswordController,
-                      obscureText: !showNewPassword,
-                      autofillHints: const [AutofillHints.newPassword],
-                      decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context)!.newPasswordLabel,
-                        helperText: AppLocalizations.of(context)!
-                            .passwordRequirementsHint,
-                        prefixIcon: const Icon(Icons.lock_reset),
-                        suffixIcon: IconButton(
-                          icon: Icon(showNewPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () => setModalState(
-                            () => showNewPassword = !showNewPassword,
-                          ),
-                        ),
-                      ),
-                      onChanged: (_) => setModalState(() {}),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.passwordRequired;
-                        }
-                        if (!_passwordMeetsRequirements(value)) {
-                          return AppLocalizations.of(context)!
-                              .passwordRequirementsHint;
-                        }
-                        return null;
-                      },
-                    ),
-                    PasswordStrengthIndicator(
-                      password: newPasswordController.text,
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: confirmPasswordController,
-                      obscureText: !showConfirmPassword,
-                      autofillHints: const [AutofillHints.newPassword],
-                      decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context)!.confirmPasswordLabel,
-                        prefixIcon: const Icon(Icons.check),
-                        suffixIcon: IconButton(
-                          icon: Icon(showConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () => setModalState(
-                            () => showConfirmPassword = !showConfirmPassword,
-                          ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.passwordRequired;
-                        }
-                        if (value != newPasswordController.text) {
-                          return AppLocalizations.of(context)!
-                              .passwordsDoNotMatch;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (!resetFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        final auth = context.read<AuthService>();
-                        final email = emailController.text.trim();
-                        final newPassword = newPasswordController.text;
-                        final updated =
-                            await auth.resetPassword(email, newPassword);
-                        if (context.mounted) {
-                          Navigator.of(context).pop(updated);
-                        }
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.resetPasswordButton,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-
-    if (!mounted || success == null) return;
-    if (success) {
-      setState(() => _error = null);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.resetPasswordSuccessMessage),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.resetPasswordErrorMessage),
-        ),
       );
     }
   }
@@ -340,12 +170,12 @@ class _AuthPageState extends State<AuthPage> {
                         return null;
                       },
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: _showForgotPasswordSheet,
-                        child: Text(
-                          AppLocalizations.of(context)!.forgotPasswordButton,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        AppLocalizations.of(context)!.localPasswordHint,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colors.onSurfaceVariant,
                         ),
                       ),
                     ),

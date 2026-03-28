@@ -181,7 +181,7 @@ void main() {
     expect(service.changePassword(email, 'wrong', 'another'), throwsStateError);
   });
 
-  test('deleteUser throws when deleting current user', () async {
+  test('deleteAccount throws when deleting current user', () async {
     final service = AuthService();
     await service.init();
 
@@ -189,7 +189,7 @@ void main() {
     const password = 'secret';
     await service.register(email, password);
 
-    expect(service.deleteUser(email), throwsStateError);
+    expect(service.deleteAccount(email), throwsStateError);
 
     final box = Hive.box('auth');
     final users = box.get('users') as Map;

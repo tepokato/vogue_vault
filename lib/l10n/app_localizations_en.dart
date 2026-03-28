@@ -257,6 +257,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPasswordButton => 'Forgot password?';
 
   @override
+  String get localPasswordHint =>
+      'Passwords are stored only on this device. While signed in, change your password from Profile. They cannot be reset from this screen.';
+
+  @override
+  String get selectCatalogServiceHint => 'Pick from your saved services';
+
+  @override
   String get resetPasswordTitle => 'Reset password';
 
   @override

@@ -8,6 +8,7 @@ import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/customer.dart';
 import '../models/address.dart';
+import 'hive_master_key.dart';
 import 'notification_service.dart';
 
 /// Handles persistence and validation for appointments, users, customers, and
@@ -37,11 +38,28 @@ class AppointmentService extends ChangeNotifier {
   /// Opens backing stores for all managed entity types. Call this before
   /// accessing any getters or mutations to avoid runtime errors.
   Future<void> init() async {
-    _appointmentsBox = await Hive.openBox(_appointmentsBoxName);
-    _usersBox = await Hive.openBox(_usersBoxName);
-    _customersBox = await Hive.openBox(_customersBoxName);
-    _addressesBox = await Hive.openBox(_addressesBoxName);
+    _appointmentsBox = await _openEncryptedBox(_appointmentsBoxName);
+    _usersBox = await _openEncryptedBox(_usersBoxName);
+    _customersBox = await _openEncryptedBox(_customersBoxName);
+    _addressesBox = await _openEncryptedBox(_addressesBoxName);
     _initialized = true;
+  }
+
+  Future<Box> _openEncryptedBox(String name) async {
+    final key = await getOrCreateHiveMasterKey();
+    final cipher = HiveAesCipher(key);
+    try {
+      return await Hive.openBox(name, encryptionCipher: cipher);
+    } on HiveError {
+      final legacy = await Hive.openBox(name);
+      final legacyData = Map<dynamic, dynamic>.from(legacy.toMap());
+      await legacy.deleteFromDisk();
+      final box = await Hive.openBox(name, encryptionCipher: cipher);
+      if (legacyData.isNotEmpty) {
+        await box.putAll(legacyData);
+      }
+      return box;
+    }
   }
 
   void _ensureInitialized() {
@@ -157,10 +175,10 @@ class AppointmentService extends ChangeNotifier {
     await _saveEntity(_usersBox, user.id, user.toMap());
   }
 
-  /// Removes a provider and optionally reassigns their appointments to another
-  /// provider. If no reassignment is provided, the related appointments are
-  /// deleted to avoid orphaned bookings.
-  Future<void> deleteUser(String id, {String? reassignedUserId}) async {
+  /// Removes a provider profile and optionally reassigns their appointments to
+  /// another provider. If no reassignment is provided, the related appointments
+  /// are deleted to avoid orphaned bookings.
+  Future<void> deleteProviderProfile(String id, {String? reassignedUserId}) async {
     _ensureInitialized();
 
     final affected = _appointmentsBox.values
@@ -193,6 +211,15 @@ class AppointmentService extends ChangeNotifier {
 
   Future<void> deleteCustomer(String id) async {
     _ensureInitialized();
+    for (final key in _appointmentsBox.keys.toList()) {
+      final raw = _appointmentsBox.get(key);
+      if (raw == null) continue;
+      final map = Map<String, dynamic>.from(raw as Map);
+      if (map['customerId'] == id) {
+        map['customerId'] = null;
+        await _appointmentsBox.put(key, map);
+      }
+    }
     await _customersBox.delete(id);
     notifyListeners();
   }
@@ -289,8 +316,10 @@ class AppointmentService extends ChangeNotifier {
   /// primarily used when an email change alters the canonical user ID.
   Future<void> renameUserId(String oldId, String newId) async {
     _ensureInitialized();
-    final userMap = _usersBox.get(oldId);
-    if (userMap != null) {
+    final raw = _usersBox.get(oldId);
+    if (raw != null) {
+      final userMap = Map<String, dynamic>.from(raw as Map);
+      userMap['id'] = newId;
       await _usersBox.put(newId, userMap);
       await _usersBox.delete(oldId);
     }

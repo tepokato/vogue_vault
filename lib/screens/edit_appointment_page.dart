@@ -41,6 +41,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
   String? _addressId;
   String? _serviceName;
   List<AddOn> _addOns = [];
+  ServiceOffering? _selectedOffering;
+  bool _offeringSetupDone = false;
 
   @override
   void initState() {
@@ -59,6 +61,39 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
     _priceController.text = widget.appointment?.price?.toStringAsFixed(2) ?? '';
     _addressId = null;
     _addOns = [...(widget.appointment?.addOns ?? const [])];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_offeringSetupDone) return;
+    final auth = context.read<AuthService>();
+    final appointmentService = context.read<AppointmentService>();
+    final offerings = auth.currentUser != null
+        ? appointmentService.getUser(auth.currentUser!)?.offerings ??
+            <ServiceOffering>[]
+        : <ServiceOffering>[];
+    if (offerings.isEmpty) {
+      _offeringSetupDone = true;
+      return;
+    }
+    if (widget.appointment != null) {
+      final appt = widget.appointment!;
+      ServiceOffering? match;
+      for (final o in offerings) {
+        if (o.type == appt.service) {
+          match = o;
+          break;
+        }
+      }
+      final pick = match ?? offerings.first;
+      setState(() {
+        _selectedOffering = pick;
+        _service = pick.type;
+        _serviceName = pick.name;
+      });
+    }
+    _offeringSetupDone = true;
   }
 
   @override
@@ -191,55 +226,61 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
           key: _formKey,
           child: Column(
             children: [
-              DropdownButtonFormField<ServiceOffering>(
-                key: const ValueKey('offeringDropdown'),
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.serviceLabel,
-                ),
-                items: offerings
-                    .map(
-                      (o) => DropdownMenuItem<ServiceOffering>(
-                        value: o,
-                        child: Text(
-                          '${serviceTypeLabel(context, o.type)} - ${o.name} (\$${o.price.toStringAsFixed(2)})',
+              if (offerings.isNotEmpty) ...[
+                DropdownButtonFormField<ServiceOffering>(
+                  key: const ValueKey('offeringDropdown'),
+                  value: _selectedOffering,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.serviceLabel,
+                    hintText: localizations.selectCatalogServiceHint,
+                  ),
+                  items: offerings
+                      .map(
+                        (o) => DropdownMenuItem<ServiceOffering>(
+                          value: o,
+                          child: Text(
+                            '${serviceTypeLabel(context, o.type)} - ${o.name} (\$${o.price.toStringAsFixed(2)})',
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) return;
-                  setState(() {
-                    _service = value.type;
-                    _priceController.text = value.price.toStringAsFixed(2);
-                    _serviceName = value.name;
-                  });
-                },
-              ),
-              DropdownButtonFormField<ServiceType>(
-                key: const ValueKey('serviceDropdown'),
-                value: _service,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.serviceLabel,
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value == null) return;
+                    setState(() {
+                      _selectedOffering = value;
+                      _service = value.type;
+                      _priceController.text = value.price.toStringAsFixed(2);
+                      _serviceName = value.name;
+                    });
+                  },
+                  validator: (value) => value == null
+                      ? localizations.selectServiceValidation
+                      : null,
                 ),
-                items: ServiceType.values
-                    .map(
-                      (s) => DropdownMenuItem<ServiceType>(
-                        value: s,
-                        child: Text(serviceTypeLabel(context, s)),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) return;
-                  setState(() {
-                    _service = value;
-                    _serviceName = null;
-                  });
-                },
-                validator: (value) => value == null
-                    ? AppLocalizations.of(context)!.selectServiceValidation
-                    : null,
-              ),
+              ] else ...[
+                DropdownButtonFormField<ServiceType>(
+                  key: const ValueKey('serviceDropdown'),
+                  value: _service,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.serviceLabel,
+                  ),
+                  items: ServiceType.values
+                      .map(
+                        (s) => DropdownMenuItem<ServiceType>(
+                          value: s,
+                          child: Text(serviceTypeLabel(context, s)),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value == null) return;
+                    setState(() {
+                      _service = value;
+                      _serviceName = null;
+                    });
+                  },
+                ),
+              ],
               TextFormField(
                 key: const ValueKey('priceField'),
                 controller: _priceController,
@@ -480,7 +521,8 @@ class _EditAppointmentPageState extends State<EditAppointmentPage> {
                   final id = widget.appointment?.id ?? const Uuid().v4();
                   final newAppt = Appointment(
                     id: id,
-                    providerId: widget.appointment?.providerId,
+                    providerId:
+                        widget.appointment?.providerId ?? auth.currentUser,
                     customerId: _customerId,
                     guestName: _guestController.text.isEmpty
                         ? null

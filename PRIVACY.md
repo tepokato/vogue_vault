@@ -1,44 +1,46 @@
 # Privacy Policy
 
-Vogue Vault respects your privacy. This policy outlines how the app collects, stores, and uses data.
+Vogue Vault is built for independent beauty professionals (hair, barbering, nails, tattoo, etc.). This policy describes what data the app handles, where it lives, and when it leaves your device.
 
-## Data Collection
+## Data you enter in the app
 
-The application does not require account creation and collects no personal information. It accesses limited device features only when necessary:
+The app stores information you provide locally on your device, including:
 
-- **Camera** – capture photos for creating or updating looks.
-- **Photos/Media/Files (Read Media Images / Read External Storage)** – allow selecting existing images from your device.
+- Account email and password (password is hashed; see Security)
+- Professional profile, service catalog, and optional profile photo
+- Appointments (times, services, prices, locations, guest or saved customer details)
+- Saved customers and address labels
+- Theme, language, and reminder timing preferences
 
-No analytics or advertising identifiers are collected.
+There is no Vogue Vault-operated cloud database. Routine use does not send this content to our servers (we do not run a backend for the app).
 
-## Data Usage
+## Optional Google Drive backup
 
-Captured or selected images are used solely within the app to manage your wardrobe and appointments. The app does not transmit this content to external servers or share it with third parties.
+If you use **Settings → Back up to Google Drive**, the app uploads an **encrypted** snapshot of your business data (appointments, customers, provider profiles, addresses) into your Google account’s **app data folder** for Drive. Google’s infrastructure processes that file under [Google’s privacy policy](https://policies.google.com/privacy). The file is encrypted with a key stored on your device (same family of key as local database encryption); **restoring on a new device is not implemented in the app today** and would require a future release that can decrypt using your device key or an export you control.
 
-## Data Storage
+## Permissions
 
-All images and related data remain on your device. Removing the app deletes this data. The project does not maintain a remote backend.
+- **Camera** — optional, to take a profile photo.
+- **Photos / media (read)** — optional, to pick an existing image for your profile.
+- **Notifications** — to show appointment reminders at the time you configure.
+- **Exact alarms (Android)** — so reminders can fire at the scheduled time where the OS allows it.
 
-## Permissions and Data Safety
+## Security on your device
 
-Google Play Data safety declarations:
+- Sign-in credentials are stored in an encrypted Hive box; password hashes use PBKDF2.
+- Appointments, customers, addresses, and provider profiles are stored in encrypted Hive boxes using a key held in the device’s secure storage.
+- Anyone with unlocked access to your device or your Google account (if you use Drive backup) could potentially access corresponding data.
 
-- **Camera** – used to take photos; no data is shared outside the device.
-- **Photos/Media/Files** – used to pick images from device storage; data stays local and is not shared.
+Uninstalling the app removes local app data from that device (subject to OS behavior). It does not delete copies already in your Google Drive.
 
-The app does not collect, sell, or share personal or sensitive user data.
+## Analytics and ads
+
+The app does not include analytics SDKs or advertising identifiers as part of this project.
 
 ## Contact
 
-For questions about this policy, open an issue on the project's [GitHub repository](https://github.com/your-org/vogue_vault).
+For questions about this policy, open an issue on the project’s GitHub repository.
 
 ## Hosting
 
-This policy file is included in the repository. To host publicly for the Play Console, enable GitHub Pages on the main branch; the file will then be available at:
-
-```
-https://<your-github-username>.github.io/vogue_vault/PRIVACY
-```
-
-Replace `<your-github-username>` with the owner of the repository and update the link in the Play Console.
-
+This file can be published (e.g. GitHub Pages) for store listings. Adjust the repository URL in your Play Console or App Store privacy fields to match where you host this document.

@@ -8,7 +8,13 @@ import 'package:vogue_vault/models/service_type.dart';
 import 'package:vogue_vault/models/customer.dart';
 import 'package:vogue_vault/screens/calendar_page.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
+import 'package:vogue_vault/services/auth_service.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+class _FakeAuthService extends AuthService {
+  @override
+  String? get currentUser => null;
+}
 
 class _FakeAppointmentService extends AppointmentService {
   final List<Appointment> _appointments;
@@ -50,8 +56,11 @@ void main() {
     ], {'c1': customer});
 
     await tester.pumpWidget(
-      ChangeNotifierProvider<AppointmentService>.value(
-        value: service,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthService>.value(value: _FakeAuthService()),
+          ChangeNotifierProvider<AppointmentService>.value(value: service),
+        ],
         child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

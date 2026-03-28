@@ -6,10 +6,12 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../l10n/app_localizations.dart';
 import '../models/appointment.dart';
+import '../utils/notification_ids.dart';
 import '../utils/service_type_utils.dart';
 
 class NotificationService {
-  static const _settingsBoxName = 'settings';
+  static const _prefsBoxName = 'notification_prefs';
+  static const _legacySettingsBoxName = 'settings';
   static const _reminderOffsetKey = 'reminderOffsetMinutes';
 
   final FlutterLocalNotificationsPlugin _plugin;
@@ -21,7 +23,16 @@ class NotificationService {
 
   Future<void> init() async {
     tz.initializeTimeZones();
-    _settingsBox = await Hive.openBox(_settingsBoxName);
+    _settingsBox = await Hive.openBox(_prefsBoxName);
+    if (!_settingsBox.containsKey(_reminderOffsetKey)) {
+      final legacy = await Hive.openBox(_legacySettingsBoxName);
+      final migrated = legacy.get(_reminderOffsetKey);
+      if (migrated != null) {
+        await _settingsBox.put(_reminderOffsetKey, migrated);
+        await legacy.delete(_reminderOffsetKey);
+      }
+      await legacy.close();
+    }
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosInit = DarwinInitializationSettings();
@@ -51,7 +62,8 @@ class NotificationService {
     await _settingsBox.put(_reminderOffsetKey, offset.inMinutes);
   }
 
-  int _notificationId(String appointmentId) => appointmentId.hashCode;
+  int _notificationId(String appointmentId) =>
+      stableNotificationId(appointmentId);
 
   /// Schedules a notification for the appointment, respecting the stored
   /// reminder offset and skipping notifications scheduled in the past.

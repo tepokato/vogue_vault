@@ -95,6 +95,8 @@
   "passwordStrengthMedium": "Media",
   "passwordStrengthStrong": "Fuerte",
   "forgotPasswordButton": "¿Olvidaste tu contraseña?",
+  "localPasswordHint": "Las contraseñas solo se guardan en este dispositivo. Con la sesión iniciada, cámbiala desde Perfil. No se puede restablecer desde esta pantalla.",
+  "selectCatalogServiceHint": "Elige entre tus servicios guardados",
   "resetPasswordTitle": "Restablecer contraseña",
   "resetPasswordDescription": "Actualiza tu contraseña usando el correo de tu cuenta.",
   "resetPasswordButton": "Actualizar contraseña",

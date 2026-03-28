@@ -607,6 +607,18 @@ abstract class AppLocalizations {
   /// **'Forgot password?'**
   String get forgotPasswordButton;
 
+  /// No description provided for @localPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords are stored only on this device. While signed in, change your password from Profile. They cannot be reset from this screen.'**
+  String get localPasswordHint;
+
+  /// No description provided for @selectCatalogServiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick from your saved services'**
+  String get selectCatalogServiceHint;
+
   /// No description provided for @resetPasswordTitle.
   ///
   /// In en, this message translates to:

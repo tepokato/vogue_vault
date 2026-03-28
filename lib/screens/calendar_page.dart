@@ -6,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../l10n/app_localizations.dart';
 import '../models/appointment.dart';
 import '../services/appointment_service.dart';
+import '../services/auth_service.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/appointment_tile.dart';
 import 'edit_appointment_page.dart';
@@ -33,11 +34,18 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedDay = _focusedDay;
   }
 
+  bool _countsTowardDayCapacity(Appointment a, String? currentUserId) {
+    if (currentUserId == null) return true;
+    return a.providerId == null || a.providerId == currentUserId;
+  }
+
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
+    final auth = context.watch<AuthService>();
     final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
+    final currentUserId = auth.currentUser;
 
     final selectedAppointments = service.appointments
         .where((a) => isSameDay(a.dateTime, _selectedDay))
@@ -116,6 +124,7 @@ class _CalendarPageState extends State<CalendarPage> {
             selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
             eventLoader: (day) => service.appointments
                 .where((a) => isSameDay(a.dateTime, day))
+                .where((a) => _countsTowardDayCapacity(a, currentUserId))
                 .toList(),
             headerVisible: false,
             onPageChanged: (day) {
@@ -131,21 +140,42 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             calendarBuilders: CalendarBuilders(
               defaultBuilder: (context, day, focusedDay) {
-                return _buildAvailabilityCell(context, day, service,
-                    isOutside: day.month != _focusedDay.month);
+                return _buildAvailabilityCell(
+                  context,
+                  day,
+                  service,
+                  currentUserId,
+                  isOutside: day.month != _focusedDay.month,
+                );
               },
               todayBuilder: (context, day, focusedDay) {
-                return _buildAvailabilityCell(context, day, service,
-                    isToday: true, isOutside: day.month != _focusedDay.month);
+                return _buildAvailabilityCell(
+                  context,
+                  day,
+                  service,
+                  currentUserId,
+                  isToday: true,
+                  isOutside: day.month != _focusedDay.month,
+                );
               },
               selectedBuilder: (context, day, focusedDay) {
-                return _buildAvailabilityCell(context, day, service,
-                    isSelected: true,
-                    isOutside: day.month != _focusedDay.month);
+                return _buildAvailabilityCell(
+                  context,
+                  day,
+                  service,
+                  currentUserId,
+                  isSelected: true,
+                  isOutside: day.month != _focusedDay.month,
+                );
               },
               outsideBuilder: (context, day, focusedDay) {
-                return _buildAvailabilityCell(context, day, service,
-                    isOutside: true);
+                return _buildAvailabilityCell(
+                  context,
+                  day,
+                  service,
+                  currentUserId,
+                  isOutside: true,
+                );
               },
             ),
           ),
@@ -191,13 +221,14 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _buildAvailabilityCell(
     BuildContext context,
     DateTime day,
-    AppointmentService service, {
+    AppointmentService service,
+    String? currentUserId, {
     bool isSelected = false,
     bool isToday = false,
     bool isOutside = false,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    final availability = _availabilityForDay(day, service);
+    final availability = _availabilityForDay(day, service, currentUserId);
 
     Color? background;
     Color? borderColor;
@@ -244,9 +275,11 @@ class _CalendarPageState extends State<CalendarPage> {
   _DayAvailability _availabilityForDay(
     DateTime day,
     AppointmentService service,
+    String? currentUserId,
   ) {
     final appointmentsOnDay = service.appointments
         .where((a) => isSameDay(a.dateTime, day))
+        .where((a) => _countsTowardDayCapacity(a, currentUserId))
         .toList();
     if (appointmentsOnDay.isEmpty) return _DayAvailability.available;
 

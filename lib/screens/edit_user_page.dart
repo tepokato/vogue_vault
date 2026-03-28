@@ -87,7 +87,7 @@ class EditUserPage extends StatelessWidget {
                 if (confirm != true) return;
 
                 try {
-                  await service.deleteUser(user.id);
+                  await service.deleteProviderProfile(user.id);
                 } catch (e) {
                   if (!context.mounted) return;
                   final message = e is StateError

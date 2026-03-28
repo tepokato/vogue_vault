@@ -95,6 +95,8 @@
   "passwordStrengthMedium": "Média",
   "passwordStrengthStrong": "Forte",
   "forgotPasswordButton": "Esqueceu a senha?",
+  "localPasswordHint": "As senhas ficam apenas neste dispositivo. Com a sessão iniciada, altere-as em Perfil. Não é possível redefinir nesta tela.",
+  "selectCatalogServiceHint": "Escolha entre os serviços salvos",
   "resetPasswordTitle": "Redefinir senha",
   "resetPasswordDescription": "Atualize sua senha usando o e-mail da sua conta.",
   "resetPasswordButton": "Atualizar senha",

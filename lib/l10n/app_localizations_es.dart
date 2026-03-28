@@ -257,6 +257,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgotPasswordButton => '¿Olvidaste tu contraseña?';
 
   @override
+  String get localPasswordHint =>
+      'Las contraseñas solo se guardan en este dispositivo. Con la sesión iniciada, cámbiala desde Perfil. No se puede restablecer desde esta pantalla.';
+
+  @override
+  String get selectCatalogServiceHint => 'Elige entre tus servicios guardados';
+
+  @override
   String get resetPasswordTitle => 'Restablecer contraseña';
 
   @override

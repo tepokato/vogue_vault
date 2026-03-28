@@ -6,11 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'hive_master_key.dart';
+
 class AuthService extends ChangeNotifier {
   static const _boxName = 'auth';
   static const _usersKey = 'users';
   static const _currentUserKey = 'currentUser';
-  static const _encryptionKey = 'authEncryptionKey';
 
   /// Underlying storage box. We avoid using a typed [Box] here because
   /// Hive may return values as `Map<dynamic, dynamic>` regardless of the
@@ -25,7 +26,7 @@ class AuthService extends ChangeNotifier {
   /// Opens the encrypted Hive box and migrates any legacy unencrypted data into
   /// it so users keep their credentials across updates.
   Future<void> init() async {
-    final key = await _getOrCreateEncryptionKey();
+    final key = await getOrCreateHiveMasterKey(secureStorage: _secureStorage);
     final cipher = HiveAesCipher(key);
     try {
       // Attempt to open as an encrypted box.
@@ -41,19 +42,6 @@ class AuthService extends ChangeNotifier {
       }
     }
     _initialized = true;
-  }
-
-  /// Retrieves an existing encryption key from secure storage or generates and
-  /// persists a new one when the app is first launched.
-  Future<List<int>> _getOrCreateEncryptionKey() async {
-    final stored = await _secureStorage.read(key: _encryptionKey);
-    if (stored != null) {
-      return base64Url.decode(stored);
-    }
-    final key = Hive.generateSecureKey();
-    await _secureStorage.write(
-        key: _encryptionKey, value: base64UrlEncode(key));
-    return key;
   }
 
   void _ensureInitialized() {
@@ -189,28 +177,13 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> resetPassword(String email, String newPassword) async {
-    _ensureInitialized();
-    final users = _users;
-    final user = users[email];
-    if (user == null) {
-      return false;
-    }
-    final newSaltBytes = _generateSalt();
-    final newSalt = base64UrlEncode(newSaltBytes);
-    final newHash = await _hashPassword(newPassword, newSalt);
-    users[email] = {'salt': newSalt, 'hash': newHash};
-    await _box.put(_usersKey, users);
-    return true;
-  }
-
   Future<void> logout() async {
     _ensureInitialized();
     await _box.delete(_currentUserKey);
     notifyListeners();
   }
 
-  Future<void> deleteUser(String email) async {
+  Future<void> deleteAccount(String email) async {
     _ensureInitialized();
     final users = _users;
 

@@ -257,6 +257,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get forgotPasswordButton => 'Esqueceu a senha?';
 
   @override
+  String get localPasswordHint =>
+      'As senhas ficam apenas neste dispositivo. Com a sessão iniciada, altere-as em Perfil. Não é possível redefinir nesta tela.';
+
+  @override
+  String get selectCatalogServiceHint => 'Escolha entre os serviços salvos';
+
+  @override
   String get resetPasswordTitle => 'Redefinir senha';
 
   @override

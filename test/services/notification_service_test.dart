@@ -11,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:vogue_vault/services/notification_service.dart';
 import 'package:vogue_vault/models/appointment.dart';
 import 'package:vogue_vault/models/service_type.dart';
+import 'package:vogue_vault/utils/notification_ids.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -129,7 +130,7 @@ void main() {
     const id = 'cancel-id';
     await service.cancelAppointmentReminder(id);
 
-    verify(plugin.cancel(id.hashCode)).called(1);
+    verify(plugin.cancel(stableNotificationId(id))).called(1);
   });
 
   test('rescheduleAppointmentReminder cancels and schedules', () async {
@@ -159,9 +160,9 @@ void main() {
 
     await service.rescheduleAppointmentReminder(appt);
 
-    verify(plugin.cancel(appt.id.hashCode)).called(1);
+    verify(plugin.cancel(stableNotificationId(appt.id))).called(1);
     verify(plugin.zonedSchedule(
-      appt.id.hashCode,
+      stableNotificationId(appt.id),
       any,
       any,
       any,

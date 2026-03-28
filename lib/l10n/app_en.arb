@@ -95,6 +95,8 @@
   "passwordStrengthMedium": "Medium",
   "passwordStrengthStrong": "Strong",
   "forgotPasswordButton": "Forgot password?",
+  "localPasswordHint": "Passwords are stored only on this device. While signed in, change your password from Profile. They cannot be reset from this screen.",
+  "selectCatalogServiceHint": "Pick from your saved services",
   "resetPasswordTitle": "Reset password",
   "resetPasswordDescription": "Update your password using your account email.",
   "resetPasswordButton": "Update password",

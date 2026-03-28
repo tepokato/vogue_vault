@@ -110,12 +110,12 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('offeringDropdown')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Barber - Cut (\$10.00)').last);
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    final serviceField = find.byKey(const ValueKey('serviceDropdown'));
-    final dropdown = tester
-        .widget<DropdownButtonFormField<ServiceType>>(serviceField);
-    expect(dropdown.value, ServiceType.barber);
+    final offeringField = find.byKey(const ValueKey('offeringDropdown'));
+    final offeringDropdown = tester
+        .widget<DropdownButtonFormField<ServiceOffering>>(offeringField);
+    expect(offeringDropdown.value?.type, ServiceType.barber);
 
     final priceField = find.byKey(const ValueKey('priceField'));
     final priceWidget = tester.widget<TextFormField>(priceField);
