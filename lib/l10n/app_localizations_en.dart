@@ -551,4 +551,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String bufferMinutesSummary(int minutes) {
     return 'Buffer: $minutes min';
   }
+
+  @override
+  String get dashboardTitle => 'Home';
+
+  @override
+  String get greetingMorning => 'Good morning';
+
+  @override
+  String get greetingAfternoon => 'Good afternoon';
+
+  @override
+  String get greetingEvening => 'Good evening';
+
+  @override
+  String get dashboardTagline => 'Here is your day at a glance';
+
+  @override
+  String get todayScheduleTitle => 'Today\'s schedule';
+
+  @override
+  String get statTodayLabel => 'Today';
+
+  @override
+  String get statWeekLabel => 'This week';
+
+  @override
+  String get statClientsLabel => 'Clients';
+
+  @override
+  String get noAppointmentsToday => 'Nothing scheduled today';
+
+  @override
+  String get viewAllLabel => 'View all';
+
+  @override
+  String get quickActionsTitle => 'Quick actions';
+
+  @override
+  String get newClientLabel => 'New client';
+
+  @override
+  String get newLocationLabel => 'New location';
 }

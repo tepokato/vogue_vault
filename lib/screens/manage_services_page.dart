@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../app/theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/service_offering.dart';
 import '../services/appointment_service.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/service_offering_editor.dart';
+import '../widgets/ui/ui.dart';
 
 /// Page allowing professionals to manage their service offerings.
 class ManageServicesPage extends StatefulWidget {
@@ -47,11 +49,17 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
     final l10n = AppLocalizations.of(context)!;
     return AppScaffold(
       title: l10n.manageServicesTitle,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Form(
+      showProfileButton: false,
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(
+          AppTokens.space,
+          AppTokens.spaceSm,
+          AppTokens.space,
+          AppTokens.spaceXl,
+        ),
+        children: [
+          AppCard(
+            child: Form(
               key: _formKey,
               child: ServiceOfferingEditor(
                 key: _editorKey,
@@ -59,16 +67,13 @@ class _ManageServicesPageState extends State<ManageServicesPage> {
                 onChanged: (list) => setState(() => _offerings = list),
               ),
             ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _save,
-                child: Text(l10n.saveButton),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: AppTokens.spaceLg),
+          FilledButton(
+            onPressed: _save,
+            child: Text(l10n.saveButton),
+          ),
+        ],
       ),
     );
   }

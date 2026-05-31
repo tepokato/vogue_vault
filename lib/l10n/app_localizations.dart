@@ -1158,6 +1158,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Buffer: {minutes} min'**
   String bufferMinutesSummary(int minutes);
+
+  /// No description provided for @dashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get dashboardTitle;
+
+  /// No description provided for @greetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get greetingMorning;
+
+  /// No description provided for @greetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get greetingAfternoon;
+
+  /// No description provided for @greetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get greetingEvening;
+
+  /// No description provided for @dashboardTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Here is your day at a glance'**
+  String get dashboardTagline;
+
+  /// No description provided for @todayScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s schedule'**
+  String get todayScheduleTitle;
+
+  /// No description provided for @statTodayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get statTodayLabel;
+
+  /// No description provided for @statWeekLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get statWeekLabel;
+
+  /// No description provided for @statClientsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Clients'**
+  String get statClientsLabel;
+
+  /// No description provided for @noAppointmentsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing scheduled today'**
+  String get noAppointmentsToday;
+
+  /// No description provided for @viewAllLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get viewAllLabel;
+
+  /// No description provided for @quickActionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick actions'**
+  String get quickActionsTitle;
+
+  /// No description provided for @newClientLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New client'**
+  String get newClientLabel;
+
+  /// No description provided for @newLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New location'**
+  String get newLocationLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

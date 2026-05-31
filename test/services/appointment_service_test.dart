@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:vogue_vault/hive_storage.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:vogue_vault/services/appointment_service.dart';
@@ -37,7 +39,7 @@ void main() {
 
   setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
-    await Hive.initFlutter();
+    await initHiveStorage();
     FlutterSecureStorage.setMockInitialValues({});
   });
 

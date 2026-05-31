@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../app/theme.dart';
 import '../services/auth_service.dart';
-import 'appointments_page.dart';
+import '../widgets/main_shell.dart';
+import '../widgets/ui/ui.dart';
 import 'profile_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -20,25 +22,26 @@ class _AuthPageState extends State<AuthPage> {
   String? _error;
   bool _showPassword = false;
 
-  bool _passwordMeetsRequirements(String password) {
-    final hasMinLength = password.length >= 8;
-    final hasNumber = RegExp(r'\d').hasMatch(password);
-    final hasSymbol = RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(password);
-    return hasMinLength && hasNumber && hasSymbol;
-  }
-
   @override
   void initState() {
     super.initState();
     final auth = context.read<AuthService>();
     if (auth.isLoggedIn) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const AppointmentsPage()),
+          MaterialPageRoute(builder: (_) => const MainShell()),
         );
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   Future<void> _submit() async {
@@ -46,6 +49,7 @@ class _AuthPageState extends State<AuthPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
     final auth = context.read<AuthService>();
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
@@ -57,20 +61,16 @@ class _AuthPageState extends State<AuthPage> {
     try {
       success = await auth.login(email, password);
       if (!success) {
-        setState(
-          () => _error = AppLocalizations.of(context)!.invalidCredentials,
-        );
+        setState(() => _error = l10n.invalidCredentials);
       }
     } finally {
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+      if (mounted) Navigator.of(context).pop();
     }
 
     if (success && mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const AppointmentsPage()),
+        MaterialPageRoute(builder: (_) => const MainShell()),
       );
     }
   }
@@ -78,13 +78,14 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = theme.colorScheme;
+    final scheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      backgroundColor: colors.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(AppTokens.spaceLg),
             child: Form(
               key: _formKey,
               child: AutofillGroup(
@@ -92,121 +93,120 @@ class _AuthPageState extends State<AuthPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Center(
+                    GradientHero(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppTokens.spaceLg,
+                        vertical: AppTokens.spaceXl,
+                      ),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Semantics(
-                            header: true,
-                            child: Text(
-                              AppLocalizations.of(context)!.appTitle,
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.headlineMedium,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Semantics(
-                            label: AppLocalizations.of(context)!.appTitle,
+                            label: l10n.appTitle,
                             image: true,
                             child: Image.asset(
                               'assets/images/VV_LOGO.webp',
-                              height: 200,
-                              color: colors.onSurface,
+                              height: 120,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: AppTokens.space),
+                          Semantics(
+                            header: true,
+                            child: Text(
+                              l10n.appTitle,
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.headlineMedium
+                                  ?.copyWith(color: Colors.white),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    TextFormField(
-                      controller: _emailController,
-                      autofillHints: const [
-                        AutofillHints.username,
-                        AutofillHints.email,
-                      ],
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.emailLabel,
-                        prefixIcon: const Icon(Icons.email),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.emailRequired;
-                        }
-                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                        if (!emailRegex.hasMatch(value)) {
-                          return AppLocalizations.of(context)!
-                              .invalidEmailFormat;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: !_showPassword,
-                      autofillHints: const [AutofillHints.password],
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.passwordLabel,
-                        helperText: AppLocalizations.of(context)!
-                            .passwordRequirementsHint,
-                        prefixIcon: const Icon(Icons.lock),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _showPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                    const SizedBox(height: AppTokens.spaceLg),
+                    AppCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            autofillHints: const [
+                              AutofillHints.username,
+                              AutofillHints.email,
+                            ],
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              labelText: l10n.emailLabel,
+                              prefixIcon: const Icon(Icons.email_outlined),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l10n.emailRequired;
+                              }
+                              final emailRegex =
+                                  RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                              if (!emailRegex.hasMatch(value)) {
+                                return l10n.invalidEmailFormat;
+                              }
+                              return null;
+                            },
                           ),
-                          onPressed: () =>
-                              setState(() => _showPassword = !_showPassword),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.passwordRequired;
-                        }
-                        return null;
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        AppLocalizations.of(context)!.localPasswordHint,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: colors.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                    if (_error != null) ...[
-                      const SizedBox(height: 16),
-                      Text(
-                        _error!,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.error,
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: _submit,
-                      child: Text(AppLocalizations.of(context)!.loginButton),
-                    ),
-                    const SizedBox(height: 12),
-                    // Style the button with the theme's primary color for
-                    // contrast against the cream background.
-                    OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ProfilePage(isNewUser: true),
+                          const SizedBox(height: AppTokens.spaceMd),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: !_showPassword,
+                            autofillHints: const [AutofillHints.password],
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _submit(),
+                            decoration: InputDecoration(
+                              labelText: l10n.passwordLabel,
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              suffixIcon: IconButton(
+                                icon: Icon(_showPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: () => setState(
+                                    () => _showPassword = !_showPassword),
+                              ),
+                            ),
+                            validator: (value) =>
+                                value == null || value.isEmpty
+                                    ? l10n.passwordRequired
+                                    : null,
                           ),
-                        );
-                      },
-                      child:
-                          Text(AppLocalizations.of(context)!.createAccount),
+                          const SizedBox(height: AppTokens.spaceSm),
+                          Text(
+                            l10n.localPasswordHint,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: scheme.onSurfaceVariant,
+                            ),
+                          ),
+                          if (_error != null) ...[
+                            const SizedBox(height: AppTokens.spaceMd),
+                            Text(
+                              _error!,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(color: scheme.error),
+                            ),
+                          ],
+                          const SizedBox(height: AppTokens.spaceLg),
+                          FilledButton(
+                            onPressed: _submit,
+                            child: Text(l10n.loginButton),
+                          ),
+                          const SizedBox(height: AppTokens.spaceSm),
+                          OutlinedButton(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const ProfilePage(isNewUser: true),
+                              ),
+                            ),
+                            child: Text(l10n.createAccount),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -216,12 +216,5 @@ class _AuthPageState extends State<AuthPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../app/theme.dart';
 import '../models/address.dart';
 import '../services/appointment_service.dart';
 import '../widgets/app_scaffold.dart';
+import '../widgets/ui/ui.dart';
 
 class AddressesPage extends StatelessWidget {
   const AddressesPage({super.key});
@@ -19,153 +20,177 @@ class AddressesPage extends StatelessWidget {
 
     return AppScaffold(
       title: l10n.addressesTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.add_location_alt_outlined),
+          tooltip: l10n.newAddressTitle,
+          onPressed: () => showAddressEditor(context),
+        ),
+      ],
       body: addresses.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    l10n.noAddressesYet,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => _showAddressDialog(context),
-                    child: Text(l10n.addFirstAddress),
-                  ),
-                ],
-              ),
+          ? EmptyState(
+              icon: Icons.place_outlined,
+              title: l10n.noAddressesYet,
+              actionLabel: l10n.addFirstAddress,
+              onAction: () => showAddressEditor(context),
             )
           : ListView.builder(
+              padding: const EdgeInsets.fromLTRB(
+                AppTokens.space,
+                AppTokens.spaceSm,
+                AppTokens.space,
+                AppTokens.spaceXl,
+              ),
               itemCount: addresses.length,
               itemBuilder: (context, index) {
                 final address = addresses[index];
-                return ListTile(
-                  leading: const Icon(Icons.location_on),
-                  title: Text(address.label),
-                  subtitle: Text(address.details),
-                  onTap: () => _showAddressDialog(context, address: address),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () async {
-                      final shouldDelete = await showDialog<bool>(
-                        context: context,
-                        builder: (dialogContext) {
-                          return AlertDialog(
-                            title: Text(l10n.deleteAddressDialogTitle),
-                            content: Text(l10n.deleteAddressDialogBody),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(dialogContext).pop(false),
-                                child: Text(l10n.dialogCancelAction),
-                              ),
-                              FilledButton(
-                                onPressed: () =>
-                                    Navigator.of(dialogContext).pop(true),
-                                child: Text(l10n.dialogConfirmAction),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (shouldDelete == true) {
-                        await service.deleteAddress(address.id);
-                      }
-                    },
-                  ),
-                );
+                return _AddressCard(address: address);
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddressDialog(context),
-        child: const Icon(Icons.add),
+    );
+  }
+}
+
+class _AddressCard extends StatelessWidget {
+  const _AddressCard({required this.address});
+
+  final Address address;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppTokens.spaceMd),
+      child: AppCard(
+        onTap: () => showAddressEditor(context, address: address),
+        padding: const EdgeInsets.all(AppTokens.spaceMd),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: scheme.secondary.withOpacity(0.16),
+                borderRadius: BorderRadius.circular(AppTokens.radiusSm),
+              ),
+              child: Icon(Icons.place_outlined, color: scheme.secondary),
+            ),
+            const SizedBox(width: AppTokens.spaceMd),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(address.label, style: theme.textTheme.titleSmall),
+                  const SizedBox(height: 2),
+                  Text(
+                    address.details,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: l10n.deleteButton,
+              onPressed: () => _confirmDelete(context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _showAddressDialog(
-    BuildContext context, {
-    Address? address,
-  }) async {
-    final labelController = TextEditingController(text: address?.label ?? '');
-    final detailsController = TextEditingController(
-      text: address?.details ?? '',
+  Future<void> _confirmDelete(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final service = context.read<AppointmentService>();
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteAddressDialogTitle),
+        content: Text(l10n.deleteAddressDialogBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.dialogCancelAction),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.dialogConfirmAction),
+          ),
+        ],
+      ),
     );
-    final formKey = GlobalKey<FormState>();
-
-    try {
-      await showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              address == null
-                  ? AppLocalizations.of(context)!.newAddressTitle
-                  : AppLocalizations.of(context)!.editAddressTitle,
-            ),
-            content: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: labelController,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.labelLabel,
-                      ),
-                      validator: (value) =>
-                          value == null || value.trim().isEmpty
-                          ? AppLocalizations.of(context)!.requiredField
-                          : null,
-                    ),
-                    TextFormField(
-                      controller: detailsController,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.addressLabel,
-                      ),
-                      validator: (value) =>
-                          value == null || value.trim().isEmpty
-                          ? AppLocalizations.of(context)!.requiredField
-                          : null,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(AppLocalizations.of(context)!.cancelButton),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if (!formKey.currentState!.validate()) return;
-                  final service = context.read<AppointmentService>();
-                  final id = address?.id ?? const Uuid().v4();
-                  final newAddress = Address(
-                    id: id,
-                    label: labelController.text.trim(),
-                    details: detailsController.text.trim(),
-                  );
-                  if (address == null) {
-                    await service.addAddress(newAddress);
-                  } else {
-                    await service.updateAddress(newAddress);
-                  }
-                  if (context.mounted) Navigator.pop(context);
-                },
-                child: Text(AppLocalizations.of(context)!.saveButton),
-              ),
-            ],
-          );
-        },
-      );
-    } finally {
-      labelController.dispose();
-      detailsController.dispose();
+    if (shouldDelete == true) {
+      await service.deleteAddress(address.id);
     }
+  }
+}
+
+/// Opens a modal sheet to create or edit an [Address].
+Future<void> showAddressEditor(
+  BuildContext context, {
+  Address? address,
+}) async {
+  final service = context.read<AppointmentService>();
+  final labelController = TextEditingController(text: address?.label ?? '');
+  final detailsController =
+      TextEditingController(text: address?.details ?? '');
+  final formKey = GlobalKey<FormState>();
+
+  try {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        final l10n = AppLocalizations.of(sheetContext)!;
+        return EditorSheet(
+          title: address == null
+              ? l10n.newAddressTitle
+              : l10n.editAddressTitle,
+          formKey: formKey,
+          fields: [
+            TextFormField(
+              controller: labelController,
+              textCapitalization: TextCapitalization.words,
+              decoration: InputDecoration(labelText: l10n.labelLabel),
+              validator: (v) =>
+                  v == null || v.trim().isEmpty ? l10n.requiredField : null,
+            ),
+            const SizedBox(height: AppTokens.spaceMd),
+            TextFormField(
+              controller: detailsController,
+              minLines: 1,
+              maxLines: 3,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(labelText: l10n.addressLabel),
+              validator: (v) =>
+                  v == null || v.trim().isEmpty ? l10n.requiredField : null,
+            ),
+          ],
+          onSave: () async {
+            if (!formKey.currentState!.validate()) return;
+            final id = address?.id ?? const Uuid().v4();
+            final updated = Address(
+              id: id,
+              label: labelController.text.trim(),
+              details: detailsController.text.trim(),
+            );
+            if (address == null) {
+              await service.addAddress(updated);
+            } else {
+              await service.updateAddress(updated);
+            }
+            if (sheetContext.mounted) Navigator.pop(sheetContext);
+          },
+        );
+      },
+    );
+  } finally {
+    labelController.dispose();
+    detailsController.dispose();
   }
 }

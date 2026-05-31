@@ -553,4 +553,46 @@ class AppLocalizationsPt extends AppLocalizations {
   String bufferMinutesSummary(int minutes) {
     return 'Intervalo: $minutes min';
   }
+
+  @override
+  String get dashboardTitle => 'Início';
+
+  @override
+  String get greetingMorning => 'Bom dia';
+
+  @override
+  String get greetingAfternoon => 'Boa tarde';
+
+  @override
+  String get greetingEvening => 'Boa noite';
+
+  @override
+  String get dashboardTagline => 'Seu dia em um relance';
+
+  @override
+  String get todayScheduleTitle => 'Agenda de hoje';
+
+  @override
+  String get statTodayLabel => 'Hoje';
+
+  @override
+  String get statWeekLabel => 'Esta semana';
+
+  @override
+  String get statClientsLabel => 'Clientes';
+
+  @override
+  String get noAppointmentsToday => 'Nada agendado para hoje';
+
+  @override
+  String get viewAllLabel => 'Ver tudo';
+
+  @override
+  String get quickActionsTitle => 'Ações rápidas';
+
+  @override
+  String get newClientLabel => 'Novo cliente';
+
+  @override
+  String get newLocationLabel => 'Novo local';
 }

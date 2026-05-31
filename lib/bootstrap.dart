@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'app/app.dart';
+import 'hive_storage.dart';
 import 'services/appointment_service.dart';
 import 'services/auth_service.dart';
 import 'services/backup_service.dart';
@@ -12,7 +12,7 @@ import 'services/settings_service.dart';
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Hive.initFlutter();
+  await initHiveStorage();
 
   final notificationService = NotificationService();
   await notificationService.init();

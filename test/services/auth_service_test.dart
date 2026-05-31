@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:vogue_vault/hive_storage.dart';
 import 'package:vogue_vault/services/auth_service.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -27,7 +28,7 @@ void main() {
 
   setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
-    await Hive.initFlutter();
+    await initHiveStorage();
     FlutterSecureStorage.setMockInitialValues({});
   });
 

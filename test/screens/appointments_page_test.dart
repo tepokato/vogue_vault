@@ -29,7 +29,8 @@ void main() {
       Appointment(
         id: '1',
         service: ServiceType.barber,
-        dateTime: DateTime(2023, 1, 1),
+        // Future date so it passes the default "upcoming" filter.
+        dateTime: DateTime.now().add(const Duration(days: 1)),
         customerId: 'c1',
         location: 'Salon',
       ),
@@ -47,6 +48,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Jane Doe @ Salon'), findsOneWidget);
+    // The redesigned card shows client and location on separate lines.
+    expect(find.textContaining('Jane Doe'), findsOneWidget);
+    expect(find.textContaining('Salon'), findsOneWidget);
   });
 }

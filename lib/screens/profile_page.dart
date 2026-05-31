@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../app/theme.dart';
 import '../models/user_profile.dart';
 import '../models/user_role.dart';
 import '../models/service_offering.dart';
@@ -13,8 +14,9 @@ import '../services/auth_service.dart';
 import '../utils/image_picking.dart';
 import '../utils/service_type_utils.dart';
 import '../widgets/app_scaffold.dart';
+import '../widgets/main_shell.dart';
 import '../widgets/password_strength_indicator.dart';
-import 'appointments_page.dart';
+import '../widgets/ui/ui.dart';
 import 'auth_page.dart';
 import 'manage_services_page.dart';
 
@@ -91,9 +93,8 @@ class _ProfilePageState extends State<ProfilePage> {
     } else if (!isImagePickerSupported && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.imageSelectionUnsupported,
-          ),
+          content:
+              Text(AppLocalizations.of(context)!.imageSelectionUnsupported),
         ),
       );
     }
@@ -103,28 +104,19 @@ class _ProfilePageState extends State<ProfilePage> {
     if (!_formKey.currentState!.validate()) return;
     final service = context.read<AppointmentService>();
     final auth = context.read<AuthService>();
+    final l10n = AppLocalizations.of(context)!;
     final email = _emailController.text.trim();
 
     if (widget.isNewUser) {
       if (_newPwdController.text != _confirmPwdController.text) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
-            ),
-          );
-        }
+        if (mounted) _toast(l10n.passwordsDoNotMatch);
         return;
       }
       try {
         await auth.register(email, _newPwdController.text);
         _userId = email;
       } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(e.toString())));
-        }
+        if (mounted) _toast(e.toString());
         return;
       }
     } else {
@@ -134,11 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
           await service.renameUserId(_userId, email);
           _userId = email;
         } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(e.toString())));
-          }
+          if (mounted) _toast(e.toString());
           return;
         }
       }
@@ -146,15 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
           _confirmPwdController.text.isNotEmpty ||
           _currentPwdController.text.isNotEmpty) {
         if (_newPwdController.text != _confirmPwdController.text) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  AppLocalizations.of(context)!.passwordsDoNotMatch,
-                ),
-              ),
-            );
-          }
+          if (mounted) _toast(l10n.passwordsDoNotMatch);
           return;
         }
         try {
@@ -164,15 +144,12 @@ class _ProfilePageState extends State<ProfilePage> {
             _newPwdController.text,
           );
         } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(e.toString())));
-          }
+          if (mounted) _toast(e.toString());
           return;
         }
       }
     }
+
     final first = _firstNameController.text.trim();
     final last = _lastNameController.text.trim();
     final nicknameText = _nicknameController?.text.trim() ?? '';
@@ -192,28 +169,30 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       await service.updateUser(user);
     }
-    if (mounted) {
-      if (widget.isNewUser) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const AppointmentsPage()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.changesSaved)),
-        );
-        Navigator.pop(context);
-      }
+    if (!mounted) return;
+    if (widget.isNewUser) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainShell()),
+      );
+    } else {
+      _toast(l10n.changesSaved);
+      Navigator.pop(context);
     }
+  }
+
+  void _toast(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   String get _initials {
     final first = _firstNameController.text.trim();
     final last = _lastNameController.text.trim();
     if (first.isEmpty && last.isEmpty) return '?';
-    final firstInitial = first.isNotEmpty ? first[0] : '';
-    final lastInitial = last.isNotEmpty ? last[0] : '';
-    return (firstInitial + lastInitial).toUpperCase();
+    final f = first.isNotEmpty ? first[0] : '';
+    final l = last.isNotEmpty ? last[0] : '';
+    return (f + l).toUpperCase();
   }
 
   ServiceType? get _serviceType =>
@@ -221,14 +200,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+
     return AppScaffold(
-      title: AppLocalizations.of(context)!.profileTitle,
+      title: l10n.profileTitle,
       showProfileButton: false,
-      showHomeButton: !widget.isNewUser,
       actions: [
         IconButton(
           icon: const Icon(Icons.logout),
-          tooltip: AppLocalizations.of(context)!.logoutTooltip,
+          tooltip: l10n.logoutTooltip,
           onPressed: () {
             context.read<AuthService>().logout();
             Navigator.pushAndRemoveUntil(
@@ -239,218 +221,210 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
       ],
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            AppTokens.space,
+            AppTokens.spaceSm,
+            AppTokens.space,
+            AppTokens.spaceXl,
+          ),
+          children: [
+            Center(
+              child: GestureDetector(
+                onTap: _pickImage,
+                child: Semantics(
+                  label: l10n.userPhotoLabel,
+                  image: true,
+                  child: Stack(
+                    clipBehavior: Clip.none,
                     children: [
-                      GestureDetector(
-                        onTap: _pickImage,
-                        child: Semantics(
-                          label: AppLocalizations.of(context)!.userPhotoLabel,
-                          image: true,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage: _photoBytes != null
-                                    ? MemoryImage(_photoBytes!)
-                                    : null,
-                                child:
-                                    _photoBytes == null || _photoBytes!.isEmpty
-                                        ? Text(_initials)
-                                        : null,
-                              ),
-                              if (_serviceType != null)
-                                Positioned(
-                                  bottom: -4,
-                                  right: -4,
-                                  child: CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: serviceTypeColor(
-                                      _serviceType!,
-                                    ),
-                                    child: ImageIcon(
-                                      AssetImage(
-                                        serviceTypeIcon(_serviceType!),
-                                      ),
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onPrimary,
-                                      size: 16,
-                                    ),
-                                  ),
+                      CircleAvatar(
+                        radius: 52,
+                        backgroundColor: scheme.primary.withOpacity(0.14),
+                        backgroundImage: _photoBytes != null
+                            ? MemoryImage(_photoBytes!)
+                            : null,
+                        child: _photoBytes == null || _photoBytes!.isEmpty
+                            ? Text(
+                                _initials,
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  color: scheme.primary,
                                 ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _firstNameController,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(
-                            context,
-                          )!
-                              .firstNameLabel,
-                        ),
-                        onChanged: (_) => setState(() {}),
-                        validator: (value) => value == null ||
-                                value.trim().isEmpty
-                            ? AppLocalizations.of(context)!.firstNameRequired
+                              )
                             : null,
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _lastNameController,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(
-                            context,
-                          )!
-                              .lastNameLabel,
-                        ),
-                        onChanged: (_) => setState(() {}),
-                        validator: (value) =>
-                            value == null || value.trim().isEmpty
-                                ? AppLocalizations.of(context)!.lastNameRequired
-                                : null,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _nicknameController,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(
-                            context,
-                          )!
-                              .nicknameLabel,
-                        ),
-                        onChanged: (_) => setState(() {}),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.emailLabel,
-                        ),
-                        validator: (value) => value == null ||
-                                value.trim().isEmpty ||
-                                !value.contains('@')
-                            ? AppLocalizations.of(context)!.invalidEmail
-                            : null,
-                      ),
-                      const SizedBox(height: 16),
-                      if (!widget.isNewUser) ...[
-                        TextFormField(
-                          controller: _currentPwdController,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(
-                              context,
-                            )!
-                                .currentPasswordLabel,
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _showCurrentPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () => setState(
-                                () => _showCurrentPassword =
-                                    !_showCurrentPassword,
-                              ),
-                            ),
-                          ),
-                          obscureText: !_showCurrentPassword,
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                      TextFormField(
-                        controller: _newPwdController,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(
-                            context,
-                          )!
-                              .newPasswordLabel,
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _showNewPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () => setState(
-                              () => _showNewPassword = !_showNewPassword,
+                      if (_serviceType != null)
+                        Positioned(
+                          bottom: -2,
+                          right: -2,
+                          child: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: serviceTypeColor(_serviceType!),
+                            child: ImageIcon(
+                              AssetImage(serviceTypeIcon(_serviceType!)),
+                              color: Colors.white,
+                              size: 18,
                             ),
                           ),
                         ),
-                        onChanged: (_) => setState(() {}),
-                        obscureText: !_showNewPassword,
-                      ),
-                      PasswordStrengthIndicator(
-                        password: _newPwdController.text,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _confirmPwdController,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(
-                            context,
-                          )!
-                              .confirmPasswordLabel,
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _showConfirmPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () => setState(
-                              () =>
-                                  _showConfirmPassword = !_showConfirmPassword,
-                            ),
-                          ),
+                      Positioned(
+                        bottom: -2,
+                        left: -2,
+                        child: CircleAvatar(
+                          radius: 16,
+                          backgroundColor: scheme.primary,
+                          child: const Icon(Icons.edit,
+                              color: Colors.white, size: 16),
                         ),
-                        obscureText: !_showConfirmPassword,
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              if (!widget.isNewUser) ...[
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.servicesTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ManageServicesPage(userId: _userId),
+            ),
+            const SizedBox(height: AppTokens.spaceLg),
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    controller: _firstNameController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration:
+                        InputDecoration(labelText: l10n.firstNameLabel),
+                    onChanged: (_) => setState(() {}),
+                    validator: (v) => v == null || v.trim().isEmpty
+                        ? l10n.firstNameRequired
+                        : null,
+                  ),
+                  const SizedBox(height: AppTokens.spaceMd),
+                  TextFormField(
+                    controller: _lastNameController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: InputDecoration(labelText: l10n.lastNameLabel),
+                    onChanged: (_) => setState(() {}),
+                    validator: (v) => v == null || v.trim().isEmpty
+                        ? l10n.lastNameRequired
+                        : null,
+                  ),
+                  const SizedBox(height: AppTokens.spaceMd),
+                  TextFormField(
+                    controller: _nicknameController,
+                    decoration: InputDecoration(labelText: l10n.nicknameLabel),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppTokens.space),
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: l10n.emailLabel,
+                      prefixIcon: const Icon(Icons.email_outlined),
+                    ),
+                    validator: (v) => v == null ||
+                            v.trim().isEmpty ||
+                            !v.contains('@')
+                        ? l10n.invalidEmail
+                        : null,
+                  ),
+                  if (!widget.isNewUser) ...[
+                    const SizedBox(height: AppTokens.spaceMd),
+                    TextFormField(
+                      controller: _currentPwdController,
+                      obscureText: !_showCurrentPassword,
+                      decoration: InputDecoration(
+                        labelText: l10n.currentPasswordLabel,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(_showCurrentPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () => setState(() =>
+                              _showCurrentPassword = !_showCurrentPassword),
+                        ),
                       ),
-                    );
-                    final service = context.read<AppointmentService>();
-                    setState(() {
-                      _offerings = [...?service.getUser(_userId)?.offerings];
-                    });
-                  },
-                ),
-                const SizedBox(height: 24),
-              ],
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _save,
-                  child: Text(AppLocalizations.of(context)!.saveButton),
+                    ),
+                  ],
+                  const SizedBox(height: AppTokens.spaceMd),
+                  TextFormField(
+                    controller: _newPwdController,
+                    obscureText: !_showNewPassword,
+                    decoration: InputDecoration(
+                      labelText: l10n.newPasswordLabel,
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(_showNewPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                        onPressed: () => setState(
+                            () => _showNewPassword = !_showNewPassword),
+                      ),
+                    ),
+                    onChanged: (_) => setState(() {}),
+                  ),
+                  PasswordStrengthIndicator(password: _newPwdController.text),
+                  const SizedBox(height: AppTokens.spaceMd),
+                  TextFormField(
+                    controller: _confirmPwdController,
+                    obscureText: !_showConfirmPassword,
+                    decoration: InputDecoration(
+                      labelText: l10n.confirmPasswordLabel,
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(_showConfirmPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                        onPressed: () => setState(
+                            () => _showConfirmPassword = !_showConfirmPassword),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (!widget.isNewUser) ...[
+              const SizedBox(height: AppTokens.space),
+              AppCard(
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ManageServicesPage(userId: _userId),
+                    ),
+                  );
+                  if (!mounted) return;
+                  final service = context.read<AppointmentService>();
+                  setState(() {
+                    _offerings = [...?service.getUser(_userId)?.offerings];
+                  });
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.design_services_outlined, color: scheme.primary),
+                    const SizedBox(width: AppTokens.spaceMd),
+                    Expanded(
+                      child: Text(l10n.servicesTitle,
+                          style: theme.textTheme.titleSmall),
+                    ),
+                    const Icon(Icons.chevron_right),
+                  ],
                 ),
               ),
             ],
-          ),
+            const SizedBox(height: AppTokens.spaceLg),
+            FilledButton(
+              onPressed: _save,
+              child: Text(l10n.saveButton),
+            ),
+          ],
         ),
       ),
     );

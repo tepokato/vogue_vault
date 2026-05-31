@@ -43,12 +43,12 @@ String serviceTypeIcon(ServiceType type) {
 Color serviceTypeColor(ServiceType type) {
   switch (type) {
     case ServiceType.barber:
-      return AppColors.primary;
+      return AppColors.serviceBarber;
     case ServiceType.hairdresser:
-      return AppColors.secondary;
+      return AppColors.serviceHairdresser;
     case ServiceType.nails:
-      return AppColors.tertiary;
+      return AppColors.serviceNails;
     case ServiceType.tattoo:
-      return AppColors.highlight;
+      return AppColors.serviceTattoo;
   }
 }

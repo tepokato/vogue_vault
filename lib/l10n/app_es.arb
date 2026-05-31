@@ -216,5 +216,19 @@
         "type": "int"
       }
     }
-  }
+  },
+  "dashboardTitle": "Inicio",
+  "greetingMorning": "Buenos días",
+  "greetingAfternoon": "Buenas tardes",
+  "greetingEvening": "Buenas noches",
+  "dashboardTagline": "Tu día de un vistazo",
+  "todayScheduleTitle": "Agenda de hoy",
+  "statTodayLabel": "Hoy",
+  "statWeekLabel": "Esta semana",
+  "statClientsLabel": "Clientes",
+  "noAppointmentsToday": "Nada agendado para hoy",
+  "viewAllLabel": "Ver todo",
+  "quickActionsTitle": "Acciones rápidas",
+  "newClientLabel": "Nuevo cliente",
+  "newLocationLabel": "Nueva ubicación"
 }

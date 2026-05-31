@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,6 +23,14 @@ class NotificationService {
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
       : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
+  /// zonedSchedule is only implemented for Android, iOS, and macOS in
+  /// flutter_local_notifications; Linux/Windows would throw [UnimplementedError].
+  static bool get _supportsZonedReminders =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS);
+
   Future<void> init() async {
     tz.initializeTimeZones();
     _settingsBox = await Hive.openBox(_prefsBoxName);
@@ -36,7 +46,14 @@ class NotificationService {
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosInit = DarwinInitializationSettings();
-    const settings = InitializationSettings(android: androidInit, iOS: iosInit);
+    const linuxInit = LinuxInitializationSettings(
+      defaultActionName: 'Open',
+    );
+    const settings = InitializationSettings(
+      android: androidInit,
+      iOS: iosInit,
+      linux: linuxInit,
+    );
     await _plugin.initialize(settings);
     _initialized = true;
   }
@@ -73,6 +90,8 @@ class NotificationService {
     String? serviceName,
   }) async {
     _ensureInitialized();
+    if (!_supportsZonedReminders) return;
+
     final scheduled = appointment.dateTime.subtract(reminderOffset);
     if (scheduled.isBefore(DateTime.now())) return;
 

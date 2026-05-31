@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vogue_vault/hive_storage.dart';
 import 'package:vogue_vault/services/settings_service.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -22,7 +23,7 @@ void main() {
 
   setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
-    await Hive.initFlutter();
+    await initHiveStorage();
   });
 
   tearDown(() async {

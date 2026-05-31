@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import 'package:vogue_vault/l10n/app_localizations.dart';
-import 'package:vogue_vault/screens/appointments_page.dart';
-import 'package:vogue_vault/screens/profile_page.dart';
+import 'package:vogue_vault/widgets/app_scaffold.dart';
+import 'package:vogue_vault/widgets/main_shell.dart';
 import 'package:vogue_vault/services/appointment_service.dart';
 import 'package:vogue_vault/services/auth_service.dart';
 import 'package:vogue_vault/models/user_profile.dart';
@@ -36,27 +36,38 @@ void main() {
     );
   }
 
-  testWidgets('navigation bar shows on appointments and routes to profile', (tester) async {
-    await tester.pumpWidget(wrap(const AppointmentsPage()));
+  testWidgets('main shell shows bottom nav and a profile shortcut',
+      (tester) async {
+    await tester.pumpWidget(
+      wrap(const MainShell(initialDestination: AppDestination.appointments)),
+    );
+    await tester.pumpAndSettle();
 
-    expect(find.byTooltip('Home'), findsOneWidget);
+    // Primary navigation lives in the shell's NavigationBar.
+    expect(find.byType(NavigationBar), findsOneWidget);
+    // Only the active tab's app bar is on-stage, so a single profile shortcut.
     expect(find.byTooltip('Profile'), findsOneWidget);
+    // No legacy "Home"/"Settings" app bar buttons.
+    expect(find.byTooltip('Home'), findsNothing);
+    expect(find.byTooltip('Settings'), findsNothing);
+  });
+
+  testWidgets('back from profile returns to the shell', (tester) async {
+    await tester.pumpWidget(
+      wrap(const MainShell(initialDestination: AppDestination.appointments)),
+    );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Profile'));
     await tester.pumpAndSettle();
 
     expect(find.text('Profile'), findsOneWidget);
-  });
+    expect(find.byType(BackButton), findsOneWidget);
 
-  testWidgets('home button from profile goes to appointments', (tester) async {
-    await tester.pumpWidget(wrap(const ProfilePage()));
-
-    expect(find.byTooltip('Home'), findsOneWidget);
-
-    await tester.tap(find.byTooltip('Home'));
+    await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
 
-    expect(find.text('Appointments'), findsOneWidget);
+    // The appointments tab title is back on-stage (also appears as a nav label).
+    expect(find.text('Appointments'), findsWidgets);
   });
 }
-

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mockito/mockito.dart';
+
+import 'package:vogue_vault/hive_storage.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -34,7 +36,7 @@ void main() {
 
   setUpAll(() async {
     PathProviderPlatform.instance = _FakePathProviderPlatform();
-    await Hive.initFlutter();
+    await initHiveStorage();
     tz.initializeTimeZones();
   });
 

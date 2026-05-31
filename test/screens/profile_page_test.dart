@@ -194,7 +194,7 @@ void main() {
     expect(appt.renameNew, 'new@example.com');
   });
 
-  testWidgets('new user profile hides home button', (tester) async {
+  testWidgets('new user profile as root has no back button', (tester) async {
     final auth = _FakeAuthService();
     final appt = _FakeAppointmentService();
 
@@ -213,7 +213,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byTooltip('Home'), findsNothing);
+    expect(find.byType(BackButton), findsNothing);
     expect(find.byType(ServiceOfferingEditor), findsNothing);
   });
 

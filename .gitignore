@@ -52,6 +52,10 @@ web/icons/*.png
 web/favicon.png
 windows/runner/resources/app_icon.ico
 
+# Local Hive boxes (path set in lib/hive_storage.dart)
+/hive/*.hive
+/hive/*.lock
+
 # Local draft images
 draftlogin.png
 

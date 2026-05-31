@@ -1,18 +1,17 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vogue_vault/l10n/app_localizations.dart';
 
+import '../app/theme.dart';
 import '../models/appointment.dart';
 import '../models/service_type.dart';
 import '../services/appointment_service.dart';
 import '../utils/service_type_utils.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/appointment_tile.dart';
-import 'calendar_page.dart';
+import '../widgets/ui/ui.dart';
+import 'addresses_page.dart';
 import 'edit_appointment_page.dart';
-import 'customers_page.dart';
-import 'my_business_page.dart';
 
 enum AppointmentTimeFilter { all, upcoming, past }
 
@@ -35,14 +34,6 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     );
   }
 
-  void _replaceWithPage(Widget page) {
-    if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => page),
-    );
-  }
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -51,21 +42,19 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
   bool _matchesTime(Appointment appointment) {
     final now = DateTime.now();
-    final appointmentEnds = appointment.dateTime.add(appointment.duration);
+    final ends = appointment.dateTime.add(appointment.duration);
     switch (_timeFilter) {
       case AppointmentTimeFilter.all:
         return true;
       case AppointmentTimeFilter.upcoming:
-        return appointmentEnds.isAfter(now);
+        return ends.isAfter(now);
       case AppointmentTimeFilter.past:
-        return appointmentEnds.isBefore(now);
+        return ends.isBefore(now);
     }
   }
 
-  bool _matchesService(Appointment appointment) {
-    if (_serviceFilter == null) return true;
-    return appointment.service == _serviceFilter;
-  }
+  bool _matchesService(Appointment appointment) =>
+      _serviceFilter == null || appointment.service == _serviceFilter;
 
   bool _matchesSearch(Appointment appointment, AppointmentService service) {
     final query = _searchController.text.trim().toLowerCase();
@@ -81,307 +70,97 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     final location = appointment.location ?? '';
     final serviceLabel = serviceTypeLabel(context, appointment.service);
 
-    return [
-      providerName,
-      customerName,
-      guestName,
-      location,
-      serviceLabel,
-    ].any((field) => field.toLowerCase().contains(query));
+    return [providerName, customerName, guestName, location, serviceLabel]
+        .any((field) => field.toLowerCase().contains(query));
   }
 
-  List<Appointment> _filteredAppointments(AppointmentService service) {
-    return service.appointments.where((appt) {
-      return _matchesTime(appt) &&
-          _matchesService(appt) &&
-          _matchesSearch(appt, service);
-    }).toList();
+  List<Appointment> _filtered(AppointmentService service) {
+    return service.appointments
+        .where((a) =>
+            _matchesTime(a) && _matchesService(a) && _matchesSearch(a, service))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final service = context.watch<AppointmentService>();
-    final appointments = service.appointments;
     final l10n = AppLocalizations.of(context)!;
+    final hasAny = service.appointments.isNotEmpty;
 
     return AppScaffold(
       title: l10n.appointmentsTitle,
-      currentDestination: AppDestination.appointments,
       actions: [
         IconButton(
-          icon: const Icon(Icons.store),
-          tooltip: l10n.myBusinessTooltip,
-          onPressed: () => _replaceWithPage(const MyBusinessPage()),
+          icon: const Icon(Icons.place_outlined),
+          tooltip: l10n.addressesTitle,
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddressesPage()),
+          ),
         ),
       ],
-      body: appointments.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(l10n.noAppointmentsScheduled,
-                        textAlign: TextAlign.center),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.appointmentsEmptyDescription,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    Semantics(
-                      button: true,
-                      label: l10n.addFirstAppointment,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: _openNewAppointment,
-                        child: DottedBorder(
-                          options: RoundedRectDottedBorderOptions(
-                            strokeWidth: 2,
-                            dashPattern: const [8, 6],
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.6),
-                            radius: const Radius.circular(16),
-                          ),
-                          child: Container(
-                            width: 180,
-                            height: 180,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.06),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  size: 38,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  l10n.addFirstAppointment,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  l10n.addBookingCta,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
-                                                .withOpacity(0.7),
-                                          ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return SafeArea(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    leading: const Icon(Icons.contacts),
-                                    title: Text(l10n.customersTitle),
-                                    subtitle: Text(l10n.importAppointmentsCta),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      _replaceWithPage(
-                                        const CustomersPage(),
-                                      );
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.calendar_today),
-                                    title: Text(l10n.calendarTitle),
-                                    subtitle: Text(l10n.importAppointmentsCta),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      _replaceWithPage(
-                                        const CalendarPage(),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Text(l10n.importAppointmentsCta),
-                    ),
-                  ],
-                ),
-              ),
+      body: !hasAny
+          ? EmptyState(
+              icon: Icons.event_note_outlined,
+              title: l10n.noAppointmentsScheduled,
+              message: l10n.appointmentsEmptyDescription,
+              actionLabel: l10n.addFirstAppointment,
+              onAction: _openNewAppointment,
             )
           : Column(
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          labelText: l10n.searchAppointmentsLabel,
-                          hintText: l10n.searchAppointmentsHint,
-                          prefixIcon: const Icon(Icons.search),
-                          border: const OutlineInputBorder(),
-                        ),
-                        onChanged: (_) => setState(() {}),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField<AppointmentTimeFilter>(
-                              value: _timeFilter,
-                              decoration: InputDecoration(
-                                labelText: l10n.appointmentTimeFilterLabel,
-                                border: const OutlineInputBorder(),
-                              ),
-                              items: [
-                                DropdownMenuItem(
-                                  value: AppointmentTimeFilter.all,
-                                  child:
-                                      Text(l10n.appointmentFilterAllLabel),
-                                ),
-                                DropdownMenuItem(
-                                  value: AppointmentTimeFilter.upcoming,
-                                  child: Text(
-                                      l10n.appointmentFilterUpcomingLabel),
-                                ),
-                                DropdownMenuItem(
-                                  value: AppointmentTimeFilter.past,
-                                  child:
-                                      Text(l10n.appointmentFilterPastLabel),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                if (value == null) return;
-                                setState(() {
-                                  _timeFilter = value;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: DropdownButtonFormField<ServiceType?>(
-                              value: _serviceFilter,
-                              decoration: InputDecoration(
-                                labelText: l10n.appointmentServiceFilterLabel,
-                                border: const OutlineInputBorder(),
-                              ),
-                              items: [
-                                DropdownMenuItem(
-                                  value: null,
-                                  child: Text(l10n.appointmentServiceAllLabel),
-                                ),
-                                ...ServiceType.values.map(
-                                  (type) => DropdownMenuItem(
-                                    value: type,
-                                    child: Text(
-                                      serviceTypeLabel(context, type),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  _serviceFilter = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                _Filters(
+                  searchController: _searchController,
+                  timeFilter: _timeFilter,
+                  serviceFilter: _serviceFilter,
+                  onSearchChanged: () => setState(() {}),
+                  onTimeChanged: (f) => setState(() => _timeFilter = f),
+                  onServiceChanged: (s) => setState(() => _serviceFilter = s),
                 ),
                 Expanded(
                   child: Builder(
                     builder: (context) {
-                      final filtered = _filteredAppointments(service);
+                      final filtered = _filtered(service);
                       if (filtered.isEmpty) {
                         return Center(
-                          child: Text(l10n.noAppointmentsMatchFilters),
+                          child: Padding(
+                            padding: const EdgeInsets.all(AppTokens.spaceLg),
+                            child: Text(
+                              l10n.noAppointmentsMatchFilters,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                            ),
+                          ),
                         );
                       }
-
                       return ListView.builder(
+                        padding: const EdgeInsets.only(
+                          bottom: AppTokens.spaceXl,
+                        ),
                         itemCount: filtered.length,
                         itemBuilder: (context, index) {
                           final appt = filtered[index];
                           return AppointmentTile(
                             appointment: appt,
                             showDate: true,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      EditAppointmentPage(appointment: appt),
-                                ),
-                              );
-                            },
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    EditAppointmentPage(appointment: appt),
+                              ),
+                            ),
                             trailing: IconButton(
-                              icon: const Icon(Icons.delete),
+                              icon: const Icon(Icons.delete_outline),
                               tooltip: l10n.deleteAppointmentTooltip,
-                              onPressed: () async {
-                                final confirm = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                          AppLocalizations.of(context)!
-                                              .deleteAppointmentTitle),
-                                      content: Text(
-                                          AppLocalizations.of(context)!
-                                              .deleteAppointmentConfirmation),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
-                                          child: Text(AppLocalizations.of(context)!
-                                              .cancelButton),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
-                                          child: Text(AppLocalizations.of(context)!
-                                              .deleteButton),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-
-                                if (confirm == true) {
-                                  await service.deleteAppointment(appt.id);
-                                }
-                              },
+                              onPressed: () => _confirmDelete(appt, service),
                             ),
                           );
                         },
@@ -391,6 +170,130 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 ),
               ],
             ),
+    );
+  }
+
+  Future<void> _confirmDelete(
+    Appointment appt,
+    AppointmentService service,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteAppointmentTitle),
+        content: Text(l10n.deleteAppointmentConfirmation),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancelButton),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.deleteButton),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      await service.deleteAppointment(appt.id);
+    }
+  }
+}
+
+class _Filters extends StatelessWidget {
+  const _Filters({
+    required this.searchController,
+    required this.timeFilter,
+    required this.serviceFilter,
+    required this.onSearchChanged,
+    required this.onTimeChanged,
+    required this.onServiceChanged,
+  });
+
+  final TextEditingController searchController;
+  final AppointmentTimeFilter timeFilter;
+  final ServiceType? serviceFilter;
+  final VoidCallback onSearchChanged;
+  final ValueChanged<AppointmentTimeFilter> onTimeChanged;
+  final ValueChanged<ServiceType?> onServiceChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final timeLabels = {
+      AppointmentTimeFilter.all: l10n.appointmentFilterAllLabel,
+      AppointmentTimeFilter.upcoming: l10n.appointmentFilterUpcomingLabel,
+      AppointmentTimeFilter.past: l10n.appointmentFilterPastLabel,
+    };
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppTokens.space,
+        AppTokens.spaceSm,
+        AppTokens.space,
+        AppTokens.spaceSm,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: searchController,
+            onChanged: (_) => onSearchChanged(),
+            decoration: InputDecoration(
+              hintText: l10n.searchAppointmentsHint,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: searchController.text.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        searchController.clear();
+                        onSearchChanged();
+                      },
+                    ),
+            ),
+          ),
+          const SizedBox(height: AppTokens.spaceMd),
+          Wrap(
+            spacing: AppTokens.spaceSm,
+            children: [
+              for (final entry in timeLabels.entries)
+                ChoiceChip(
+                  label: Text(entry.value),
+                  selected: timeFilter == entry.key,
+                  onSelected: (_) => onTimeChanged(entry.key),
+                ),
+            ],
+          ),
+          const SizedBox(height: AppTokens.spaceSm),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ChoiceChip(
+                  label: Text(l10n.appointmentServiceAllLabel),
+                  selected: serviceFilter == null,
+                  onSelected: (_) => onServiceChanged(null),
+                ),
+                for (final type in ServiceType.values) ...[
+                  const SizedBox(width: AppTokens.spaceSm),
+                  ChoiceChip(
+                    avatar: Icon(
+                      Icons.circle,
+                      size: 12,
+                      color: serviceTypeColor(type),
+                    ),
+                    label: Text(serviceTypeLabel(context, type)),
+                    selected: serviceFilter == type,
+                    onSelected: (_) => onServiceChanged(type),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
